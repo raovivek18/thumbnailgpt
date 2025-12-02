@@ -1,0 +1,15 @@
+# Nixpacks configuration for Next.js SSR with Bun
+
+[phases.setup]
+nixPkgs = ["bun"]
+aptPkgs = ["build-essential"]
+
+[phases.install]
+cmds = ["bun install"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+cmd = "bun run start"
+

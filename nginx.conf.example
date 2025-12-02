@@ -1,0 +1,37 @@
+# Example Nginx configuration for Next.js static export
+# Place this in your Nginx server block
+
+server {
+    listen 80;
+    server_name your-domain.com;
+    root /var/www/out;
+    index index.html;
+
+    # Remove .html extension from URLs
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+
+    # Prevent trailing slashes
+    location ~ ^(.+)/$ {
+        return 301 $1;
+    }
+
+    # Handle 404 errors
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    # Cache static assets
+    location /_next/static/ {
+        expires 365d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+

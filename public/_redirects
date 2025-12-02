@@ -1,0 +1,9 @@
+# Netlify redirects file for clean URLs
+# This file will be copied to the out directory during build
+
+# Rewrite clean URLs to .html files (200 = rewrite, not redirect)
+/*    /:splat.html   200
+
+# Handle 404 errors
+/*    /404.html   404
+

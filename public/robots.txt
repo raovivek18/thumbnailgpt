@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Disallow admin or private pages
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://thumbnailgpt.com/sitemap.xml
