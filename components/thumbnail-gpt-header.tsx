@@ -72,8 +72,8 @@ export function ThumbnailGPTHeader() {
   }
 
   return (
-    <header className="fixed top-9 left-0 right-0 z-50 w-full bg-black/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20 transition-all duration-300">
-      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 gap-4">
+    <header className="fixed top-9 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300">
+      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 gap-4 relative">
         {/* Logo + Name - Left */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity flex-shrink-0">
           <img
@@ -96,7 +96,7 @@ export function ThumbnailGPTHeader() {
               key={link.label}
               href={link.href}
               onClick={(e) => handleAnchorClick(e, link.href)}
-              className="px-4 py-2 text-sm text-gray-200 hover:text-[#FF8D00] transition-colors rounded-lg hover:bg-white/5"
+              className="px-4 py-2 text-sm text-gray-200 hover:text-[#FF8D00] transition-colors rounded-lg hover:bg-white/10 hover:backdrop-blur-sm"
             >
               {link.label}
             </Link>
@@ -137,7 +137,7 @@ export function ThumbnailGPTHeader() {
               key={link.label}
               href={link.href}
               onClick={(e) => handleAnchorClick(e, link.href)}
-              className="px-4 py-3 text-left text-gray-200 hover:text-[#FF8D00] hover:bg-white/5 rounded-lg transition-colors"
+              className="px-4 py-3 text-left text-gray-200 hover:text-[#FF8D00] hover:bg-white/10 hover:backdrop-blur-sm rounded-lg transition-colors"
             >
               {link.label}
             </Link>
@@ -171,8 +171,8 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
     <div
       id="mobile-menu"
       className={cn(
-        "bg-black/95 backdrop-blur-xl",
-        "fixed top-[100px] right-0 bottom-0 left-0 z-40 flex flex-col overflow-y-auto overflow-x-hidden border-t border-[#FF8D00]/20 md:hidden max-h-[calc(100vh-100px)]",
+        "bg-gradient-to-b from-black/90 via-black/85 to-black/90 backdrop-blur-xl backdrop-saturate-150",
+        "fixed top-[100px] right-0 bottom-0 left-0 z-40 flex flex-col overflow-y-auto overflow-x-hidden border-t border-white/10 shadow-lg shadow-black/30 md:hidden max-h-[calc(100vh-100px)]",
       )}
     >
       <div
