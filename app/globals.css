@@ -198,6 +198,13 @@
     @apply bg-background text-foreground;
     /* Added position relative to ensure proper containment */
     position: relative;
+    /* Prevent white flash on page load */
+    background-color: #000000;
+  }
+  
+  html {
+    /* Prevent white flash on page load */
+    background-color: #000000;
   }
   /* Enhanced overflow prevention with min-width constraint */
   html,

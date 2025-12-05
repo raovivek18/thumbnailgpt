@@ -27,9 +27,9 @@ const AspectRatioCard = ({ imageUrl, className = "" }: { imageUrl: string; class
 
       <div className={`w-full flex flex-col justify-center items-center ${className}`}>
         <div className="w-full max-w-2xl mx-auto relative p-4 sm:p-8">
-          <div className="relative w-full shrink-0 overflow-hidden rounded-2xl border border-[#FF8D00]/20 bg-neutral-900 shadow-2xl">
+          <div className="relative w-full shrink-0 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
             <div className="w-full p-1">
-              <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-[#FF8D00]/20 bg-black aspect-[16/9]">
+              <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-black aspect-video">
                 {!imageUrl && <div className="text-neutral-500 p-10 text-center">Image Placeholder</div>}
 
                 {imageUrl && (
@@ -70,9 +70,9 @@ const AnimatedBeam = ({
   gradientStopColor = "#FF8D00",
   curvature = 0.5,
 }: {
-  containerRef: React.RefObject<HTMLDivElement>
-  fromRef: React.RefObject<HTMLDivElement>
-  toRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
+  fromRef: React.RefObject<HTMLDivElement | null>
+  toRef: React.RefObject<HTMLDivElement | null>
   duration?: number
   pathColor?: string
   pathWidth?: number
@@ -246,8 +246,29 @@ export function ImageToThumbnailFeature() {
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-stretch">
-            {/* Interactive Card - Now on the left */}
-            <div className="flex items-center justify-center w-full px-4 md:px-6 h-full">
+            {/* Text Content - First on mobile, right on desktop */}
+            <div className="order-1 md:order-2 flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
+              <div className="flex flex-col gap-4">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl text-white">
+                  Image to <span className="text-[#FF8D00]">Thumbnail</span>
+                </h1>
+                <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
+                  Upload any image and transform it into a professional, eye-catching thumbnail. Enhance colors, add
+                  effects, and optimize for maximum click-through rates with AI-powered editing.
+                </p>
+              </div>
+
+              <div className="h-px w-20 bg-gradient-to-r from-[#FF8D00] to-transparent" />
+
+              <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
+                <AnimatedButton size="md" className="w-fit">
+                  Try It Now
+                </AnimatedButton>
+              </a>
+            </div>
+
+            {/* Interactive Card - Second on mobile, left on desktop */}
+            <div className="order-2 md:order-1 flex items-center justify-center w-full px-4 md:px-6 h-full">
               <div
                 ref={containerRef}
                 className="w-full h-auto lg:aspect-[120/75] rounded-xl border border-[#FF8D00]/20 bg-black/40 backdrop-blur-md shadow-2xl relative flex flex-col"
@@ -294,30 +315,10 @@ export function ImageToThumbnailFeature() {
                 </div>
               </div>
             </div>
-
-            {/* Text Content - Now on the right */}
-            <div className="flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
-              <div className="flex flex-col gap-4">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl text-white">
-                  Image to <span className="text-[#FF8D00]">Thumbnail</span>
-                </h1>
-                <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Upload any image and transform it into a professional, eye-catching thumbnail. Enhance colors, add
-                  effects, and optimize for maximum click-through rates with AI-powered editing.
-                </p>
-              </div>
-
-              <div className="h-px w-20 bg-gradient-to-r from-[#FF8D00] to-transparent" />
-
-              <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
-                <AnimatedButton size="md" className="w-fit">
-                  Try It Now
-                </AnimatedButton>
-              </a>
-            </div>
           </div>
         </div>
       </div>
     </div>
   )
 }
+

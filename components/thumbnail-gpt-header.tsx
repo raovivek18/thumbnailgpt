@@ -75,7 +75,7 @@ export function ThumbnailGPTHeader() {
     <header className="fixed top-9 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300">
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 gap-4 relative">
         {/* Logo + Name - Left */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity flex-shrink-0">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0">
           <img
             src="/thumbnailgpt-logo.svg"
             alt="ThumbnailGPT Logo"
@@ -104,7 +104,7 @@ export function ThumbnailGPTHeader() {
         </div>
 
         {/* Buttons - Right */}
-        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+        <div className="hidden md:flex items-center gap-2 shrink-0">
           <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
             <AnimatedButton variant="ghost" size="sm">
               Login

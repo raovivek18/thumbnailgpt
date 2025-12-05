@@ -7,10 +7,10 @@ import { AnimatedButton } from "@/components/ui/animated-button"
 const AspectRatioCard = ({ imageUrl, className = "" }: { imageUrl: string; className?: string }) => {
   return (
     <div className={`w-full flex flex-col justify-center items-center ${className}`}>
-      <div className="w-full max-w-lg mx-auto relative">
+      <div className="w-full max-w-2xl mx-auto relative p-4 sm:p-8">
         <div className="relative w-full shrink-0 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div className="w-full p-1">
-            <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-black aspect-[16/9]">
+            <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-black aspect-video">
               <img
                 loading="lazy"
                 width={800}
@@ -39,9 +39,9 @@ const AnimatedBeam = ({
   gradientStopColor = "#FFA500",
   curvature = 0.5,
 }: {
-  containerRef: React.RefObject<HTMLElement>
-  fromRef: React.RefObject<HTMLElement>
-  toRef: React.RefObject<HTMLElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
+  fromRef: React.RefObject<HTMLDivElement | null>
+  toRef: React.RefObject<HTMLDivElement | null>
   duration?: number
   pathColor?: string
   pathWidth?: number
@@ -74,14 +74,17 @@ const AnimatedBeam = ({
 
       const dx = endX - startX
       const dy = endY - startY
+      const verticalCompression = 0.5 // Reduce vertical height by 50%
+      const compressedDy = dy * verticalCompression
+      const compressedEndY = startY + compressedDy
       let d = ""
 
-      if (Math.abs(dx) > Math.abs(dy)) {
+      if (Math.abs(dx) > Math.abs(compressedDy)) {
         const controlX = startX + dx * curvature
-        d = `M ${startX},${startY} C ${controlX},${startY} ${controlX},${endY} ${endX},${endY}`
+        d = `M ${startX},${startY} C ${controlX},${startY} ${controlX},${compressedEndY} ${endX},${compressedEndY}`
       } else {
-        const controlY = startY + dy * curvature
-        d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${endY}`
+        const controlY = startY + compressedDy * curvature
+        d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${compressedEndY}`
       }
 
       setPathD(d)
@@ -213,8 +216,8 @@ export function RecreateThumbnailFeature() {
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-stretch">
-            {/* Left side - Description */}
-            <div className="flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
+            {/* Description - First on mobile, left on desktop */}
+            <div className="order-1 md:order-1 flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
               <div className="flex flex-col gap-4">
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl text-white">
                   <span className="text-[#FF8D00]">Recreate</span> Thumbnail
@@ -234,51 +237,57 @@ export function RecreateThumbnailFeature() {
               </a>
             </div>
 
-            {/* Right side - Interactive Card */}
-            <div className="flex items-center justify-center w-full px-4 md:px-6 h-full">
+            {/* Interactive Card - Second on mobile, right on desktop */}
+            <div className="order-2 md:order-2 flex items-center justify-center w-full px-4 md:px-6 h-full">
               <div
                 ref={containerRef}
-                className="w-full h-auto lg:aspect-[120/75] rounded-xl border border-[#FF8D00]/20 bg-black/40 backdrop-blur-md shadow-2xl relative flex flex-col"
+                className="w-full h-auto lg:aspect-[120/60] rounded-xl border border-[#FF8D00]/20 bg-black/40 backdrop-blur-md shadow-2xl relative flex flex-col"
               >
-                {/* Window controls */}
                 <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-[#FF8D00]/20 rounded-t-xl">
                   <div className="h-3 w-3 rounded-full bg-neutral-700" />
                   <div className="h-3 w-3 rounded-full bg-neutral-700" />
                   <div className="h-3 w-3 rounded-full bg-neutral-700" />
                 </div>
 
-                <div className="p-4 md:p-6 flex flex-col items-center gap-2 relative w-full">
+                <div className="p-3 md:p-4 flex flex-col items-center gap-0 relative w-full">
                   {/* YouTube Card Section */}
-                  <div ref={youtubeCardRef} className="relative w-full z-20">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1">
+                  <div ref={youtubeCardRef} className="relative w-full z-20 flex flex-col items-center">
+                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1 w-full">
                       Original
                     </label>
-                    <div className="w-full rounded-lg border border-[#FF8D00]/30 bg-neutral-800 p-2 hover:border-[#FF8D00]/50 transition-all transform scale-[0.8] origin-top">
-                      {/* Thumbnail */}
-                      <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black mb-2">
+                    <div className="w-full bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-all duration-200 cursor-pointer group transform scale-[0.55] origin-top mx-auto">
+                      {/* Thumbnail Container */}
+                      <div className="relative w-full aspect-video overflow-hidden bg-black">
                         <img
                           loading="lazy"
                           width={640}
                           height={360}
                           src="/images/thumbnailgpt-youtube-preview.jpg"
                           alt="YouTube video thumbnail"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        {/* Play button overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                          <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                            <Play className="w-5 h-5 text-white fill-white ml-1" />
+                        
+                        {/* Video Duration Badge */}
+                        <div className="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-medium px-1.5 py-0.5 rounded">
+                          12:34
+                        </div>
+                        
+                        {/* Play button overlay - appears on hover */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-200">
+                            <Play className="w-6 h-6 text-white fill-white ml-0.5" />
                           </div>
                         </div>
                       </div>
 
-                      {/* Title and stats */}
-                      <div className="space-y-1">
-                        <h3 className="text-xs font-semibold text-white line-clamp-2">
+                      {/* Video Info Section */}
+                      <div className="p-3">
+                        <h3 className="text-sm font-semibold text-white line-clamp-2 mb-2 group-hover:text-[#FF8D00] transition-colors">
                           Would You Risk Dying For $500,000?
                         </h3>
-                        <div className="flex items-center gap-2 text-[10px] text-neutral-400">
-                          <Eye className="w-2.5 h-2.5" />
+                        <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+                          <span>MrBeast</span>
+                          <span>•</span>
                           <span>102M views</span>
                           <span>•</span>
                           <span>2 months ago</span>
@@ -288,20 +297,19 @@ export function RecreateThumbnailFeature() {
                   </div>
 
                   {/* Enhanced Result Section */}
-                  <div ref={resultRef} className="w-full relative z-20">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1">
+                  <div ref={resultRef} className="w-full relative z-20 -mt-28 flex flex-col items-center">
+                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1 w-full">
                       Result
                     </label>
                     <AspectRatioCard imageUrl="/images/thumbnailgpt-thumbnail3.png" />
                   </div>
 
-                  {/* Animated Beam */}
                   <AnimatedBeam
                     containerRef={containerRef}
                     fromRef={youtubeCardRef}
                     toRef={resultRef}
                     duration={3}
-                    pathColor="rgba(255,255,255,0.1)"
+                    pathColor="rgba(255,141,0,0.1)"
                     pathWidth={2}
                     gradientStartColor="#FF8D00"
                     gradientStopColor="#FFA500"

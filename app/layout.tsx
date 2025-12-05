@@ -88,8 +88,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
+    <html lang="en" className="bg-black">
+      <body className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} style={{ backgroundColor: "#000000" }}>
         <LaunchBanner />
         <LenisProvider>{children}</LenisProvider>
         <Analytics />

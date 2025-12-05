@@ -5,9 +5,9 @@ import { AnimatedButton } from "@/components/ui/animated-button"
 
 export function LaserFlowSection() {
   return (
-    <div className="w-full max-w-full overflow-x-hidden px-4 sm:px-6 lg:max-w-6xl lg:mx-auto">
+    <div className="w-full max-w-full overflow-x-hidden px-4 sm:px-6 lg:max-w-6xl lg:mx-auto bg-black">
       <div
-        className="relative h-[600px] sm:h-[700px] md:h-[800px] overflow-hidden"
+        className="relative h-[600px] sm:h-[700px] md:h-[800px] overflow-hidden bg-black"
         style={{ backgroundColor: "#000000" }}
       >
         <LaserFlow horizontalBeamOffset={0.2} verticalBeamOffset={0.0} color="#FF8D00" />
