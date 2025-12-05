@@ -37,11 +37,10 @@ export default function LaunchBanner({
   }, [targetDate])
 
   return (
-    <button className="cursor-pointer px-2 sm:px-4 fixed z-50 font-medium top-0 gap-2 flex items-center justify-center w-full backdrop-blur-xl shadow-inner-white-sm/10 bg-[#FF8D00] text-white py-1.5 sm:py-0.5">
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 text-[10px] xs:text-xs sm:text-sm md:text-base w-full max-w-7xl -mt-0.25">
-        <span className="opacity-100 font-medium text-center leading-tight sm:leading-normal">
-          <span className="hidden sm:inline">{promoText} - Use code </span>
-          <span className="sm:hidden">25% OFF - Code </span>
+    <button className="cursor-pointer px-2 sm:px-4 fixed z-50 font-medium top-0 left-0 right-0 gap-2 flex items-center justify-center w-full backdrop-blur-xl shadow-inner-white-sm/10 bg-[#FF8D00] text-white py-1.5 sm:py-0.5 h-9">
+      <div className="flex flex-row items-center justify-center gap-x-2 sm:gap-x-3 text-[10px] xs:text-xs sm:text-sm md:text-base w-full max-w-7xl">
+        <span className="opacity-100 font-medium text-center leading-tight sm:leading-normal whitespace-nowrap">
+          <span>{promoText} - Use code </span>
           <span
             onClick={() => navigator.clipboard.writeText(promoCode)}
             className="underline cursor-pointer active:scale-95 font-bold"
