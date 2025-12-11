@@ -17,6 +17,11 @@ export function ClientsSection() {
       />
 
       <section className="relative mx-auto max-w-3xl px-4">
+        <div className="mb-6 flex items-center justify-center w-full">
+          <a href="https://www.producthunt.com/products/thumbnailgpt-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-thumbnailgpt&#0045;2" target="_blank" rel="noopener noreferrer">
+            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1046501&theme=dark&t=1765437298280" alt="ThumbnailGPT - AI&#0032;YouTube&#0032;Thumbnail&#0032;Generator&#0032;for&#0032;Viral&#0032;Videos | Product Hunt" style={{ width: "200px", height: "43px" }} width="200" height="43" />
+          </a>
+        </div>
         <h2 className="mb-5 text-center font-medium text-white text-xl tracking-tight md:text-3xl">
           <span className="text-gray-400">Trusted by creators.</span>
           <br />
