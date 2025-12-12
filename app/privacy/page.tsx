@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Learn how ThumbnailGPT collects, uses, and protects your personal information.",
 }
 
+// Enable static generation with revalidation
+export const revalidate = 3600 // Revalidate every hour
+
 export default function PrivacyPage() {
   return (
     <>

@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Learn about ThumbnailGPT's refund policy and eligibility criteria.",
 }
 
+// Enable static generation with revalidation
+export const revalidate = 3600 // Revalidate every hour
+
 export default function RefundPage() {
   return (
     <>

@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   description: "Learn about ThumbnailGPT - AI-powered thumbnail generation tool for creators.",
 }
 
+// Enable static generation with revalidation
+export const revalidate = 3600 // Revalidate every hour
+
 export default function AboutPage() {
   return (
     <>

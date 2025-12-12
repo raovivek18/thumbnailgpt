@@ -1,3 +1,14 @@
+/**
+ * Express server for serving static exports (out directory)
+ * 
+ * NOTE: This file is only used when Next.js is configured with `output: 'export'` 
+ * in next.config.mjs. Currently, the app uses SSR mode, so Next.js handles the server.
+ * 
+ * If you switch to static export mode, uncomment the `output: 'export'` option
+ * in next.config.mjs and use this server to serve the static files.
+ * 
+ * For SSR mode (current setup), Next.js handles the server automatically via `next start`.
+ */
 const express = require('express');
 const path = require('path');
 const fs = require('fs');

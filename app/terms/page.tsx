@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Read the terms and conditions for using ThumbnailGPT's services.",
 }
 
+// Enable static generation with revalidation
+export const revalidate = 3600 // Revalidate every hour
+
 export default function TermsPage() {
   return (
     <>
