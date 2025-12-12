@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Inter } from "next/font/google"
 import { LenisProvider } from "@/components/lenis-provider"
 import LaunchBanner from "@/components/launch-banner"
+import { GoogleAnalytics } from "@/components/analytics"
 import "./globals.css"
 
 const inter = Inter({
@@ -12,20 +13,47 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
+// Helper function to get base URL
+function getBaseUrl() {
+  // Use environment variable if available (for production)
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL
+  }
+  // Fallback for development
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  // Default fallback (update with your actual domain)
+  return 'https://thumbnailgpt.com'
+}
+
+const baseUrl = getBaseUrl()
+const ogImageUrl = `${baseUrl}/opengraph-image`
+
 export const metadata: Metadata = {
-  title: "ThumbnailGPT - AI YouTube Thumbnail Generator",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+    template: "%s | ThumbnailGPT"
+  },
   description:
-    "Create viral YouTube thumbnails with AI. Best AI thumbnail generator for YouTube automation, faceless channels & CTR optimization. Free AI thumbnail maker with 1-click generation. Join the waitlist for early access to ThumbnailGPT.",
+    "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
   keywords: [
+    "ai thumbnail maker",
+    "ai thumbnail generator tool",
+    "ai thumbnail creator",
+    "thumbnailgpt ai thumbnail maker",
+    "viral thumbnail generator",
+    "social media thumbnail generator",
+    "high ctr thumbnail maker",
+    "create thumbnails online with ai",
+    "best ai thumbnail maker 2025",
     "thumbnail gpt",
-    "ai thumbnail generator",
     "ai youtube thumbnail generator",
     "ai youtube thumbnail maker",
     "youtube thumbnail ai",
-    "ai thumbnail creator",
     "automatic thumbnail generator",
     "best ai thumbnail generator",
-    "ai thumbnail maker",
     "ai tool to make youtube thumbnails",
     "create youtube thumbnail with ai",
     "generate youtube thumbnail ai",
@@ -64,22 +92,59 @@ export const metadata: Metadata = {
     "ai for youtube growth",
     "thumbnailgpt waitlist",
     "thumbnailgpt launch",
-    "thumbnailgpt ai thumbnail maker",
     "youtube thumbnail generator 2025",
   ],
+  authors: [{ name: "ThumbnailGPT" }],
+  creator: "ThumbnailGPT",
+  publisher: "ThumbnailGPT",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: "ThumbnailGPT - AI YouTube Thumbnail Generator",
-    description:
-      "Create viral YouTube thumbnails with AI. Best AI thumbnail generator for YouTube automation, faceless channels & CTR optimization.",
     type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: "ThumbnailGPT",
+    title: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+    description:
+      "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ThumbnailGPT - AI YouTube Thumbnail Generator",
+    title: "ThumbnailGPT – Make Stunning Thumbnails with AI",
     description:
-      "Create viral YouTube thumbnails with AI. Best AI thumbnail generator for YouTube automation, faceless channels & CTR optimization.",
+      "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
+    images: [ogImageUrl],
+    creator: "@thumbnailgpt",
   },
-    generator: 'v0.app'
+  alternates: {
+    canonical: baseUrl,
+  },
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  colorScheme: "dark",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  generator: "Next.js",
 }
 
 export default function RootLayout({
@@ -89,7 +154,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-black">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+      </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} style={{ backgroundColor: "#000000" }}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-MMT6QV52"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+        
+        <GoogleAnalytics />
         <LaunchBanner />
         <LenisProvider>{children}</LenisProvider>
         <Analytics />
