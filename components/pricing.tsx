@@ -42,8 +42,8 @@ export function Pricing() {
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Find the right plan to fuel your{" "}
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 flex flex-col items-center gap-2">
+            <span>Find the right plan to fuel your</span>
             <span className="inline-block border-2 border-dashed border-[#FF8D00] px-3 py-1 rounded-xl bg-[#FF8D00]/10">
               Content Creation
             </span>
