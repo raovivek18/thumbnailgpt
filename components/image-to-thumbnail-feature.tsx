@@ -235,7 +235,7 @@ const AnimatedBeam = ({
 }
 
 export function ImageToThumbnailFeature() {
-  const [imageUrl] = useState("/images/thumbnailgpt-famous-athletes.png")
+  const [imageUrl] = useState("/images/thumbnailgpt-famous-athletes.webp")
 
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null)
@@ -286,11 +286,11 @@ export function ImageToThumbnailFeature() {
                     </label>
                     <div className="flex items-center justify-center w-full">
                       <ImageReveal
-                        leftImage="/images/athletes/ronaldo.png"
-                        leftMiddleImage="/images/athletes/messi.png"
-                        middleImage="/images/athletes/virat-kohli.png"
-                        rightMiddleImage="/images/athletes/lebron-james.png"
-                        rightImage="/images/athletes/usain-bolt.png"
+                        leftImage="/images/athletes/ronaldo.webp"
+                        leftMiddleImage="/images/athletes/messi.webp"
+                        middleImage="/images/athletes/virat-kohli.webp"
+                        rightMiddleImage="/images/athletes/lebron-james.webp"
+                        rightImage="/images/athletes/usain-bolt.webp"
                       />
                     </div>
                   </div>

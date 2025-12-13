@@ -241,7 +241,7 @@ export function TextToThumbnailFeature() {
   const [prompt, setPrompt] = useState(
     "Cinematic B/W Virat Kohli with bold red 'Reality' text and dramatic shadow lighting.",
   )
-  const [imageUrl, setImageUrl] = useState("/images/thumbnailgpt-692b18f74ff58.png")
+  const [imageUrl, setImageUrl] = useState("/images/thumbnailgpt-692b18f74ff58.webp")
 
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null)

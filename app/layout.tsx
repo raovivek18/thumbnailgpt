@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Inter } from "next/font/google"
 import { LenisProvider } from "@/components/lenis-provider"
@@ -137,14 +137,15 @@ export const metadata: Metadata = {
     canonical: baseUrl,
   },
   manifest: "/manifest.json",
+  generator: "Next.js",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
   themeColor: "#000000",
   colorScheme: "dark",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  generator: "Next.js",
 }
 
 export default function RootLayout({
@@ -156,7 +157,6 @@ export default function RootLayout({
     <html lang="en" className="bg-black">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#000000" />
       </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} style={{ backgroundColor: "#000000" }}>
         {/* Google Tag Manager (noscript) */}

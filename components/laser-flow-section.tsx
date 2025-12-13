@@ -36,7 +36,7 @@ export function LaserFlowSection() {
         >
           <div className="w-full h-full rounded-[12px] sm:rounded-[14px] md:rounded-[16px] overflow-hidden relative">
             <img
-              src="/images/design-mode/image.png"
+              src="/images/design-mode/image.webp"
               alt="ThumbnailGPT Interface"
               className="w-full h-full object-cover object-top"
             />

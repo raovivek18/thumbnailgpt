@@ -262,7 +262,7 @@ export function RecreateThumbnailFeature() {
                           loading="lazy"
                           width={640}
                           height={360}
-                          src="/images/thumbnailgpt-youtube-preview.jpg"
+                          src="/images/thumbnailgpt-youtube-preview.webp"
                           alt="YouTube video thumbnail"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -301,7 +301,7 @@ export function RecreateThumbnailFeature() {
                     <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1 w-full">
                       Result
                     </label>
-                    <AspectRatioCard imageUrl="/images/thumbnailgpt-thumbnail3.png" />
+                    <AspectRatioCard imageUrl="/images/thumbnailgpt-thumbnail3.webp" />
                   </div>
 
                   <AnimatedBeam
