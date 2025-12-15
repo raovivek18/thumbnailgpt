@@ -28,7 +28,8 @@ function getBaseUrl() {
 }
 
 const baseUrl = getBaseUrl()
-const ogImageUrl = `${baseUrl}/opengraph-image`
+// Use static OG image for better social media compatibility
+const ogImageUrl = `${baseUrl}/og/thumbnailgpt.-og-image.png`
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -122,6 +123,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+        type: "image/png",
       },
     ],
   },
@@ -132,6 +134,7 @@ export const metadata: Metadata = {
       "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
     images: [ogImageUrl],
     creator: "@thumbnailgpt",
+    site: "@thumbnailgpt",
   },
   alternates: {
     canonical: baseUrl,
