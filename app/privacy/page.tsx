@@ -5,6 +5,9 @@ import Footer from "@/components/footer"
 export const metadata: Metadata = {
   title: "Privacy Policy | ThumbnailGPT",
   description: "Learn how ThumbnailGPT collects, uses, and protects your personal information.",
+  alternates: {
+    canonical: "https://thumbnailgpt.com/privacy",
+  },
 }
 
 // Enable static generation with revalidation

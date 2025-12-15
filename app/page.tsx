@@ -1,5 +1,4 @@
-"use client"
-
+import type { Metadata } from "next"
 import { ThumbnailGPTHeader } from "@/components/thumbnail-gpt-header"
 import { LaserFlowSection } from "@/components/laser-flow-section"
 import { ClientsSection } from "@/components/clients-section"
@@ -10,6 +9,12 @@ import { Pricing } from "@/components/pricing"
 import { FaqSection } from "@/components/faq-section"
 import { CtaSection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://thumbnailgpt.com/",
+  },
+}
 
 export default function Home() {
   return (

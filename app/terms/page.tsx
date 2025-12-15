@@ -5,6 +5,9 @@ import Footer from "@/components/footer"
 export const metadata: Metadata = {
   title: "Terms & Conditions | ThumbnailGPT",
   description: "Read the terms and conditions for using ThumbnailGPT's services.",
+  alternates: {
+    canonical: "https://thumbnailgpt.com/terms",
+  },
 }
 
 // Enable static generation with revalidation

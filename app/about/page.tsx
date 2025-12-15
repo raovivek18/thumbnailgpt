@@ -7,6 +7,9 @@ import Footer from "@/components/footer"
 export const metadata: Metadata = {
   title: "About | ThumbnailGPT",
   description: "Learn about ThumbnailGPT - AI-powered thumbnail generation tool for creators.",
+  alternates: {
+    canonical: "https://thumbnailgpt.com/about",
+  },
 }
 
 // Enable static generation with revalidation

@@ -5,6 +5,9 @@ import Footer from "@/components/footer"
 export const metadata: Metadata = {
   title: "Refund Policy | ThumbnailGPT",
   description: "Learn about ThumbnailGPT's refund policy and eligibility criteria.",
+  alternates: {
+    canonical: "https://thumbnailgpt.com/refund",
+  },
 }
 
 // Enable static generation with revalidation
