@@ -1,8 +1,13 @@
 # Nixpacks configuration for Next.js SSR with Bun
+# Security-hardened configuration
 
 [phases.setup]
 nixPkgs = ["bun"]
 aptPkgs = ["build-essential"]
+cmds = [
+  "groupadd -r appgroup -g 1001 || true",
+  "useradd -r -u 1001 -g appgroup -s /bin/sh -d /app appuser || true"
+]
 
 [phases.install]
 cmds = ["bun install"]
@@ -12,4 +17,5 @@ cmds = ["bun run build"]
 
 [start]
 cmd = "bun run start"
+user = "appuser"
 

@@ -17,6 +17,8 @@ try {
 }
 
 const nextConfig = {
+  // Enable standalone output for Docker
+  output: 'standalone',
   // SSR mode (removed output: 'export' for server-side rendering)
   // No trailing slashes (e.g., /about instead of /about/)
   trailingSlash: false,
@@ -40,17 +42,49 @@ const nextConfig = {
   poweredByHeader: false,
   // Headers for caching and security
   async headers() {
+    // Build CSP dynamically based on environment
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://thumbnailgpt.com'
+    const adminDomain = process.env.ADMIN_DOMAIN
+    
+    // Content Security Policy
+    const cspDirectives = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: https: blob:",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "connect-src 'self' https://www.google-analytics.com https://vercel.live https://*.supabase.co https://*.supabase.in",
+      "frame-src 'self' https://www.googletagmanager.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'self'",
+      "upgrade-insecure-requests",
+    ]
+    
+    if (adminDomain) {
+      cspDirectives.push(`frame-ancestors 'self' https://${adminDomain}`)
+    }
+    
     return [
       {
         source: '/:path*',
         headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: cspDirectives.join('; ')
+          },
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on'
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY'
           },
           {
             key: 'X-Content-Type-Options',
@@ -62,7 +96,15 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+          },
+          {
+            key: 'X-Permitted-Cross-Domain-Policies',
+            value: 'none'
           }
         ],
       },

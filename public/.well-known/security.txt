@@ -1,0 +1,25 @@
+Contact: mailto:security@thumbnailgpt.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://thumbnailgpt.com/.well-known/security.txt
+Policy: https://thumbnailgpt.com/security-policy
+
+# Security Policy
+# We take security seriously and appreciate responsible disclosure of vulnerabilities.
+# Please report security issues to security@thumbnailgpt.com
+# We will respond within 48 hours and work with you to resolve the issue.
+
+# Scope
+# - thumbnailgpt.com and all subdomains
+# - Production infrastructure
+# - Third-party integrations
+
+# Out of Scope
+# - Social engineering attacks
+# - Physical attacks
+# - Denial of service attacks
+# - Issues requiring physical access to devices
+
+# Rewards
+# We may offer recognition or rewards for valid security reports at our discretion.
+
