@@ -65,8 +65,8 @@ export async function requireAdmin(): Promise<AdminUser> {
 /**
  * Check if request is from admin subdomain
  */
-export function isAdminDomain(): boolean {
-  const headersList = headers()
+export async function isAdminDomain(): Promise<boolean> {
+  const headersList = await headers()
   const host = headersList.get('host') || ''
   const adminDomain = process.env.ADMIN_DOMAIN
   
@@ -83,7 +83,7 @@ export function isAdminDomain(): boolean {
  */
 export async function validateAdminAccess(): Promise<boolean> {
   // Must be from admin domain
-  if (!isAdminDomain()) {
+  if (!(await isAdminDomain())) {
     return false
   }
   
