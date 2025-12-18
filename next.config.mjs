@@ -40,6 +40,21 @@ const nextConfig = {
   compress: true,
   // Power optimization
   poweredByHeader: false,
+  // Redirects for SEO and 404 fixes
+  async redirects() {
+    return [
+      {
+        source: "/privacy-policy",
+        destination: "/privacy",
+        permanent: true,
+      },
+      {
+        source: "/manifest.json",
+        destination: "/manifest.webmanifest",
+        permanent: true,
+      },
+    ]
+  },
   // Headers for caching and security
   async headers() {
     // Build CSP dynamically based on environment

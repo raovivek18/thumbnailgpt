@@ -1,0 +1,14 @@
+# *
+User-agent: *
+Allow: /
+
+# Disallow admin or private pages
+Disallow: /api/
+
+# Block non-SEO assets
+Disallow: /opengraph-image
+Disallow: /manifest.webmanifest
+Disallow: /favicon.ico
+
+# Sitemap
+Sitemap: https://thumbnailgpt.com/sitemap.xml
