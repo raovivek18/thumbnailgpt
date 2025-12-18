@@ -1,20 +1,17 @@
-# Nixpacks configuration for Next.js SSR with Bun
+# Nixpacks configuration for Next.js SSR with Node.js and pnpm
 # Security-hardened configuration
 
 [phases.setup]
-nixPkgs = ["bun"]
-aptPkgs = ["build-essential"]
+nixPkgs = ["nodejs_22", "pnpm"]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = ["pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = ["bun run build"]
+cmds = ["pnpm build"]
+
+[start]
+cmd = "pnpm start"
 
 [run]
 user = "node"
-
-[start]
-cmd = "bun run start"
-
-
