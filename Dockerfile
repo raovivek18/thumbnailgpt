@@ -35,6 +35,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Ensure node user exists (nixpacks images include it, but we must be safe)
+RUN id node || useradd -m node
+
 # Copy necessary files
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
@@ -45,6 +48,12 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
+# Fix permissions (otherwise app will crash - node needs to read /app)
+RUN chown -R node:node /app
+
+# Switch to non-root user
+USER node
 
 # Start the application
 CMD ["node", "server.js"]

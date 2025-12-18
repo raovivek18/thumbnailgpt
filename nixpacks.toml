@@ -12,6 +12,7 @@ cmds = ["pnpm build"]
 
 [start]
 cmd = "pnpm start"
+user = "node"
 
 [run]
 user = "node"
