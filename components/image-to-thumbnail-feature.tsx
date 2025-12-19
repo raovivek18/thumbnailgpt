@@ -91,9 +91,13 @@ const AnimatedBeam = ({
   const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
+    let rafId: number | null = null
+    let needsUpdate = true
+
     function calc() {
       if (!containerRef.current || !fromRef.current || !toRef.current) return
 
+      // Batch DOM reads to prevent forced reflow
       const containerRect = containerRef.current.getBoundingClientRect()
       const fromRect = fromRef.current.getBoundingClientRect()
       const toRect = toRef.current.getBoundingClientRect()
@@ -127,16 +131,31 @@ const AnimatedBeam = ({
       } catch (e) {
         setPathLength(Math.sqrt(dx * dx + dy * dy))
       }
+      
+      needsUpdate = false
     }
 
+    function scheduleCalc() {
+      if (needsUpdate) return
+      needsUpdate = true
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        calc()
+        rafId = null
+      })
+    }
+
+    // Initial calculation
     calc()
-    const ro = new ResizeObserver(calc)
+    
+    const ro = new ResizeObserver(scheduleCalc)
     if (containerRef.current) ro.observe(containerRef.current)
-    window.addEventListener("resize", calc)
+    window.addEventListener("resize", scheduleCalc, { passive: true })
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId)
       ro.disconnect()
-      window.removeEventListener("resize", calc)
+      window.removeEventListener("resize", scheduleCalc)
     }
   }, [containerRef, fromRef, toRef, curvature])
 

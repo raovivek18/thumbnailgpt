@@ -60,9 +60,13 @@ const AnimatedBeam = ({
   const rafRef = React.useRef<number | null>(null)
 
   React.useEffect(() => {
+    let rafId: number | null = null
+    let needsUpdate = true
+
     function calc() {
       if (!containerRef.current || !fromRef.current || !toRef.current) return
 
+      // Batch DOM reads to prevent forced reflow
       const containerRect = containerRef.current.getBoundingClientRect()
       const fromRect = fromRef.current.getBoundingClientRect()
       const toRect = toRef.current.getBoundingClientRect()
@@ -99,16 +103,31 @@ const AnimatedBeam = ({
       } catch (e) {
         setPathLength(Math.sqrt(dx * dx + dy * dy))
       }
+      
+      needsUpdate = false
     }
 
+    function scheduleCalc() {
+      if (needsUpdate) return
+      needsUpdate = true
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        calc()
+        rafId = null
+      })
+    }
+
+    // Initial calculation
     calc()
-    const ro = new ResizeObserver(calc)
+    
+    const ro = new ResizeObserver(scheduleCalc)
     if (containerRef.current) ro.observe(containerRef.current)
-    window.addEventListener("resize", calc)
+    window.addEventListener("resize", scheduleCalc, { passive: true })
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId)
       ro.disconnect()
-      window.removeEventListener("resize", calc)
+      window.removeEventListener("resize", scheduleCalc)
     }
   }, [containerRef, fromRef, toRef, curvature])
 
@@ -117,8 +136,18 @@ const AnimatedBeam = ({
 
     let start: number | null = null
     const durationMs = duration * 1000
+    let lastFrameTime = 0
+    const targetFPS = 60
+    const frameInterval = 1000 / targetFPS
 
     function step(ts: number) {
+      // Throttle to target FPS to reduce CPU usage
+      if (ts - lastFrameTime < frameInterval) {
+        rafRef.current = requestAnimationFrame(step)
+        return
+      }
+      lastFrameTime = ts
+
       if (!start) start = ts
       const elapsed = ts - start
       const t = (elapsed % durationMs) / durationMs
@@ -126,6 +155,7 @@ const AnimatedBeam = ({
       if (pathRef.current && particleRef.current) {
         try {
           const point = pathRef.current.getPointAtLength(t * pathLength)
+          // Batch DOM updates
           particleRef.current.setAttribute("cx", String(point.x))
           particleRef.current.setAttribute("cy", String(point.y))
 
@@ -142,7 +172,10 @@ const AnimatedBeam = ({
     rafRef.current = requestAnimationFrame(step)
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
     }
   }, [pathD, pathLength, duration])
 
