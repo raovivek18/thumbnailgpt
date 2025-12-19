@@ -48,11 +48,6 @@ const nextConfig = {
         destination: "/privacy",
         permanent: true,
       },
-      {
-        source: "/manifest.json",
-        destination: "/manifest.webmanifest",
-        permanent: true,
-      },
     ]
   },
   // Headers for caching and security
@@ -64,11 +59,11 @@ const nextConfig = {
     // Content Security Policy
     const cspDirectives = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: https: blob:",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "connect-src 'self' https://www.google-analytics.com https://vercel.live https://*.supabase.co https://*.supabase.in",
+      "connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://*.supabase.in",
       "frame-src 'self' https://www.googletagmanager.com",
       "object-src 'none'",
       "base-uri 'self'",
@@ -115,7 +110,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+            value: 'camera=(), microphone=(), geolocation=()'
           },
           {
             key: 'X-Permitted-Cross-Domain-Policies',

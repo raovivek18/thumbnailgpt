@@ -145,8 +145,18 @@ const AnimatedBeam = ({
 
     let start: number | null = null
     const durationMs = duration * 1000
+    let lastFrameTime = 0
+    const targetFPS = 60
+    const frameInterval = 1000 / targetFPS
 
     function step(ts: number) {
+      // Throttle to target FPS to reduce CPU usage
+      if (ts - lastFrameTime < frameInterval) {
+        rafRef.current = requestAnimationFrame(step)
+        return
+      }
+      lastFrameTime = ts
+
       if (!start) start = ts
       const elapsed = ts - start
       const t = (elapsed % durationMs) / durationMs
@@ -154,6 +164,7 @@ const AnimatedBeam = ({
       if (pathRef.current && particleRef.current) {
         try {
           const point = pathRef.current.getPointAtLength(t * pathLength)
+          // Batch DOM updates
           particleRef.current.setAttribute("cx", String(point.x))
           particleRef.current.setAttribute("cy", String(point.y))
 
@@ -170,7 +181,10 @@ const AnimatedBeam = ({
     rafRef.current = requestAnimationFrame(step)
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
     }
   }, [pathD, pathLength, duration])
 

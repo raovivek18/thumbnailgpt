@@ -1,6 +1,5 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Analytics } from "@vercel/analytics/next"
 import { Inter } from "next/font/google"
 import { LenisProvider } from "@/components/lenis-provider"
 import LaunchBanner from "@/components/launch-banner"
@@ -158,9 +157,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-black">
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-      </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} style={{ backgroundColor: "#000000" }}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
@@ -176,7 +172,6 @@ export default function RootLayout({
         <GoogleAnalytics />
         <LaunchBanner />
         <LenisProvider>{children}</LenisProvider>
-        <Analytics />
       </body>
     </html>
   )
