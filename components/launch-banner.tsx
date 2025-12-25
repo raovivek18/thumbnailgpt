@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 
 // EXACT SAME UI AS PROVIDED HTML (Orange launch version)
 export default function LaunchBanner({
-  targetDate = "2025-12-25T23:59:59",
-  promoText = "LAUNCH SPECIAL: 25% OFF ALL PLANS",
-  promoCode = "LAUNCH25",
+  targetDate = "2025-12-28T23:59:59",
+  promoText = "CHRISTMAS OFFER - 25% OFF ALL PLANS",
+  promoCode = "GIFT25",
   ctaHref = "https://app.thumbnailgpt.com",
 }) {
   const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", mins: "00", secs: "00" })
