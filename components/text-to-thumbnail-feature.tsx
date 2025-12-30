@@ -292,8 +292,8 @@ export function TextToThumbnailFeature() {
                   Text to <span className="text-[#FF8D00]">Thumbnail</span>
                 </h2>
                 <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Instantly transform simple text prompts into compelling, professional-grade thumbnails. Save time,
-                  boost engagement, and create stunning visuals in seconds with the power of AI.
+                  Instantly transform simple text prompts into compelling, professional-grade YouTube thumbnails using our AI thumbnail generator. Save time,
+                  boost engagement, and create stunning visuals in seconds with the power of AI thumbnail maker technology.
                 </p>
               </div>
 

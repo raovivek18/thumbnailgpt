@@ -256,8 +256,8 @@ export function RecreateThumbnailFeature() {
                   <span className="text-[#FF8D00]">Recreate</span> Thumbnail
                 </h2>
                 <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Upload any YouTube thumbnail and get AI-generated recreated versions with improved design, enhanced
-                  clarity, and boosted CTR potential for your content.
+                  Upload any YouTube thumbnail and recreate YouTube thumbnail with AI-generated versions featuring improved design, enhanced
+                  clarity, and boosted CTR potential. Our AI YouTube thumbnail creator transforms existing thumbnails into high-converting visuals.
                 </p>
               </div>
 

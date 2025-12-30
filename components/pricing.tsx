@@ -10,7 +10,7 @@ export function Pricing() {
   const plans = [
     {
       name: "Basic",
-      description: "Perfect for individuals and small projects getting started with AI thumbnails.",
+      description: "Perfect for individuals and small projects getting started with AI thumbnail generator tools for YouTube.",
       price: { INR: 299, USD: 3.37 },
       credits: 200,
       thumbnails: 20,
@@ -19,7 +19,7 @@ export function Pricing() {
     },
     {
       name: "Pro",
-      description: "Best value for professionals and growing businesses that need more power.",
+      description: "Best value for professionals and growing businesses that need more power from their YouTube thumbnail generator.",
       price: { INR: 599, USD: 6.76 },
       credits: 500,
       thumbnails: 50,
@@ -28,7 +28,7 @@ export function Pricing() {
     },
     {
       name: "Premium",
-      description: "Advanced plan with unlimited access for large teams and power users.",
+      description: "Advanced plan with unlimited access for large teams and power users who need premium AI thumbnail maker capabilities.",
       price: { INR: 1199, USD: 13.52 },
       credits: 1500,
       thumbnails: 150,
@@ -49,8 +49,8 @@ export function Pricing() {
             </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-            Join thousands of creators generating stunning YouTube thumbnails with AI. Choose the perfect plan for your
-            content creation needs.
+            Join thousands of creators using our AI thumbnail generator to produce stunning YouTube thumbnails. Choose the perfect plan for your
+            content creation needs and unlock the power of thumbnail maker AI technology.
           </p>
 
           <div className="inline-flex items-center gap-0 p-1 rounded-full bg-neutral-900/60 backdrop-blur-sm border border-[#FF8D00]/20 relative">

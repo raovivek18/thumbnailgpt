@@ -12,13 +12,13 @@ export function CtaSection() {
         </h2>
 
         <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto">
-          Join thousands of creators using AI to generate click-worthy thumbnails in seconds.
+          Join thousands of creators using our AI thumbnail generator and YouTube thumbnail generator to produce click-worthy thumbnails in seconds.
         </p>
 
         <div className="pt-4">
           <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
             <AnimatedButton size="lg" className="group inline-flex items-center gap-2">
-              Get Started Free
+              Get Started
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </AnimatedButton>
           </a>

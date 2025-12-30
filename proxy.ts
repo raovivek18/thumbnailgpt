@@ -74,7 +74,7 @@ setInterval(() => {
   }
 }, 60 * 1000) // Clean up every minute
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const ip = getClientIP(request)
   

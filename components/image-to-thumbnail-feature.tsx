@@ -286,8 +286,8 @@ export function ImageToThumbnailFeature() {
                   Image to <span className="text-[#FF8D00]">Thumbnail</span>
                 </h1>
                 <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Upload any image and transform it into a professional, eye-catching thumbnail. Enhance colors, add
-                  effects, and optimize for maximum click-through rates with AI-powered editing.
+                  Upload any image and transform it into a professional, eye-catching YouTube thumbnail. Enhance colors, add
+                  effects, and optimize thumbnail background editing for maximum click-through rates with AI-powered YouTube thumbnail background enhancement.
                 </p>
               </div>
 

@@ -17,8 +17,8 @@ export function LaserFlowSection() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight my-0 py-0">
               Generate <span className="text-[#FF8D00]">Stunning</span> Thumbnails in Seconds
             </h1>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 leading-relaxed my-3">
-              AI-powered thumbnail creator that transforms your ideas into viral visuals instantly.
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 leading-relaxed my-3" suppressHydrationWarning>
+              AI thumbnail generator that transforms your ideas into viral YouTube thumbnails instantly. The ultimate thumbnail maker AI for creators.
             </p>
             <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
               <AnimatedButton size="md">Get Started</AnimatedButton>

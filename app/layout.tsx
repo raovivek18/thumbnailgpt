@@ -33,11 +33,11 @@ const ogImageUrl = `${baseUrl}/og/thumbnailgpt.-og-image.png`
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+    default: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
     template: "%s | ThumbnailGPT"
   },
   description:
-    "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
+    "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
   keywords: [
     "ai thumbnail maker",
     "ai thumbnail generator tool",
@@ -113,24 +113,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: baseUrl,
     siteName: "ThumbnailGPT",
-    title: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+    title: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
     description:
-      "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
+      "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
     images: [
       {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+        alt: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ThumbnailGPT – Make Stunning Thumbnails with AI",
+    title: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
     description:
-      "Create eye-catching thumbnails with ThumbnailGPT, the AI thumbnail maker that designs viral, high-CTR thumbnails in seconds for videos and social media.",
+      "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
     images: [ogImageUrl],
     creator: "@thumbnailgpt",
     site: "@thumbnailgpt",

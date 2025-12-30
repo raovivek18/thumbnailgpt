@@ -6,7 +6,7 @@ const faqs = [
   {
     question: "What is ThumbnailGPT and how does it work?",
     answer:
-      "ThumbnailGPT is an AI powered thumbnail generator. You enter a prompt and optionally upload images. The system processes your input and creates a custom thumbnail that you can use for YouTube, social media, blogs, or other projects. No design skills are required.",
+      "ThumbnailGPT is an AI thumbnail generator and YouTube thumbnail generator powered by advanced AI. You enter a prompt and optionally upload images. The system processes your input and creates a custom thumbnail using thumbnail AI technology that you can use for YouTube, social media, blogs, or other projects. No design skills are required.",
   },
   {
     question: "Do I need to install any software to use it?",
