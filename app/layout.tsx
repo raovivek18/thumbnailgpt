@@ -144,6 +144,9 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   generator: "Next.js",
+  verification: {
+    google: "DR9fULaZKpwfSdk5HdJU7rQwOG7YUeiAAw-fVHUchtw",
+  },
 }
 
 export const viewport: Viewport = {
