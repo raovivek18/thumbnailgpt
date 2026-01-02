@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useBanner } from "./banner-context"
 
 // EXACT SAME UI AS PROVIDED HTML (Orange launch version)
 export default function LaunchBanner({
@@ -8,15 +9,42 @@ export default function LaunchBanner({
   promoText = "YEAR END SALE - 25% OFF ALL PLANS",
   promoCode = "SALE25",
   ctaHref = "https://app.thumbnailgpt.com",
+  enabled = true,
+}: {
+  targetDate?: string
+  promoText?: string
+  promoCode?: string
+  ctaHref?: string
+  enabled?: boolean
 }) {
   const [timeLeft, setTimeLeft] = useState({ days: "00", hours: "00", mins: "00", secs: "00" })
+  const [isExpired, setIsExpired] = useState(false)
+  const { setIsVisible } = useBanner()
 
   useEffect(() => {
+    if (!enabled) {
+      setIsVisible(false)
+      return
+    }
+
     const target = new Date(targetDate)
 
     function update() {
       const now = new Date()
-      const diff = Math.max(0, target.getTime() - now.getTime())
+      const diff = target.getTime() - now.getTime()
+
+      if (diff <= 0) {
+        // Timer has ended
+        setIsExpired(true)
+        setIsVisible(false)
+        setTimeLeft({
+          days: "00",
+          hours: "00",
+          mins: "00",
+          secs: "00",
+        })
+        return
+      }
 
       const secs = Math.floor((diff / 1000) % 60)
       const mins = Math.floor((diff / 1000 / 60) % 60)
@@ -29,15 +57,21 @@ export default function LaunchBanner({
         mins: String(mins).padStart(2, "0"),
         secs: String(secs).padStart(2, "0"),
       })
+      setIsVisible(true)
     }
 
     update()
     const interval = setInterval(update, 1000)
     return () => clearInterval(interval)
-  }, [targetDate])
+  }, [targetDate, enabled, setIsVisible])
+
+  // Don't render if disabled or expired
+  if (!enabled || isExpired) {
+    return null
+  }
 
   return (
-    <button className="cursor-pointer px-2 sm:px-4 fixed z-50 font-medium top-0 left-0 right-0 gap-2 flex items-center justify-center w-full backdrop-blur-xl shadow-inner-white-sm/10 bg-[#FF8D00] text-white py-1.5 sm:py-0.5 h-9">
+    <button className="cursor-pointer px-2 sm:px-4 fixed z-50 font-medium top-0 left-0 right-0 gap-2 flex items-center justify-center w-full backdrop-blur-xl shadow-inner-white-sm/10 bg-[#FF8D00] text-white py-1.5 sm:py-0.5 h-9 transition-all duration-300">
       <div className="flex flex-row items-center justify-center gap-x-2 sm:gap-x-3 text-[10px] xs:text-xs sm:text-sm md:text-base w-full max-w-7xl">
         <span className="opacity-100 font-medium text-center leading-tight sm:leading-normal whitespace-nowrap">
           <span>{promoText} - Use code </span>

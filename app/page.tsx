@@ -9,6 +9,7 @@ import { Pricing } from "@/components/pricing"
 import { FaqSection } from "@/components/faq-section"
 import { CtaSection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
+import { PageContent } from "@/components/page-content"
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,7 +21,7 @@ export default function Home() {
   return (
     <main className="dark bg-black overflow-x-hidden min-w-0 w-full max-w-full">
       <ThumbnailGPTHeader />
-      <div className="pt-[88px] max-w-full overflow-x-hidden">
+      <PageContent className="max-w-full overflow-x-hidden">
         <LaserFlowSection />
         <ClientsSection />
 
@@ -37,7 +38,7 @@ export default function Home() {
         <FaqSection />
         <CtaSection />
         <Footer />
-      </div>
+      </PageContent>
     </main>
   )
 }

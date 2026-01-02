@@ -3,8 +3,12 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import { LenisProvider } from "@/components/lenis-provider"
 import LaunchBanner from "@/components/launch-banner"
+import { BannerProvider } from "@/components/banner-context"
 import { GoogleAnalytics } from "@/components/analytics"
 import "./globals.css"
+
+// Simple flag to enable/disable banner - set to false to hide banner
+const BANNER_ENABLED = true
 
 const inter = Inter({
   subsets: ["latin"],
@@ -170,8 +174,10 @@ export default function RootLayout({
         {/* End Google Tag Manager (noscript) */}
         
         <GoogleAnalytics />
-        <LaunchBanner />
-        <LenisProvider>{children}</LenisProvider>
+        <BannerProvider>
+          <LaunchBanner enabled={BANNER_ENABLED} />
+          <LenisProvider>{children}</LenisProvider>
+        </BannerProvider>
       </body>
     </html>
   )

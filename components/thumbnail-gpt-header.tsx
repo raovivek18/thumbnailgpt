@@ -7,11 +7,13 @@ import { AnimatedButton } from "@/components/ui/animated-button"
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon"
 import { createPortal } from "react-dom"
 import { cn } from "@/lib/utils"
+import { useBanner } from "@/components/banner-context"
 
 export function ThumbnailGPTHeader() {
   const [open, setOpen] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
+  const { isVisible: isBannerVisible } = useBanner()
 
   const links = [
     {
@@ -72,7 +74,10 @@ export function ThumbnailGPTHeader() {
   }
 
   return (
-    <header className="fixed top-9 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300">
+    <header className={cn(
+      "fixed left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300",
+      isBannerVisible ? "top-9" : "top-0"
+    )}>
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 gap-4 relative">
         {/* Logo + Name - Left */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0">
@@ -165,15 +170,30 @@ type MobileMenuProps = React.ComponentProps<"div"> & {
 }
 
 function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
+  const { isVisible: isBannerVisible } = useBanner()
+  
   if (!open || typeof window === "undefined") return null
+
+  // Calculate top position based on header position
+  // Header nav has h-16 (64px)
+  // When banner visible: header at top-9 (36px) + nav height (64px) = 100px
+  // When banner hidden: header at top-0 (0px) + nav height (64px) = 64px
+  // Position menu exactly at header bottom with no gap
+  const headerTop = isBannerVisible ? 36 : 0 // top-9 = 36px, top-0 = 0px
+  const headerHeight = 64 // h-16 = 64px
+  const menuTop = headerTop + headerHeight
 
   return createPortal(
     <div
       id="mobile-menu"
       className={cn(
         "bg-gradient-to-b from-black/90 via-black/85 to-black/90 backdrop-blur-xl backdrop-saturate-150",
-        "fixed top-[100px] right-0 bottom-0 left-0 z-40 flex flex-col overflow-y-auto overflow-x-hidden border-t border-white/10 shadow-lg shadow-black/30 md:hidden max-h-[calc(100vh-100px)]",
+        "fixed right-0 bottom-0 left-0 z-40 flex flex-col overflow-y-auto overflow-x-hidden border-t border-white/10 shadow-lg shadow-black/30 md:hidden transition-all duration-300",
       )}
+      style={{
+        top: `${menuTop}px`,
+        maxHeight: `calc(100vh - ${menuTop}px)`,
+      }}
     >
       <div
         data-slot={open ? "open" : "closed"}

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import ThumbnailGPTHeader from "@/components/thumbnail-gpt-header"
 import Footer from "@/components/footer"
 import ContactForm from "./contact-form"
+import { MainWithPadding } from "@/components/main-with-padding"
 
 export const metadata: Metadata = {
   alternates: {
@@ -13,7 +14,7 @@ export default function ContactPage() {
   return (
     <>
       <ThumbnailGPTHeader />
-      <main className="min-h-screen bg-black text-white pt-[88px]">
+      <MainWithPadding>
         <div className="max-w-6xl mx-auto px-6 py-16">
           {/* Hero Section */}
           <div className="text-center mb-20">
@@ -33,7 +34,7 @@ export default function ContactPage() {
 
           <ContactForm />
         </div>
-      </main>
+      </MainWithPadding>
       <Footer />
     </>
   )

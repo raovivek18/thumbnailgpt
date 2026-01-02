@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Mail, Github, Instagram, Twitter, Zap, Lock, Palette, Sparkles } from "lucide-react"
 import ThumbnailGPTHeader from "@/components/thumbnail-gpt-header"
 import Footer from "@/components/footer"
+import { MainWithPadding } from "@/components/main-with-padding"
 
 export const metadata: Metadata = {
   title: "About | ThumbnailGPT",
@@ -19,7 +20,7 @@ export default function AboutPage() {
   return (
     <>
       <ThumbnailGPTHeader />
-      <main className="min-h-screen bg-black text-white pt-[88px]">
+      <MainWithPadding>
         <div className="max-w-6xl mx-auto px-6 py-16">
           {/* Hero Section */}
           <div className="text-center mb-20">
@@ -172,7 +173,7 @@ export default function AboutPage() {
             </div>
           </section>
         </div>
-      </main>
+      </MainWithPadding>
       <Footer />
     </>
   )

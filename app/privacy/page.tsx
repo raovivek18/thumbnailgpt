@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import ThumbnailGPTHeader from "@/components/thumbnail-gpt-header"
 import Footer from "@/components/footer"
+import { MainWithPadding } from "@/components/main-with-padding"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | ThumbnailGPT",
@@ -17,12 +18,12 @@ export default function PrivacyPage() {
   return (
     <>
       <ThumbnailGPTHeader />
-      <main className="min-h-screen bg-black text-white pt-24">
+      <MainWithPadding>
         <div className="max-w-4xl mx-auto px-6 py-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-2 mt-8">
             Privacy <span className="text-[#FF8D00]">Policy</span>
           </h1>
-          <p className="text-gray-400 mb-6">Last Updated: January 2025</p>
+          <p className="text-gray-400 mb-6">Last Updated: 14 Dec 2025</p>
 
           <div className="space-y-4 text-gray-300 leading-relaxed">
             <p>
@@ -149,7 +150,7 @@ export default function PrivacyPage() {
             </section>
           </div>
         </div>
-      </main>
+      </MainWithPadding>
       <Footer />
     </>
   )
