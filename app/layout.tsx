@@ -8,7 +8,7 @@ import { GoogleAnalytics } from "@/components/analytics"
 import "./globals.css"
 
 // Simple flag to enable/disable banner - set to false to hide banner
-const BANNER_ENABLED = true
+const BANNER_ENABLED = false
 
 const inter = Inter({
   subsets: ["latin"],
@@ -177,7 +177,7 @@ export default function RootLayout({
         {/* End Google Tag Manager (noscript) */}
         
         <GoogleAnalytics />
-        <BannerProvider>
+        <BannerProvider initialVisible={BANNER_ENABLED}>
           <LaunchBanner enabled={BANNER_ENABLED} />
           <LenisProvider>{children}</LenisProvider>
         </BannerProvider>

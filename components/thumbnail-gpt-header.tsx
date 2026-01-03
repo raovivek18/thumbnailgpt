@@ -11,9 +11,15 @@ import { useBanner } from "@/components/banner-context"
 
 export function ThumbnailGPTHeader() {
   const [open, setOpen] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
   const { isVisible: isBannerVisible } = useBanner()
+
+  // Ensure client-side only rendering for dynamic classes
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const links = [
     {
@@ -73,11 +79,17 @@ export function ThumbnailGPTHeader() {
     }
   }
 
+  // Use default state that matches server render (banner disabled = false)
+  const headerTop = mounted && isBannerVisible ? "top-9" : "top-0"
+
   return (
-    <header className={cn(
-      "fixed left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300",
-      isBannerVisible ? "top-9" : "top-0"
-    )}>
+    <header 
+      className={cn(
+        "fixed left-0 right-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/60 to-black/50 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-lg shadow-black/30 transition-all duration-300",
+        headerTop
+      )}
+      suppressHydrationWarning
+    >
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 gap-4 relative">
         {/* Logo + Name - Left */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0">

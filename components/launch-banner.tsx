@@ -22,10 +22,13 @@ export default function LaunchBanner({
   const { setIsVisible } = useBanner()
 
   useEffect(() => {
+    // Immediately set visibility based on enabled prop
     if (!enabled) {
       setIsVisible(false)
       return
     }
+    
+    // Only proceed if enabled is true
 
     const target = new Date(targetDate)
 
