@@ -5,7 +5,7 @@ import { useState } from "react"
 import { AnimatedButton } from "@/components/ui/animated-button"
 
 export function Pricing() {
-  const [currency, setCurrency] = useState<"INR" | "USD">("INR")
+  const [currency, setCurrency] = useState<"INR" | "USD">("USD")
 
   const plans = [
     {
@@ -69,18 +69,10 @@ export function Pricing() {
             {/* Sliding indicator background */}
             <div
               className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-r from-[#FF8D00] to-[#FFA500] rounded-full transition-all duration-300 shadow-lg shadow-[#FF8D00]/40 ${
-                currency === "USD" ? "translate-x-[calc(100%+4px)]" : "translate-x-0"
+                currency === "INR" ? "translate-x-[calc(100%+4px)]" : "translate-x-0"
               }`}
             />
 
-            <button
-              onClick={() => setCurrency("INR")}
-              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${
-                currency === "INR" ? "text-black" : "text-gray-400 hover:text-gray-200"
-              }`}
-            >
-              INR ₹
-            </button>
             <button
               onClick={() => setCurrency("USD")}
               className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${
@@ -88,6 +80,14 @@ export function Pricing() {
               }`}
             >
               USD $
+            </button>
+            <button
+              onClick={() => setCurrency("INR")}
+              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${
+                currency === "INR" ? "text-black" : "text-gray-400 hover:text-gray-200"
+              }`}
+            >
+              INR ₹
             </button>
           </div>
         </div>
