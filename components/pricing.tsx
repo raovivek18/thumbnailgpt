@@ -9,11 +9,11 @@ export function Pricing() {
 
   const plans = [
     {
-      name: "Starter",
+      name: "Basic",
       description: "Perfect for individuals and small projects getting started with AI thumbnail generator tools for YouTube.",
-      price: { INR: 449, USD: 5 },
-      credits: 200,
-      thumbnails: 20,
+      price: { INR: 810, USD: 9 },
+      credits: 250,
+      thumbnails: 25,
       features: [
         "Text to Thumbnail",
         "Image to Thumbnail",
@@ -24,7 +24,7 @@ export function Pricing() {
     {
       name: "Pro",
       description: "Best value for professionals and growing businesses that need more power from their YouTube thumbnail generator.",
-      price: { INR: 899, USD: 10 },
+      price: { INR: 1710, USD: 19 },
       credits: 500,
       thumbnails: 50,
       features: [
@@ -37,9 +37,9 @@ export function Pricing() {
     {
       name: "Premium",
       description: "Advanced plan with unlimited access for large teams and power users who need premium AI thumbnail maker capabilities.",
-      price: { INR: 1349, USD: 15 },
-      credits: 1200,
-      thumbnails: 120,
+      price: { INR: 4410, USD: 49 },
+      credits: 1000,
+      thumbnails: 100,
       features: [
         "Text to Thumbnail",
         "Image to Thumbnail",
@@ -106,7 +106,13 @@ export function Pricing() {
               {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#FF8D00] to-[#FFA500] text-black px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-[#FF8D00]/50">
-                  Popular
+                  Most Popular
+                </div>
+              )}
+              {/* Anchor Badge for Premium */}
+              {plan.name === "Premium" && (
+                <div className="absolute -top-4 right-4 bg-gradient-to-r from-[#FF8D00] to-[#FFA500] text-black px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-[#FF8D00]/50">
+                  Anchor
                 </div>
               )}
 
@@ -125,7 +131,7 @@ export function Pricing() {
 
               <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer" className="block mb-6">
                 <AnimatedButton variant={plan.popular ? "primary" : "secondary"} size="md" className="w-full">
-                  {plan.name === "Starter" ? "Get Started" : plan.name === "Pro" ? "Choose Pro" : "Go Premium"}
+                  {plan.name === "Basic" ? "Get Started" : plan.name === "Pro" ? "Choose Pro" : "Go Premium"}
                 </AnimatedButton>
               </a>
 
