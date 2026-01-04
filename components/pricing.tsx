@@ -1,6 +1,6 @@
 "use client"
 
-import { Zap, ImageIcon, Download, Check } from "lucide-react"
+import { Zap, ImageIcon, Download, Check, Sparkles, Shield, Image } from "lucide-react"
 import { useState } from "react"
 import { AnimatedButton } from "@/components/ui/animated-button"
 
@@ -9,30 +9,42 @@ export function Pricing() {
 
   const plans = [
     {
-      name: "Basic",
+      name: "Starter",
       description: "Perfect for individuals and small projects getting started with AI thumbnail generator tools for YouTube.",
-      price: { INR: 299, USD: 3.37 },
+      price: { INR: 449, USD: 5 },
       credits: 200,
       thumbnails: 20,
-      features: ["Text to Thumbnail", "Image to Thumbnail", "Recreate Thumbnail"],
+      features: [
+        "Text to Thumbnail",
+        "Image to Thumbnail",
+        "Recreate Thumbnail",
+      ],
       popular: false,
     },
     {
       name: "Pro",
       description: "Best value for professionals and growing businesses that need more power from their YouTube thumbnail generator.",
-      price: { INR: 599, USD: 6.76 },
+      price: { INR: 899, USD: 10 },
       credits: 500,
       thumbnails: 50,
-      features: ["Text to Thumbnail", "Image to Thumbnail", "Recreate Thumbnail"],
+      features: [
+        "Text to Thumbnail",
+        "Image to Thumbnail",
+        "Recreate Thumbnail",
+      ],
       popular: true,
     },
     {
       name: "Premium",
       description: "Advanced plan with unlimited access for large teams and power users who need premium AI thumbnail maker capabilities.",
-      price: { INR: 1199, USD: 13.52 },
-      credits: 1500,
-      thumbnails: 150,
-      features: ["Text to Thumbnail", "Image to Thumbnail", "Recreate Thumbnail"],
+      price: { INR: 1349, USD: 15 },
+      credits: 1200,
+      thumbnails: 120,
+      features: [
+        "Text to Thumbnail",
+        "Image to Thumbnail",
+        "Recreate Thumbnail",
+      ],
       popular: false,
     },
   ]
@@ -113,7 +125,7 @@ export function Pricing() {
 
               <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer" className="block mb-6">
                 <AnimatedButton variant={plan.popular ? "primary" : "secondary"} size="md" className="w-full">
-                  {index === 0 ? "Get Started" : index === 1 ? "Choose Pro" : "Go Premium"}
+                  {plan.name === "Starter" ? "Get Started" : plan.name === "Pro" ? "Choose Pro" : "Go Premium"}
                 </AnimatedButton>
               </a>
 
@@ -130,6 +142,18 @@ export function Pricing() {
                 <div className="flex items-center gap-3">
                   <Download className="w-5 h-5 text-[#FF8D00]" />
                   <span className="text-white font-medium">High Quality Downloads</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Image className="w-5 h-5 text-[#FF8D00]" />
+                  <span className="text-white font-medium">High-Resolution</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-[#FF8D00]" />
+                  <span className="text-white font-medium">Best AI Model</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-5 h-5 text-[#FF8D00]" />
+                  <span className="text-white font-medium">No Watermark</span>
                 </div>
               </div>
 
