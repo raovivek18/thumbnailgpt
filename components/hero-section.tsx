@@ -1,0 +1,388 @@
+"use client"
+
+import React, { useState, useRef, useEffect } from 'react';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import LaserFlow from './LaserFlow';
+
+export default function HeroSection() {
+  // ============================================
+  // LASERFLOW POSITIONING CONTROLS
+  // ============================================
+  // Adjust these values to control LaserFlow position
+  const laserFlowConfig = {
+    // Container positioning
+    position: 'absolute' as const, // 'absolute' | 'fixed' | 'relative'
+    top: '0', // CSS value: '0', '50%', '100px', etc.
+    left: '0', // CSS value: '0', '50%', '100px', etc.
+    right: '0', // CSS value: '0', '50%', '100px', etc. (use 'auto' to disable)
+    bottom: '0', // CSS value: '0', '50%', '100px', etc. (use 'auto' to disable)
+    
+    // Alignment (when using flexbox)
+    alignItems: 'center' as const, // 'center' | 'flex-start' | 'flex-end' | 'stretch'
+    justifyContent: 'center' as const, // 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around'
+    
+    // Transform/Offset (for fine-tuning)
+    translateX: '70px', // Move horizontally: '-100px', '50px', etc.
+    // translateY will be set dynamically based on screen size
+    
+    // Size
+    width: '1080px', // Width of LaserFlow container (base size)
+    height: '1080px', // Height of LaserFlow container (base size)
+    
+    // Z-index
+    zIndex: 0,
+    
+    // LaserFlow component props
+    laserFlowProps: {
+      color: "#ff8800",
+      wispDensity: 1,
+      flowSpeed: 0.35,
+      verticalSizing: 2,
+      horizontalSizing: 0.5,
+      fogIntensity: 0.5,
+      fogScale: 0.3,
+      wispSpeed: 15,
+      wispIntensity: 5,
+      flowStrength: 0.5,
+      decay: 1.1, // Default for tablet/desktop, overridden for mobile
+      horizontalBeamOffset: 0.05,
+      verticalBeamOffset: -0.3,
+    }
+  };
+  // ============================================
+
+  // Responsive LaserFlow positioning
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setScreenSize('mobile');
+      } else if (width < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+    
+    handleResize(); // Set initial size
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // State for the interactive input area
+  const [message, setMessage] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Animated Placeholder Logic
+  const placeholders = [
+    "Minecraft Survival Ep. 1: We Found Diamonds in the First 10 Minutes!",
+    "iPhone 16 Pro Max Review: Is It Actually Worth The Upgrade?",
+    "How I Scaled My SaaS to $10k/Month in 30 Days (Step-by-Step)",
+    "Solo Travel Vlog: Exploring Tokyo's Hidden Alleys at Midnight",
+    "The Ultimate Gym Transformation: From Skinny to Shredded in 6 Months",
+    "World's Hottest Pepper Challenge Gone Wrong (Do Not Try This)"
+  ];
+  const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const [fadeOpacity, setFadeOpacity] = useState(1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFadeOpacity(0); // Fade out
+      setTimeout(() => {
+        setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
+        setFadeOpacity(1); // Fade in
+      }, 500); // Wait for transition duration
+    }, 4000); // 4 seconds visible
+
+    return () => clearInterval(interval);
+  }, [placeholders.length]);
+
+  // Auto-resize textarea logic
+  useEffect(() => {
+    if (textareaRef.current) {
+      // Reset height to auto to get the correct scrollHeight
+      textareaRef.current.style.height = 'auto';
+      
+      const scrollHeight = textareaRef.current.scrollHeight;
+      const maxHeight = 120; // Matches the maxHeight in styles
+
+      // Set the new height
+      textareaRef.current.style.height = `${scrollHeight}px`;
+
+      // Only show scrollbar if content exceeds max height
+      if (scrollHeight > maxHeight) {
+        textareaRef.current.style.overflowY = 'auto';
+      } else {
+        textareaRef.current.style.overflowY = 'hidden';
+      }
+    }
+  }, [message]);
+
+  const handleSubmit = () => {
+    if (!message.trim()) return;
+    console.log("Generating thumbnail for:", message);
+    // Logic to trigger generation would go here
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  // Custom CSS for the button, animations, and scrollbar
+  const customStyles = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    /* Ensure body has dark background as fallback */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #000000;
+      margin: 0;
+    }
+
+    /* Custom Scrollbar - Sleek and minimal */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(255, 141, 0, 0.6); /* Brand orange on hover */
+    }
+
+    /* Fade Masks */
+    .fade-left {
+      mask-image: linear-gradient(to right, transparent 0%, black 50%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 50%);
+    }
+    .fade-right {
+      mask-image: linear-gradient(to left, transparent 0%, black 50%);
+      -webkit-mask-image: linear-gradient(to left, transparent 0%, black 50%);
+    }
+
+    /* Generate Button Styles */
+    .btn-generate {
+      --clr-font-main: hsla(0 0% 20% / 100);
+      --btn-bg-1: hsla(25 95% 53% / 1);
+      --btn-bg-2: hsla(16 100% 50% / 1);
+      --btn-bg-color: hsla(360 100% 100% / 1);
+      --radii: 9999px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: 0.8s;
+      background-size: 280% auto;
+      background-image: linear-gradient(
+        325deg,
+        var(--btn-bg-2) 0%,
+        var(--btn-bg-1) 55%,
+        var(--btn-bg-2) 90%
+      );
+      border: none;
+      border-radius: var(--radii);
+      color: var(--btn-bg-color);
+      box-shadow:
+        0px 0px 20px rgba(255, 165, 0, 0.5),
+        0px 5px 5px -1px rgba(255, 140, 0, 0.25),
+        inset 4px 4px 8px rgba(255, 200, 150, 0.5),
+        inset -4px -4px 8px rgba(200, 100, 0, 0.35);
+    }
+
+    .btn-generate:hover {
+      background-position: right top;
+    }
+
+    .btn-generate:is(:focus, :focus-visible, :active) {
+      outline: none;
+      box-shadow:
+        0 0 0 3px var(--btn-bg-color),
+        0 0 0 6px var(--btn-bg-2);
+    }
+
+    .btn-generate:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      background-image: linear-gradient(325deg, hsla(25 95% 53% / 0.3) 0%, hsla(25 95% 53% / 0.2) 55%, hsla(25 95% 53% / 0.3) 90%);
+      box-shadow: 0px 2px 4px rgba(255, 165, 0, 0.2);
+      color: hsla(25 95% 53% / 0.8);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn-generate {
+        transition: linear;
+      }
+    }
+  `;
+
+  return (
+    <div 
+      className="w-full h-full flex flex-col items-center justify-center text-white overflow-x-hidden selection:bg-[#FF8D00] selection:text-black relative min-h-screen bg-transparent"
+    >
+      <style>{customStyles}</style>
+      
+      {/* LaserFlow Background */}
+      {/* 
+        POSITIONING CONTROLS: Edit laserFlowConfig object above to adjust position
+        Examples:
+        - Center: top: '0', left: '0', right: '0', bottom: '0' with flexbox centering
+        - Top-left: top: '0', left: '0', right: 'auto', bottom: 'auto'
+        - Bottom-right: top: 'auto', left: 'auto', right: '0', bottom: '0'
+        - Custom offset: Use translateX/translateY for fine adjustments
+      */}
+      <div 
+        className={`flex pointer-events-none`}
+        style={{ 
+          position: laserFlowConfig.position,
+          top: laserFlowConfig.top,
+          left: laserFlowConfig.left,
+          right: laserFlowConfig.right === 'auto' ? undefined : laserFlowConfig.right,
+          bottom: laserFlowConfig.bottom === 'auto' ? undefined : laserFlowConfig.bottom,
+          alignItems: laserFlowConfig.alignItems,
+          justifyContent: laserFlowConfig.justifyContent,
+          zIndex: laserFlowConfig.zIndex,
+        }}
+      >
+        <div 
+          style={{ 
+            width: laserFlowConfig.width, 
+            height: laserFlowConfig.height, 
+            position: 'relative',
+            transform: `translate(${
+              screenSize === 'mobile' ? '55px' : laserFlowConfig.translateX
+            }, ${
+              screenSize === 'mobile' ? '-580px' : 
+              screenSize === 'tablet' ? '-252px' : 
+              '-252px'
+            }) scale(${
+              screenSize === 'mobile' ? '1.9' : '1'
+            })`,
+          }}
+        >
+          <LaserFlow 
+            {...laserFlowConfig.laserFlowProps}
+            decay={screenSize === 'mobile' ? 0.65 : 1.1}
+          />
+        </div>
+      </div>
+      
+      {/* Main Content Wrapper - Increased padding for mobile */}
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-16 sm:pt-20 md:pt-24 pb-16 relative z-10">
+        
+        {/* 1. Top Badge / Notification */}
+        <div className="mb-4 sm:mb-6">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-[9px] sm:text-[10px] font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white cursor-pointer group">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8D00] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF8D00]"></span>
+              </span>
+              <span>ThumbnailGPT V2 Live</span>
+              <ArrowRight className="w-3 h-3 text-gray-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+            </div>
+        </div>
+
+        {/* 2. Headline - Responsive sizing */}
+        <div className="text-center mb-5 sm:mb-6 max-w-5xl mx-auto px-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight leading-[1.1] text-white">
+            Create, edit, recreate and upscale thumbnails
+          </h1>
+        </div>
+
+        {/* 3. Subheading - Responsive sizing and width */}
+        <div className="text-center mb-6 sm:mb-8 max-w-sm sm:max-w-lg md:max-w-xl mx-auto">
+          <p className="text-gray-400 text-xs sm:text-sm md:text-base font-normal leading-relaxed">
+            Custom-designed thumbnails that make your <br className="hidden sm:block"/>
+            content impossible to ignore.
+          </p>
+        </div>
+
+        {/* 4. Input Area - Responsive width and padding */}
+        <div className="mt-2 sm:mt-6 w-full max-w-lg sm:max-w-xl md:max-w-4xl mx-auto relative z-[3]">
+          {/* Glassmorphism border wrapper - stroke only */}
+          <div 
+            className="rounded-2xl p-[3px] transition-all duration-200"
+            style={{
+              background: isFocused
+                ? 'linear-gradient(135deg, rgba(255, 141, 0, 0.4), rgba(255, 141, 0, 0.2))'
+                : 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1))',
+              backdropFilter: 'blur(10px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+              boxShadow: isFocused
+                ? '0 0 20px rgba(255, 141, 0, 0.1)'
+                : 'none',
+            }}
+          >
+            <div 
+              className="rounded-2xl p-3 sm:p-4 w-full bg-[#111] transition-all duration-200"
+            >
+              <div className="flex flex-col gap-3">
+              <div className="w-full min-h-[50px] relative flex items-start">
+                
+                {/* Animated Placeholder Overlay - Responsive Text Size */}
+                {!message && (
+                  <div 
+                    className="absolute top-0 left-0 w-full h-full pointer-events-none text-white/40 leading-relaxed text-sm sm:text-base transition-opacity duration-500 flex items-start"
+                    style={{ 
+                      padding: '2px 0px 2px 2px',
+                      opacity: fadeOpacity
+                    }}
+                  >
+                    {placeholders[currentPlaceholder]}
+                  </div>
+                )}
+
+                <textarea 
+                  ref={textareaRef}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  // placeholder removed to allow animated overlay
+                  className="w-full bg-transparent resize-none focus:outline-none leading-relaxed text-sm sm:text-base placeholder-transparent custom-scrollbar" 
+                  rows={1} 
+                  spellCheck={false}
+                  style={{ 
+                    minHeight: '24px', 
+                    maxHeight: '120px', 
+                    overflowY: 'hidden', 
+                    whiteSpace: 'pre-wrap', 
+                    color: '#eee', 
+                    caretColor: '#FF8D00', 
+                    padding: '2px 0px 2px 2px',
+                    height: 'auto'
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-end">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!message.trim()}
+                  className="btn-generate rounded-full flex items-center justify-center gap-2 px-4 py-2 min-w-[100px] text-sm sm:text-base"
+                  title="Generate thumbnail"
+                >
+                  <Sparkles className="w-4 h-4" strokeWidth={2.5} />
+                  <span>Generate</span>
+                </button>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  );
+}
