@@ -32,7 +32,22 @@ export default function HeroSection() {
     // Z-index
     zIndex: 0,
     
-    // LaserFlow component props
+    // LaserFlow component props - Responsive beam offsets
+    // Control placement using horizontalBeamOffset and verticalBeamOffset
+    beamOffsets: {
+      desktop: {
+        horizontalBeamOffset: 0.2,
+        verticalBeamOffset: -0.07,
+      },
+      tablet: {
+        horizontalBeamOffset: 0.2,
+        verticalBeamOffset: -0.0975,
+      },
+      mobile: {
+        horizontalBeamOffset: 0.05,
+        verticalBeamOffset: -0.026,
+      },
+    },
     laserFlowProps: {
       color: "#ff8800",
       wispDensity: 1,
@@ -43,10 +58,8 @@ export default function HeroSection() {
       fogScale: 0.3,
       wispSpeed: 15,
       wispIntensity: 5,
-      flowStrength: 0.5,
+      flowStrength: 0.25,
       decay: 1.1, // Default for tablet/desktop, overridden for mobile
-      horizontalBeamOffset: 0.05,
-      verticalBeamOffset: -0.3,
     }
   };
   // ============================================
@@ -260,20 +273,30 @@ export default function HeroSection() {
             width: laserFlowConfig.width, 
             height: laserFlowConfig.height, 
             position: 'relative',
-            transform: `translate(${
-              screenSize === 'mobile' ? '55px' : laserFlowConfig.translateX
-            }, ${
-              screenSize === 'mobile' ? '-580px' : 
-              screenSize === 'tablet' ? '-252px' : 
-              '-252px'
-            }) scale(${
-              screenSize === 'mobile' ? '1.9' : '1'
+            transform: `scale(${
+              screenSize === 'mobile' ? '1.9' : 
+              screenSize === 'tablet' ? '0.9' : 
+              '1'
             })`,
           }}
         >
           <LaserFlow 
             {...laserFlowConfig.laserFlowProps}
             decay={screenSize === 'mobile' ? 0.65 : 1.1}
+            horizontalBeamOffset={
+              screenSize === 'mobile' 
+                ? laserFlowConfig.beamOffsets.mobile.horizontalBeamOffset
+                : screenSize === 'tablet'
+                ? laserFlowConfig.beamOffsets.tablet.horizontalBeamOffset
+                : laserFlowConfig.beamOffsets.desktop.horizontalBeamOffset
+            }
+            verticalBeamOffset={
+              screenSize === 'mobile' 
+                ? laserFlowConfig.beamOffsets.mobile.verticalBeamOffset
+                : screenSize === 'tablet'
+                ? laserFlowConfig.beamOffsets.tablet.verticalBeamOffset
+                : laserFlowConfig.beamOffsets.desktop.verticalBeamOffset
+            }
           />
         </div>
       </div>
@@ -296,7 +319,15 @@ export default function HeroSection() {
         {/* 2. Headline - Responsive sizing */}
         <div className="text-center mb-5 sm:mb-6 max-w-5xl mx-auto px-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight leading-[1.1] text-white">
-            Create, edit, recreate and upscale thumbnails
+            Your
+            <span className="inline-flex items-center justify-center align-middle mx-1.5 sm:mx-2.5 md:mx-3 relative -top-0.5 sm:-top-1">
+              {/* YouTube Icon - Scaled for responsive */}
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 sm:w-11 sm:h-11 md:w-[52px] md:h-[52px] lg:w-16 lg:h-16 text-[#FF0000] drop-shadow-[0_0_20px_rgba(255,0,0,0.4)]">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </span>
+            Videos Deserve to <br className="hidden md:block" />
+            Be Clicked, Let's Make It Happen
           </h1>
         </div>
 
