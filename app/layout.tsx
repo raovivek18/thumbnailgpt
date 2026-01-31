@@ -164,7 +164,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-black">
-      <body className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} style={{ backgroundColor: "#000000" }}>
+      <body 
+        className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} 
+        style={{ backgroundColor: "#000000" }}
+        suppressHydrationWarning
+      >
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

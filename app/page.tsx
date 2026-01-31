@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { ThumbnailGPTHeader } from "@/components/thumbnail-gpt-header"
 import HeroSection from "@/components/hero-section"
+import ThumbnailPreview from "@/components/thumbnail-preview"
 import { ClientsSection } from "@/components/clients-section"
 import { TextToThumbnailFeature } from "@/components/text-to-thumbnail-feature"
 import { ImageToThumbnailFeature } from "@/components/image-to-thumbnail-feature"
@@ -22,6 +23,7 @@ export default function Home() {
     <main className="dark bg-black overflow-x-hidden min-w-0 w-full max-w-full">
       <ThumbnailGPTHeader />
       <HeroSection />
+      <ThumbnailPreview />
       <PageContent className="max-w-full overflow-x-hidden">
         <ClientsSection />
 

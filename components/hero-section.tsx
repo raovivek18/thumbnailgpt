@@ -25,9 +25,35 @@ export default function HeroSection() {
     translateX: '70px', // Move horizontally: '-100px', '50px', etc.
     // translateY will be set dynamically based on screen size
     
-    // Size
-    width: '1080px', // Width of LaserFlow container (base size)
-    height: '1080px', // Height of LaserFlow container (base size)
+    // Size - Responsive controls for LaserFlow dimensions
+    // Adjust width and height for each screen type independently
+    // Screen Types: Mobile (<640px), Large Mobile (640-767px), Tablet-Portrait (770-790px), Tablet (768-1023px), Laptop (1024-1279px), Desktop (≥1280px)
+    size: {
+      mobile: {
+        width: '1080px', // LaserFlow width for mobile screens (< 640px)
+        height: '1080px', // LaserFlow height for mobile screens (< 640px)
+      },
+      largeMobile: {
+        width: '1080px', // LaserFlow width for large mobile screens (640-767px)
+        height: '1080px', // LaserFlow height for large mobile screens (640-767px)
+      },
+      tabletPortrait: {
+        width: '1080px', // LaserFlow width for tablet-portrait problematic range (770-790px)
+        height: '1080px', // LaserFlow height for tablet-portrait problematic range (770-790px)
+      },
+      tablet: {
+        width: '1080px', // LaserFlow width for tablet screens (768-1023px)
+        height: '1080px', // LaserFlow height for tablet screens (768-1023px)
+      },
+      laptop: {
+        width: '1080px', // LaserFlow width for laptop screens (1024-1279px)
+        height: '1080px', // LaserFlow height for laptop screens (1024-1279px)
+      },
+      desktop: {
+        width: '1080px', // LaserFlow width for desktop screens (≥ 1280px)
+        height: '1080px', // LaserFlow height for desktop screens (≥ 1280px)
+      },
+    },
     
     // Z-index
     zIndex: 0,
@@ -35,17 +61,29 @@ export default function HeroSection() {
     // LaserFlow component props - Responsive beam offsets
     // Control placement using horizontalBeamOffset and verticalBeamOffset
     beamOffsets: {
-      desktop: {
+      mobile: {
+        horizontalBeamOffset: 0.1,
+        verticalBeamOffset: -0.035,
+      },
+      largeMobile: {
+        horizontalBeamOffset: 0.15,
+        verticalBeamOffset: -0.05,
+      },
+      tabletPortrait: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.07,
+        verticalBeamOffset: -0.08,
       },
       tablet: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.0975,
+        verticalBeamOffset: -0.135,
       },
-      mobile: {
-        horizontalBeamOffset: 0.05,
-        verticalBeamOffset: -0.026,
+      laptop: {
+        horizontalBeamOffset: 0.2,
+        verticalBeamOffset: -0.106,
+      },
+      desktop: {
+        horizontalBeamOffset: 0.2,
+        verticalBeamOffset: -0.105,
       },
     },
     laserFlowProps: {
@@ -65,16 +103,30 @@ export default function HeroSection() {
   // ============================================
 
   // Responsive LaserFlow positioning
-  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [screenSize, setScreenSize] = useState<'mobile' | 'largeMobile' | 'tabletPortrait' | 'tablet' | 'laptop' | 'desktop'>('desktop');
+  const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
+    setIsMounted(true);
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width < 768) {
+      if (width < 640) {
+        // Mobile: < 640px (Phones)
         setScreenSize('mobile');
-      } else if (width < 1024) {
+      } else if (width >= 640 && width < 768) {
+        // Large Mobile: 640 - 767px (Big phones / small tablets)
+        setScreenSize('largeMobile');
+      } else if (width >= 770 && width <= 790) {
+        // Custom: 770 - 790px (Tablet-portrait UI-problematic range)
+        setScreenSize('tabletPortrait');
+      } else if (width >= 768 && width < 1024) {
+        // Tablet: 768 - 1023px (iPad, tablets)
         setScreenSize('tablet');
+      } else if (width >= 1024 && width < 1280) {
+        // Laptop: 1024 - 1279px (Small laptops)
+        setScreenSize('laptop');
       } else {
+        // Desktop: ≥ 1280px (Large screens)
         setScreenSize('desktop');
       }
     };
@@ -255,6 +307,8 @@ export default function HeroSection() {
         - Bottom-right: top: 'auto', left: 'auto', right: '0', bottom: '0'
         - Custom offset: Use translateX/translateY for fine adjustments
       */}
+      {/* LaserFlow Background */}
+      {isMounted && (
       <div 
         className={`flex pointer-events-none`}
         style={{ 
@@ -268,41 +322,81 @@ export default function HeroSection() {
           zIndex: laserFlowConfig.zIndex,
         }}
       >
-        <div 
-          style={{ 
-            width: laserFlowConfig.width, 
-            height: laserFlowConfig.height, 
-            position: 'relative',
-            transform: `scale(${
-              screenSize === 'mobile' ? '1.9' : 
-              screenSize === 'tablet' ? '0.9' : 
-              '1'
-            })`,
-          }}
-        >
-          <LaserFlow 
-            {...laserFlowConfig.laserFlowProps}
-            decay={screenSize === 'mobile' ? 0.65 : 1.1}
-            horizontalBeamOffset={
-              screenSize === 'mobile' 
-                ? laserFlowConfig.beamOffsets.mobile.horizontalBeamOffset
-                : screenSize === 'tablet'
-                ? laserFlowConfig.beamOffsets.tablet.horizontalBeamOffset
-                : laserFlowConfig.beamOffsets.desktop.horizontalBeamOffset
-            }
-            verticalBeamOffset={
-              screenSize === 'mobile' 
-                ? laserFlowConfig.beamOffsets.mobile.verticalBeamOffset
-                : screenSize === 'tablet'
-                ? laserFlowConfig.beamOffsets.tablet.verticalBeamOffset
-                : laserFlowConfig.beamOffsets.desktop.verticalBeamOffset
-            }
-          />
-        </div>
+        {isMounted && (
+          <div 
+            style={{ 
+              width: 
+                screenSize === 'mobile' 
+                  ? laserFlowConfig.size.mobile.width
+                  : screenSize === 'largeMobile'
+                  ? laserFlowConfig.size.largeMobile.width
+                  : screenSize === 'tabletPortrait'
+                  ? laserFlowConfig.size.tabletPortrait.width
+                  : screenSize === 'tablet'
+                  ? laserFlowConfig.size.tablet.width
+                  : screenSize === 'laptop'
+                  ? laserFlowConfig.size.laptop.width
+                  : laserFlowConfig.size.desktop.width,
+              height: 
+                screenSize === 'mobile' 
+                  ? laserFlowConfig.size.mobile.height
+                  : screenSize === 'largeMobile'
+                  ? laserFlowConfig.size.largeMobile.height
+                  : screenSize === 'tabletPortrait'
+                  ? laserFlowConfig.size.tabletPortrait.height
+                  : screenSize === 'tablet'
+                  ? laserFlowConfig.size.tablet.height
+                  : screenSize === 'laptop'
+                  ? laserFlowConfig.size.laptop.height
+                  : laserFlowConfig.size.desktop.height,
+              position: 'relative',
+              transform: `scale(${
+                screenSize === 'mobile' ? '1.9' : 
+                screenSize === 'largeMobile' ? '1.5' :
+                screenSize === 'tabletPortrait' ? '0.85' :
+                screenSize === 'tablet' ? '0.9' : 
+                screenSize === 'laptop' ? '1' :
+                '1'
+              })`,
+            }}
+          >
+            <LaserFlow 
+              {...laserFlowConfig.laserFlowProps}
+              decay={screenSize === 'mobile' ? 0.6 : 1.1}
+              horizontalBeamOffset={
+                screenSize === 'mobile' 
+                  ? laserFlowConfig.beamOffsets.mobile.horizontalBeamOffset
+                  : screenSize === 'largeMobile'
+                  ? laserFlowConfig.beamOffsets.largeMobile.horizontalBeamOffset
+                  : screenSize === 'tabletPortrait'
+                  ? laserFlowConfig.beamOffsets.tabletPortrait.horizontalBeamOffset
+                  : screenSize === 'tablet'
+                  ? laserFlowConfig.beamOffsets.tablet.horizontalBeamOffset
+                  : screenSize === 'laptop'
+                  ? laserFlowConfig.beamOffsets.laptop.horizontalBeamOffset
+                  : laserFlowConfig.beamOffsets.desktop.horizontalBeamOffset
+              }
+              verticalBeamOffset={
+                screenSize === 'mobile' 
+                  ? laserFlowConfig.beamOffsets.mobile.verticalBeamOffset
+                  : screenSize === 'largeMobile'
+                  ? laserFlowConfig.beamOffsets.largeMobile.verticalBeamOffset
+                  : screenSize === 'tabletPortrait'
+                  ? laserFlowConfig.beamOffsets.tabletPortrait.verticalBeamOffset
+                  : screenSize === 'tablet'
+                  ? laserFlowConfig.beamOffsets.tablet.verticalBeamOffset
+                  : screenSize === 'laptop'
+                  ? laserFlowConfig.beamOffsets.laptop.verticalBeamOffset
+                  : laserFlowConfig.beamOffsets.desktop.verticalBeamOffset
+              }
+            />
+          </div>
+        )}
       </div>
+      )}
       
       {/* Main Content Wrapper - Increased padding for mobile */}
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-16 sm:pt-20 md:pt-24 pb-16 relative z-10">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-12 sm:pt-16 md:pt-20 pb-0 relative z-10">
         
         {/* 1. Top Badge / Notification */}
         <div className="mb-4 sm:mb-6">
@@ -332,7 +426,7 @@ export default function HeroSection() {
         </div>
 
         {/* 3. Subheading - Responsive sizing and width */}
-        <div className="text-center mb-6 sm:mb-8 max-w-sm sm:max-w-lg md:max-w-xl mx-auto">
+        <div className="text-center mb-4 sm:mb-6 max-w-sm sm:max-w-lg md:max-w-xl mx-auto">
           <p className="text-gray-400 text-xs sm:text-sm md:text-base font-normal leading-relaxed">
             Custom-designed thumbnails that make your <br className="hidden sm:block"/>
             content impossible to ignore.
@@ -340,7 +434,7 @@ export default function HeroSection() {
         </div>
 
         {/* 4. Input Area - Responsive width and padding */}
-        <div className="mt-2 sm:mt-6 w-full max-w-lg sm:max-w-xl md:max-w-4xl mx-auto relative z-[3]">
+        <div className="mt-0 sm:mt-2 w-full max-w-lg sm:max-w-xl md:max-w-4xl mx-auto relative z-[3]">
           {/* Glassmorphism border wrapper - stroke only */}
           <div 
             className="rounded-2xl p-[3px] transition-all duration-200"
