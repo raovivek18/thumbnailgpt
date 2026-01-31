@@ -1,363 +1,282 @@
 "use client"
 
 import React, { useRef, useEffect, useState } from "react"
-import { AnimatedButton } from "@/components/ui/animated-button"
 
-// --- Components ---
+// --- Helper Components ---
 
-const AspectRatioCard = ({ imageUrl, className = "" }: { imageUrl: string; className?: string }) => {
-  const [showImage, setShowImage] = useState(false)
+/**
+ * Renders the generated image with a sleek reveal animation and glass frame.
+ */
+const ThumbnailPreview = ({ imageUrl, className = "" }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     if (imageUrl) {
-      setShowImage(false)
-      const timeout = setTimeout(() => setShowImage(true), 100)
+      setIsLoaded(false)
+      const timeout = setTimeout(() => setIsLoaded(true), 150)
       return () => clearTimeout(timeout)
     }
-    setShowImage(false)
   }, [imageUrl])
 
   return (
-    <>
-      <style>
-        {`
-          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } 
-          .animate-fadeIn { animation: fadeIn 1s ease-in-out forwards; }
-        `}
-      </style>
-
-      <div className={`w-full flex flex-col justify-center items-center ${className}`}>
-        <div className="w-full max-w-2xl mx-auto relative p-4 sm:p-8">
-          <div className="relative w-full shrink-0 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-            <div className="w-full p-1">
-              <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-black aspect-[16/9]">
-                {!imageUrl && <div className="text-neutral-500 p-10 text-center">Image Placeholder</div>}
-
-                {imageUrl && (
-                  <img
-                    loading="lazy"
-                    width={800}
-                    height={450}
-                    className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${
-                      showImage ? "opacity-100 animate-fadeIn" : "opacity-0"
-                    }`}
-                    src={imageUrl || "/placeholder.svg"}
-                    alt="Generated thumbnail"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.onerror = null
-                      target.src = "https://placehold.co/800x450/262626/ffffff?text=Error+Loading+Image"
-                    }}
-                  />
-                )}
-              </div>
+    <div className={`w-full flex flex-col items-center ${className}`}>
+      {/* Glass Frame for Image */}
+      <div className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
+        
+        {/* Inner Container */}
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black/80">
+          
+          {/* Loading / Empty State */}
+          {!imageUrl && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-700 border-t-neutral-400" />
+              <span className="mt-3 text-xs font-medium tracking-wider uppercase opacity-60">Processing</span>
             </div>
-          </div>
+          )}
+
+          {/* Image */}
+          {imageUrl && (
+            <img
+              src={imageUrl}
+              alt="Generated Result"
+              className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+                isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
+              }`}
+              onError={(e) => {
+                e.target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Generation+Failed"
+              }}
+            />
+          )}
+
+          {/* Glossy Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
         </div>
       </div>
-    </>
+      
+      {/* Reflection/Glow below the card */}
+      <div className="mt-2 h-1 w-[80%] rounded-full bg-orange-500/20 blur-xl" />
+    </div>
   )
 }
 
+/**
+ * Draws the connecting line between elements with a directional arrow.
+ */
 const AnimatedBeam = ({
   containerRef,
   fromRef,
   toRef,
-  duration = 3,
-  pathColor = "rgba(255,255,255,0.1)",
-  pathWidth = 2,
-  pathOpacity = 1,
-  gradientStartColor = "#FF8D00",
-  gradientStopColor = "#FFA500",
-  curvature = 0.5,
-}: {
-  containerRef: React.RefObject<HTMLElement>
-  fromRef: React.RefObject<HTMLElement>
-  toRef: React.RefObject<HTMLElement>
-  duration?: number
-  pathColor?: string
-  pathWidth?: number
-  pathOpacity?: number
-  gradientStartColor?: string
-  gradientStopColor?: string
-  curvature?: number
+  curvature = 0.4,
+  reverse = false, // Flow direction
 }) => {
-  const [pathD, setPathD] = useState("")
-  const [pathLength, setPathLength] = useState(0)
-  const [viewBox, setViewBox] = useState<string | null>(null)
-  const id = React.useId().replace(/:/g, "-")
+  const [pathData, setPathData] = useState({ d: "", length: 0, viewBox: "" })
+  const id = React.useId()
+  
+  // Refs for animation loop
+  const pathRef = useRef(null)
+  const particleRef = useRef(null)
+  const rafRef = useRef(null)
 
-  const particleRef = useRef<SVGCircleElement>(null)
-  const pathRef = useRef<SVGPathElement>(null)
-  const rafRef = useRef<number | null>(null)
-
+  // Calculate SVG Path
   useEffect(() => {
-    let rafId: number | null = null
-    let needsUpdate = true
-
-    function calc() {
+    const updatePath = () => {
       if (!containerRef.current || !fromRef.current || !toRef.current) return
 
-      // Batch DOM reads to prevent forced reflow
       const containerRect = containerRef.current.getBoundingClientRect()
       const fromRect = fromRef.current.getBoundingClientRect()
       const toRect = toRef.current.getBoundingClientRect()
 
+      // Calculate points relative to container
+      // Start: Bottom Center of 'from' element
       const startX = fromRect.left - containerRect.left + fromRect.width / 2
-      const startY = fromRect.top - containerRect.top + fromRect.height / 2
-      const endX = toRect.left - containerRect.left + toRect.width / 2
-      const endY = toRect.top - containerRect.top + toRect.height / 2
-
-      const dx = endX - startX
-      const dy = endY - startY
-      let d = ""
-
-      if (Math.abs(dx) > Math.abs(dy)) {
-        const controlX = startX + dx * curvature
-        d = `M ${startX},${startY} C ${controlX},${startY} ${controlX},${endY} ${endX},${endY}`
-      } else {
-        const controlY = startY + dy * curvature
-        d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${endY}`
-      }
-
-      setPathD(d)
-      setViewBox(`0 0 ${containerRef.current.clientWidth} ${containerRef.current.clientHeight}`)
-
-      try {
-        const svgNS = "http://www.w3.org/2000/svg"
-        const tempPath = document.createElementNS(svgNS, "path")
-        tempPath.setAttribute("d", d)
-        const len = tempPath.getTotalLength()
-        setPathLength(len)
-      } catch (e) {
-        setPathLength(Math.sqrt(dx * dx + dy * dy))
-      }
+      const startY = fromRect.bottom - containerRect.top 
       
-      needsUpdate = false
-    }
+      // End: Top Center of 'to' element
+      const endX = toRect.left - containerRect.left + toRect.width / 2
+      const endY = toRect.top - containerRect.top
 
-    function scheduleCalc() {
-      if (needsUpdate) return
-      needsUpdate = true
-      if (rafId) cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        calc()
-        rafId = null
+      // Control points for bezier curve
+      const controlY = startY + (endY - startY) * curvature
+
+      const d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${endY}`
+
+      setPathData({
+        d,
+        viewBox: `0 0 ${containerRect.width} ${containerRect.height}`,
+        length: Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) * 1.5 // Approx length
       })
     }
 
-    // Initial calculation
-    calc()
-    
-    const ro = new ResizeObserver(scheduleCalc)
-    if (containerRef.current) ro.observe(containerRef.current)
-    window.addEventListener("resize", scheduleCalc, { passive: true })
+    updatePath()
+    const resizeObserver = new ResizeObserver(updatePath)
+    if (containerRef.current) resizeObserver.observe(containerRef.current)
+    window.addEventListener("resize", updatePath)
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId)
-      ro.disconnect()
-      window.removeEventListener("resize", scheduleCalc)
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updatePath)
     }
   }, [containerRef, fromRef, toRef, curvature])
 
+  // Animation Loop
   useEffect(() => {
-    if (!pathD || !pathLength) return
+    if (!pathData.d) return
 
-    let start: number | null = null
-    const durationMs = duration * 1000
-    let lastFrameTime = 0
-    const targetFPS = 60
-    const frameInterval = 1000 / targetFPS
+    let startTime
+    const duration = 2000 // ms
 
-    function step(ts: number) {
-      // Throttle to target FPS to reduce CPU usage
-      if (ts - lastFrameTime < frameInterval) {
-        rafRef.current = requestAnimationFrame(step)
-        return
-      }
-      lastFrameTime = ts
-
-      if (!start) start = ts
-      const elapsed = ts - start
-      const t = (elapsed % durationMs) / durationMs
-
+    const animate = (time) => {
+      if (!startTime) startTime = time
+      const elapsed = time - startTime
+      const progress = (elapsed % duration) / duration
+      
+      // Move arrow
       if (pathRef.current && particleRef.current) {
+        const path = pathRef.current
         try {
-          const point = pathRef.current.getPointAtLength(t * pathLength)
-          // Batch DOM updates
-          particleRef.current.setAttribute("cx", String(point.x))
-          particleRef.current.setAttribute("cy", String(point.y))
-
-          const opacity = t < 0.1 ? t * 10 : t > 0.9 ? (1 - t) * 10 : 1
-          particleRef.current.setAttribute("opacity", String(Math.max(0, Math.min(1, opacity))))
+          const totalLength = path.getTotalLength()
+          const currentLen = progress * totalLength
+          const point = path.getPointAtLength(currentLen)
+          
+          // Calculate rotation angle by looking slightly behind
+          const prevLen = Math.max(0, currentLen - 2) 
+          const prevPoint = path.getPointAtLength(prevLen)
+          
+          // Calculate angle in degrees
+          const angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x) * (180 / Math.PI)
+          
+          // Apply position and rotation using transform
+          particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
+          
+          // Fade in/out at ends
+          const opacity = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
+          particleRef.current.setAttribute("opacity", opacity)
         } catch (e) {
-          // ignore
+            // box resize safety
         }
       }
-      rafRef.current = requestAnimationFrame(step)
+      
+      rafRef.current = requestAnimationFrame(animate)
     }
 
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(step)
+    rafRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [pathData.d])
 
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-        rafRef.current = null
-      }
-    }
-  }, [pathD, pathLength, duration])
-
-  if (!pathD || !viewBox) return null
-
-  const pathId = `beamPath-${id}`
-  const gradId = `beamGrad-${id}`
-  const dashAnim = `dash-${id}`
+  if (!pathData.d) return null
 
   return (
     <svg
-      viewBox={viewBox}
-      className="absolute inset-0 w-full h-full pointer-events-none z-10"
+      viewBox={pathData.viewBox}
+      className="absolute inset-0 z-0 pointer-events-none w-full h-full"
       style={{ overflow: "visible" }}
     >
-      <path d={pathD} fill="none" stroke={pathColor} strokeWidth={pathWidth} opacity={pathOpacity} />
-
+      {/* Background Track */}
+      <path d={pathData.d} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="2" />
+      
+      {/* Animated Gradient Path */}
       <path
-        id={pathId}
         ref={pathRef}
-        d={pathD}
+        d={pathData.d}
         fill="none"
-        strokeWidth={pathWidth * 1.5}
+        stroke={`url(#gradient-${id})`}
+        strokeWidth="2"
         strokeLinecap="round"
-        stroke={`url(#${gradId})`}
-        style={{
-          strokeDasharray: `${pathLength} ${pathLength}`,
-          strokeDashoffset: pathLength,
-          filter: "url(#beamGlow)",
-        }}
+        className="opacity-60"
       />
+      
+      {/* Glowing Arrow Group */}
+      <g ref={particleRef} className="drop-shadow-[0_0_10px_#FF8D00]">
+        {/* Chevron pointing right (0 degrees) */}
+        <path d="M-4,-4 L2,0 L-4,4" fill="none" stroke="#FF8D00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Small dot in center */}
+        <circle r="1.5" fill="#FF8D00" />
+      </g>
 
       <defs>
-        <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={gradientStartColor} stopOpacity="0" />
-          <stop offset="20%" stopColor={gradientStartColor} stopOpacity="1" />
-          <stop offset="100%" stopColor={gradientStopColor} stopOpacity="0" />
+        <linearGradient id={`gradient-${id}`} gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FF8D00" stopOpacity="0" />
+          <stop offset="50%" stopColor="#FF8D00" stopOpacity="1" />
+          <stop offset="100%" stopColor="#FFA500" stopOpacity="0" />
         </linearGradient>
-
-        <filter id="beamGlow">
-          <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-          <feMerge>
-            <feMergeNode in="coloredBlur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
-
-      <circle ref={particleRef} r="3" fill={gradientStartColor} className="drop-shadow-[0_0_8px_rgba(255,141,0,0.8)]" />
-
-      <style>{`
-        @keyframes ${dashAnim} {
-          0% { stroke-dashoffset: ${pathLength}; }
-          100% { stroke-dashoffset: ${-pathLength}; } 
-        }
-        #${pathId} {
-          animation: ${dashAnim} ${duration}s linear infinite;
-        }
-      `}</style>
     </svg>
   )
 }
 
-// --- Main Component ---
+// --- Main Feature Component ---
 
-export function TextToThumbnailFeature() {
+export default function TextToThumbnailFeature() {
   const [prompt, setPrompt] = useState(
-    "Cinematic B/W Virat Kohli with bold red 'Reality' text and dramatic shadow lighting.",
+    "Cinematic portrait of a cyberpunk samurai, neon rain, detailed armor, 8k resolution, dramatic lighting."
   )
-  const [imageUrl, setImageUrl] = useState("/images/thumbnailgpt-692b18f74ff58.webp")
+  const imageUrl = "/images/thumbnailgpt-692b18f74ff58.webp" // Placeholder or props
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
+  // Refs for Beam Animation
+  const containerRef = useRef(null)
+  const inputRef = useRef(null)
+  const outputRef = useRef(null)
 
   return (
-    <div className="bg-black text-neutral-100 w-full font-sans selection:bg-[#FF8D00]/30 py-20 md:py-32">
-      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-stretch">
-            {/* Left side - Description */}
-            <div className="flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
-              <div className="flex flex-col gap-4">
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl text-white">
-                  Text to <span className="text-[#FF8D00]">Thumbnail</span>
-                </h2>
-                <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Instantly transform simple text prompts into compelling, professional-grade YouTube thumbnails using our AI thumbnail generator. Save time,
-                  boost engagement, and create stunning visuals in seconds with the power of AI thumbnail maker technology.
-                </p>
-              </div>
-
-              <div className="h-px w-20 bg-gradient-to-r from-[#FF8D00] to-transparent" />
-
-              <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
-                <AnimatedButton size="md" className="w-fit">
-                  Try It Now
-                </AnimatedButton>
-              </a>
-            </div>
-
-            {/* Right side - Interactive Card */}
-            <div className="flex items-center justify-center w-full px-4 md:px-6 h-full">
-              <div
-                ref={containerRef}
-                className="w-full h-auto lg:aspect-[120/75] rounded-xl border border-[#FF8D00]/20 bg-black/40 backdrop-blur-md shadow-2xl relative flex flex-col"
-              >
-                {/* Window controls */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-[#FF8D00]/20 rounded-t-xl">
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                </div>
-
-                <div className="p-4 md:p-6 flex flex-col items-center gap-6 relative w-full">
-                  {/* Input Section */}
-                  <div ref={inputRef} className="relative w-full z-20">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2 block ml-1">
-                      Prompt
-                    </label>
-                    <textarea
-                      value={prompt}
-                      readOnly
-                      className="w-full h-32 resize-none rounded-lg border border-[#FF8D00]/30 bg-neutral-800 px-4 py-3 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-[#FF8D00] transition-all cursor-default"
-                      placeholder="Describe your thumbnail..."
-                    />
+    <section className="relative w-full flex items-center justify-center py-20 bg-transparent">
+      
+      <div className="container relative z-10 mx-auto px-4 md:px-6 flex justify-center">
+        
+        {/* New Style Wrapper */}
+        <div className="snap-center inline-block xl:pe-0 xl:ps-0">
+          <div 
+            ref={containerRef}
+            className="relative bg-neutral-900/90 shadow-2xl outline outline-[6px] outline-black/10 aspect-square w-[340px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col"
+          >
+              {/* Reduced padding from p-6/sm:p-8 to p-5/sm:p-6 to fit content */}
+              <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2 justify-between">
+                  
+                  {/* 1. Input Section (Top) */}
+                  <div className="relative z-20 flex flex-col gap-2 shrink-0">
+                      <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+                          <span>Prompt</span>
+                      </div>
+                      
+                      {/* Textarea container with ref for beam start */}
+                      <div ref={inputRef} className="group relative rounded-xl bg-black/50 p-1 ring-1 ring-white/10 transition-all focus-within:ring-orange-500/50 hover:ring-white/20">
+                          {/* Reduced height from h-20/24 to h-16/20 to save vertical space */}
+                          <textarea
+                              value={prompt}
+                              readOnly
+                              className="h-16 sm:h-20 w-full resize-none bg-transparent p-3 text-sm font-medium leading-relaxed text-neutral-200 placeholder-neutral-600 focus:outline-none overflow-hidden"
+                          />
+                      </div>
                   </div>
 
-                  {/* Output Section */}
-                  <div ref={imageRef} className="w-full relative z-20">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2 block ml-1">
-                      Result
-                    </label>
-                    <AspectRatioCard imageUrl={imageUrl} />
+                  {/* 2. Middle Connector (Beam Space) */}
+                  <div className="relative flex-grow flex items-center justify-center min-h-[4px]">
+                      {/* Spacer for beam visualization */}
                   </div>
 
-                  {/* Animated Beam */}
-                  <AnimatedBeam
-                    containerRef={containerRef}
-                    fromRef={inputRef}
-                    toRef={imageRef}
-                    duration={3}
-                    pathColor="rgba(255,255,255,0.1)"
-                    pathWidth={2}
-                    gradientStartColor="#FF8D00"
-                    gradientStopColor="#FFA500"
+                  {/* 3. Output Section (Bottom) */}
+                  <div className="relative z-20 flex flex-col gap-2 shrink-0">
+                          <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+                          <span>Result</span>
+                      </div>
+                      
+                      {/* Image container with ref for beam end */}
+                      <div ref={outputRef} className="w-full">
+                          <ThumbnailPreview imageUrl={imageUrl} />
+                      </div>
+                  </div>
+
+                  {/* Beam Layer */}
+                  <AnimatedBeam 
+                      containerRef={containerRef}
+                      fromRef={inputRef}
+                      toRef={outputRef}
+                      curvature={0.2} 
                   />
-                </div>
               </div>
-            </div>
           </div>
         </div>
+
       </div>
-    </div>
+    </section>
   )
 }

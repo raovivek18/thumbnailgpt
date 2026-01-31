@@ -3,9 +3,9 @@ import { ThumbnailGPTHeader } from "@/components/thumbnail-gpt-header"
 import HeroSection from "@/components/hero-section"
 import ThumbnailPreview from "@/components/thumbnail-preview"
 import { ClientsSection } from "@/components/clients-section"
-import { TextToThumbnailFeature } from "@/components/text-to-thumbnail-feature"
-import { ImageToThumbnailFeature } from "@/components/image-to-thumbnail-feature"
-import { RecreateThumbnailFeature } from "@/components/recreate-thumbnail-feature"
+import FeaturesCarouselSection from "@/components/features-carousel-section"
+import FeaturesCarouselSection2 from "@/components/features-carousel-section-2"
+import FeaturesCarouselSection3 from "@/components/features-carousel-section-3"
 import { Pricing } from "@/components/pricing"
 import { FaqSection } from "@/components/faq-section"
 import { CtaSection } from "@/components/cta-section"
@@ -28,9 +28,9 @@ export default function Home() {
         <ClientsSection />
 
         <div id="features" className="scroll-mt-24">
-          <TextToThumbnailFeature />
-          <ImageToThumbnailFeature />
-          <RecreateThumbnailFeature />
+          <FeaturesCarouselSection />
+          <FeaturesCarouselSection2 />
+          <FeaturesCarouselSection3 />
         </div>
 
         <div id="pricing" className="scroll-mt-24">

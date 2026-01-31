@@ -1,358 +1,320 @@
 "use client"
 
-import React, { useRef } from "react"
-import { Play, Eye } from "lucide-react"
-import { AnimatedButton } from "@/components/ui/animated-button"
+import React, { useRef, useEffect, useState } from "react"
+import { Play } from "lucide-react"
 
-const AspectRatioCard = ({ imageUrl, className = "" }: { imageUrl: string; className?: string }) => {
+// --- Helper Components ---
+
+const YouTubeCardPreview = () => {
   return (
-    <div className={`w-full flex flex-col justify-center items-center ${className}`}>
-      <div className="w-full max-w-2xl mx-auto relative p-4 sm:p-8">
-        <div className="relative w-full shrink-0 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-          <div className="w-full p-1">
-            <div className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-black aspect-video">
-              <img
-                loading="lazy"
-                width={800}
-                height={450}
-                className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110"
-                src={imageUrl || "/placeholder.svg"}
-                alt="Enhanced thumbnail"
-              />
-            </div>
+    // Removed border/bg that was wrapping text, now just wraps the image
+    <div className="w-full bg-neutral-950 border border-white/10 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-lg">
+      {/* Thumbnail Container - Pure 16:9 Aspect Ratio */}
+      <div className="relative w-full aspect-video bg-neutral-900 overflow-hidden">
+        <img
+          src="/images/thumbnailgpt-youtube-preview.webp"
+          alt="YouTube video thumbnail"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+          onError={(e) => {
+             const target = e.target as HTMLImageElement;
+             target.src = "https://placehold.co/640x360/1a1a1a/666666?text=Video+Thumbnail"
+          }}
+        />
+        
+        {/* Duration Badge */}
+        <div className="absolute bottom-1 right-1 bg-black/80 backdrop-blur-sm text-white text-[8px] sm:text-[10px] font-medium px-1 py-0.5 rounded">
+          12:34
+        </div>
+        
+        {/* Play Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+            <Play className="w-3 h-3 sm:w-4 sm:h-4 text-white fill-white ml-0.5" />
           </div>
         </div>
       </div>
+      
+      {/* Removed Title & Views Section */}
     </div>
   )
 }
 
+/**
+ * Renders the generated image with a sleek reveal animation and glass frame.
+ */
+const ThumbnailPreview = ({ imageUrl, className = "" }: { imageUrl: string, className?: string }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    if (imageUrl) {
+      setIsLoaded(false)
+      const timeout = setTimeout(() => setIsLoaded(true), 150)
+      return () => clearTimeout(timeout)
+    }
+  }, [imageUrl])
+
+  return (
+    <div className={`w-full flex flex-col items-center ${className}`}>
+      {/* Glass Frame for Image */}
+      <div className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.01]">
+        
+        {/* Inner Container */}
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black/80">
+          
+          {/* Loading / Empty State */}
+          {!imageUrl && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-neutral-700 border-t-neutral-400" />
+              <span className="mt-2 text-[10px] font-medium tracking-wider uppercase opacity-60">Processing</span>
+            </div>
+          )}
+
+          {/* Image */}
+          {imageUrl && (
+            <img
+              src={imageUrl}
+              alt="Generated Result"
+              className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+                isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
+              }`}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Generation+Failed"
+              }}
+            />
+          )}
+
+          {/* Glossy Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+        </div>
+      </div>
+      
+      {/* Reflection/Glow below the card */}
+      <div className="mt-1 h-1 w-[80%] rounded-full bg-orange-500/20 blur-xl" />
+    </div>
+  )
+}
+
+/**
+ * Draws the connecting line between elements with a directional arrow.
+ */
 const AnimatedBeam = ({
   containerRef,
   fromRef,
   toRef,
-  duration = 3,
-  pathColor = "rgba(255,255,255,0.1)",
-  pathWidth = 2,
-  pathOpacity = 1,
-  gradientStartColor = "#FF8D00",
-  gradientStopColor = "#FFA500",
-  curvature = 0.5,
+  curvature = 0.4,
+  reverse = false, // Flow direction
 }: {
-  containerRef: React.RefObject<HTMLDivElement | null>
-  fromRef: React.RefObject<HTMLDivElement | null>
-  toRef: React.RefObject<HTMLDivElement | null>
-  duration?: number
-  pathColor?: string
-  pathWidth?: number
-  pathOpacity?: number
-  gradientStartColor?: string
-  gradientStopColor?: string
-  curvature?: number
+    containerRef: React.RefObject<HTMLElement | null>,
+    fromRef: React.RefObject<HTMLElement | null>,
+    toRef: React.RefObject<HTMLElement | null>,
+    curvature?: number,
+    reverse?: boolean
 }) => {
-  const [pathD, setPathD] = React.useState("")
-  const [pathLength, setPathLength] = React.useState(0)
-  const [viewBox, setViewBox] = React.useState<string | null>(null)
-  const id = React.useId().replace(/:/g, "-")
+  const [pathData, setPathData] = useState({ d: "", length: 0, viewBox: "" })
+  const id = React.useId()
+  
+  // Refs for animation loop
+  const pathRef = useRef<SVGPathElement | null>(null)
+  const particleRef = useRef<SVGGElement | null>(null)
+  const rafRef = useRef<number | null>(null)
 
-  const particleRef = React.useRef<SVGCircleElement>(null)
-  const pathRef = React.useRef<SVGPathElement>(null)
-  const rafRef = React.useRef<number | null>(null)
-
-  React.useEffect(() => {
-    let rafId: number | null = null
-    let needsUpdate = true
-
-    function calc() {
+  // Calculate SVG Path
+  useEffect(() => {
+    const updatePath = () => {
       if (!containerRef.current || !fromRef.current || !toRef.current) return
 
-      // Batch DOM reads to prevent forced reflow
       const containerRect = containerRef.current.getBoundingClientRect()
       const fromRect = fromRef.current.getBoundingClientRect()
       const toRect = toRef.current.getBoundingClientRect()
 
+      // Calculate points relative to container
+      // Start: Bottom Center of 'from' element
       const startX = fromRect.left - containerRect.left + fromRect.width / 2
-      const startY = fromRect.top - containerRect.top + fromRect.height / 2
-      const endX = toRect.left - containerRect.left + toRect.width / 2
-      const endY = toRect.top - containerRect.top + toRect.height / 2
-
-      const dx = endX - startX
-      const dy = endY - startY
-      const verticalCompression = 0.5 // Reduce vertical height by 50%
-      const compressedDy = dy * verticalCompression
-      const compressedEndY = startY + compressedDy
-      let d = ""
-
-      if (Math.abs(dx) > Math.abs(compressedDy)) {
-        const controlX = startX + dx * curvature
-        d = `M ${startX},${startY} C ${controlX},${startY} ${controlX},${compressedEndY} ${endX},${compressedEndY}`
-      } else {
-        const controlY = startY + compressedDy * curvature
-        d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${compressedEndY}`
-      }
-
-      setPathD(d)
-      setViewBox(`0 0 ${containerRef.current.clientWidth} ${containerRef.current.clientHeight}`)
-
-      try {
-        const svgNS = "http://www.w3.org/2000/svg"
-        const tempPath = document.createElementNS(svgNS, "path")
-        tempPath.setAttribute("d", d)
-        const len = tempPath.getTotalLength()
-        setPathLength(len)
-      } catch (e) {
-        setPathLength(Math.sqrt(dx * dx + dy * dy))
-      }
+      const startY = fromRect.bottom - containerRect.top 
       
-      needsUpdate = false
-    }
+      // End: Top Center of 'to' element
+      const endX = toRect.left - containerRect.left + toRect.width / 2
+      const endY = toRect.top - containerRect.top
 
-    function scheduleCalc() {
-      if (needsUpdate) return
-      needsUpdate = true
-      if (rafId) cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        calc()
-        rafId = null
+      // Control points for bezier curve
+      const controlY = startY + (endY - startY) * curvature
+
+      const d = `M ${startX},${startY} C ${startX},${controlY} ${endX},${controlY} ${endX},${endY}`
+
+      setPathData({
+        d,
+        viewBox: `0 0 ${containerRect.width} ${containerRect.height}`,
+        length: Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) * 1.5 // Approx length
       })
     }
 
-    // Initial calculation
-    calc()
-    
-    const ro = new ResizeObserver(scheduleCalc)
-    if (containerRef.current) ro.observe(containerRef.current)
-    window.addEventListener("resize", scheduleCalc, { passive: true })
+    updatePath()
+    const resizeObserver = new ResizeObserver(updatePath)
+    if (containerRef.current) resizeObserver.observe(containerRef.current)
+    window.addEventListener("resize", updatePath)
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId)
-      ro.disconnect()
-      window.removeEventListener("resize", scheduleCalc)
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updatePath)
     }
   }, [containerRef, fromRef, toRef, curvature])
 
-  React.useEffect(() => {
-    if (!pathD || !pathLength) return
+  // Animation Loop
+  useEffect(() => {
+    if (!pathData.d) return
 
-    let start: number | null = null
-    const durationMs = duration * 1000
-    let lastFrameTime = 0
-    const targetFPS = 60
-    const frameInterval = 1000 / targetFPS
+    let startTime: number | null = null
+    const duration = 2000 // ms
 
-    function step(ts: number) {
-      // Throttle to target FPS to reduce CPU usage
-      if (ts - lastFrameTime < frameInterval) {
-        rafRef.current = requestAnimationFrame(step)
-        return
-      }
-      lastFrameTime = ts
-
-      if (!start) start = ts
-      const elapsed = ts - start
-      const t = (elapsed % durationMs) / durationMs
-
+    const animate = (time: number) => {
+      if (startTime === null) startTime = time
+      const elapsed = time - startTime
+      const progress = (elapsed % duration) / duration
+      
+      // Move arrow
       if (pathRef.current && particleRef.current) {
+        const path = pathRef.current
         try {
-          const point = pathRef.current.getPointAtLength(t * pathLength)
-          // Batch DOM updates
-          particleRef.current.setAttribute("cx", String(point.x))
-          particleRef.current.setAttribute("cy", String(point.y))
-
-          const opacity = t < 0.1 ? t * 10 : t > 0.9 ? (1 - t) * 10 : 1
-          particleRef.current.setAttribute("opacity", String(Math.max(0, Math.min(1, opacity))))
+          const totalLength = path.getTotalLength()
+          const currentLen = progress * totalLength
+          const point = path.getPointAtLength(currentLen)
+          
+          // Calculate rotation angle by looking slightly behind
+          const prevLen = Math.max(0, currentLen - 2) 
+          const prevPoint = path.getPointAtLength(prevLen)
+          
+          // Calculate angle in degrees
+          const angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x) * (180 / Math.PI)
+          
+          // Apply position and rotation using transform
+          particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
+          
+          // Fade in/out at ends
+          const opacity = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
+          particleRef.current.setAttribute("opacity", String(opacity))
         } catch (e) {
-          // ignore
+            // box resize safety
         }
       }
-      rafRef.current = requestAnimationFrame(step)
+      
+      rafRef.current = requestAnimationFrame(animate)
     }
 
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(step)
-
+    rafRef.current = requestAnimationFrame(animate)
     return () => {
-      if (rafRef.current) {
+      if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current)
-        rafRef.current = null
       }
     }
-  }, [pathD, pathLength, duration])
+  }, [pathData.d])
 
-  if (!pathD || !viewBox) return null
-
-  const pathId = `beamPath-${id}`
-  const gradId = `beamGrad-${id}`
-  const dashAnim = `dash-${id}`
+  if (!pathData.d) return null
 
   return (
     <svg
-      viewBox={viewBox}
-      className="absolute inset-0 w-full h-full pointer-events-none z-10"
+      viewBox={pathData.viewBox}
+      className="absolute inset-0 z-0 pointer-events-none w-full h-full"
       style={{ overflow: "visible" }}
     >
-      <path d={pathD} fill="none" stroke={pathColor} strokeWidth={pathWidth} opacity={pathOpacity} />
-
+      {/* Background Track */}
+      <path d={pathData.d} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="2" />
+      
+      {/* Animated Gradient Path */}
       <path
-        id={pathId}
         ref={pathRef}
-        d={pathD}
+        d={pathData.d}
         fill="none"
-        strokeWidth={pathWidth * 1.5}
+        stroke={`url(#gradient-${id})`}
+        strokeWidth="2"
         strokeLinecap="round"
-        stroke={`url(#${gradId})`}
-        style={{
-          strokeDasharray: `${pathLength} ${pathLength}`,
-          strokeDashoffset: pathLength,
-          filter: "url(#beamGlow)",
-        }}
+        className="opacity-60"
       />
+      
+      {/* Glowing Arrow Group */}
+      <g ref={particleRef} className="drop-shadow-[0_0_10px_#FF8D00]">
+        {/* Chevron pointing right (0 degrees) */}
+        <path d="M-4,-4 L2,0 L-4,4" fill="none" stroke="#FF8D00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Small dot in center */}
+        <circle r="1.5" fill="#FF8D00" />
+      </g>
 
       <defs>
-        <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={gradientStartColor} stopOpacity="0" />
-          <stop offset="20%" stopColor={gradientStartColor} stopOpacity="1" />
-          <stop offset="100%" stopColor={gradientStopColor} stopOpacity="0" />
+        <linearGradient id={`gradient-${id}`} gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FF8D00" stopOpacity="0" />
+          <stop offset="50%" stopColor="#FF8D00" stopOpacity="1" />
+          <stop offset="100%" stopColor="#FFA500" stopOpacity="0" />
         </linearGradient>
-
-        <filter id="beamGlow">
-          <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-          <feMerge>
-            <feMergeNode in="coloredBlur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
-
-      <circle ref={particleRef} r="3" fill={gradientStartColor} className="drop-shadow-[0_0_8px_rgba(255,141,0,0.8)]" />
-
-      <style>{`
-        @keyframes ${dashAnim} {
-          0% { stroke-dashoffset: ${pathLength}; }
-          100% { stroke-dashoffset: ${-pathLength}; } 
-        }
-        #${pathId} {
-          animation: ${dashAnim} ${duration}s linear infinite;
-        }
-      `}</style>
     </svg>
   )
 }
 
-export function RecreateThumbnailFeature() {
+// --- Main Feature Component ---
+
+export default function RecreateThumbnailFeature() {
+  const imageUrl = "/images/thumbnailgpt-thumbnail3.webp"
+
+  // Refs for Beam Animation
   const containerRef = useRef<HTMLDivElement>(null)
-  const youtubeCardRef = useRef<HTMLDivElement>(null)
-  const resultRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const outputRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className="bg-black text-neutral-100 w-full font-sans selection:bg-[#FF8D00]/30 py-20 md:py-32">
-      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-stretch">
-            {/* Description - First on mobile, left on desktop */}
-            <div className="order-1 md:order-1 flex flex-col justify-center gap-8 py-10 px-4 md:px-6 lg:px-10 h-full">
-              <div className="flex flex-col gap-4">
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl lg:text-6xl text-white">
-                  <span className="text-[#FF8D00]">Recreate</span> Thumbnail
-                </h2>
-                <p className="max-w-xl text-base leading-relaxed text-neutral-400 sm:text-lg">
-                  Upload any YouTube thumbnail and recreate YouTube thumbnail with AI-generated versions featuring improved design, enhanced
-                  clarity, and boosted CTR potential. Our AI YouTube thumbnail creator transforms existing thumbnails into high-converting visuals.
-                </p>
-              </div>
-
-              <div className="h-px w-20 bg-gradient-to-r from-[#FF8D00] to-transparent" />
-
-              <a href="https://app.thumbnailgpt.com/" target="_blank" rel="noopener noreferrer">
-                <AnimatedButton size="md" className="w-fit">
-                  Try It Now
-                </AnimatedButton>
-              </a>
-            </div>
-
-            {/* Interactive Card - Second on mobile, right on desktop */}
-            <div className="order-2 md:order-2 flex items-center justify-center w-full px-4 md:px-6 h-full">
-              <div
-                ref={containerRef}
-                className="w-full h-auto lg:aspect-[120/60] rounded-xl border border-[#FF8D00]/20 bg-black/40 backdrop-blur-md shadow-2xl relative flex flex-col"
-              >
-                <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-[#FF8D00]/20 rounded-t-xl">
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                  <div className="h-3 w-3 rounded-full bg-neutral-700" />
-                </div>
-
-                <div className="p-3 md:p-4 flex flex-col items-center gap-0 relative w-full">
-                  {/* YouTube Card Section */}
-                  <div ref={youtubeCardRef} className="relative w-full z-20 flex flex-col items-center">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1 w-full">
-                      Original
-                    </label>
-                    <div className="w-full bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-all duration-200 cursor-pointer group transform scale-[0.55] origin-top mx-auto">
-                      {/* Thumbnail Container */}
-                      <div className="relative w-full aspect-video overflow-hidden bg-black">
-                        <img
-                          loading="lazy"
-                          width={640}
-                          height={360}
-                          src="/images/thumbnailgpt-youtube-preview.webp"
-                          alt="YouTube video thumbnail"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        
-                        {/* Video Duration Badge */}
-                        <div className="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-medium px-1.5 py-0.5 rounded">
-                          12:34
-                        </div>
-                        
-                        {/* Play button overlay - appears on hover */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-200">
-                            <Play className="w-6 h-6 text-white fill-white ml-0.5" />
-                          </div>
-                        </div>
+    <section className="relative w-full flex items-center justify-center py-20 bg-transparent">
+      
+      <div className="container relative z-10 mx-auto px-4 md:px-6 flex justify-center">
+        
+        {/* New Style Wrapper */}
+        <div className="snap-center inline-block xl:pe-0 xl:ps-0">
+          <div 
+            ref={containerRef}
+            className="relative bg-neutral-900/90 shadow-2xl outline outline-[6px] outline-black/10 aspect-square w-[340px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col"
+          >
+              {/* Adjusted padding: Reduced top (pt-2) and Increased bottom (pb-6) to shift content "upper" */}
+              <div className="relative pt-2 px-3 pb-6 sm:pt-3 sm:px-5 sm:pb-8 z-10 flex flex-col h-full w-full gap-1 justify-between">
+                  
+                  {/* 1. Input Section (Top) */}
+                  <div className="relative z-20 flex flex-col gap-1 shrink-0">
+                      <div className="flex items-center justify-between text-[10px] sm:text-xs font-medium uppercase tracking-wider text-neutral-500">
+                          <span>Original</span>
                       </div>
-
-                      {/* Video Info Section */}
-                      <div className="p-3">
-                        <h3 className="text-sm font-semibold text-white line-clamp-2 mb-2 group-hover:text-[#FF8D00] transition-colors">
-                          Would You Risk Dying For $500,000?
-                        </h3>
-                        <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-                          <span>MrBeast</span>
-                          <span>•</span>
-                          <span>102M views</span>
-                          <span>•</span>
-                          <span>2 months ago</span>
-                        </div>
+                      
+                      {/* Reduced width to 40% (mobile) / 45% (desktop) to ensure result fits */}
+                      <div ref={inputRef} className="w-[40%] sm:w-[45%] mx-auto">
+                          <YouTubeCardPreview />
                       </div>
-                    </div>
                   </div>
 
-                  {/* Enhanced Result Section */}
-                  <div ref={resultRef} className="w-full relative z-20 -mt-28 flex flex-col items-center">
-                    <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 block ml-1 w-full">
-                      Result
-                    </label>
-                    <AspectRatioCard imageUrl="/images/thumbnailgpt-thumbnail3.webp" />
+                  {/* 2. Middle Connector (Beam Space) */}
+                  <div className="relative grow flex items-center justify-center min-h-[4px]">
+                      {/* Spacer for beam visualization */}
                   </div>
 
-                  <AnimatedBeam
-                    containerRef={containerRef}
-                    fromRef={youtubeCardRef}
-                    toRef={resultRef}
-                    duration={3}
-                    pathColor="rgba(255,141,0,0.1)"
-                    pathWidth={2}
-                    gradientStartColor="#FF8D00"
-                    gradientStopColor="#FFA500"
+                  {/* 3. Output Section (Bottom) */}
+                  <div className="relative z-20 flex flex-col gap-1 shrink-0">
+                          <div className="flex items-center justify-between text-[10px] sm:text-xs font-medium uppercase tracking-wider text-neutral-500">
+                          <span>Result</span>
+                      </div>
+                      
+                      {/* Image container remains full width */}
+                      <div ref={outputRef} className="w-full">
+                          <ThumbnailPreview imageUrl={imageUrl} />
+                      </div>
+                  </div>
+
+                  {/* Beam Layer */}
+                  <AnimatedBeam 
+                      containerRef={containerRef}
+                      fromRef={inputRef}
+                      toRef={outputRef}
+                      curvature={0.2} 
                   />
-                </div>
               </div>
-            </div>
           </div>
         </div>
+
       </div>
-    </div>
+    </section>
   )
 }
