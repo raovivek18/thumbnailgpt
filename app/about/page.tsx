@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Mail, Github, Instagram, Twitter, Zap, Lock, Palette, Sparkles } from "lucide-react"
+import { Mail, Github, Instagram, Twitter, Zap, Lock, Palette, Sparkles, PenTool, Type, Search, Wrench, Maximize } from "lucide-react"
 import ThumbnailGPTHeader from "@/components/thumbnail-gpt-header"
 import Footer from "@/components/footer"
 import { MainWithPadding } from "@/components/main-with-padding"
@@ -42,7 +42,7 @@ export default function AboutPage() {
           <section className="mb-20">
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">What We Offer</h2>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Feature 1 */}
               <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
@@ -82,6 +82,76 @@ export default function AboutPage() {
                   <h3 className="text-xl font-bold mb-3 text-white">Recreate Thumbnail</h3>
                   <p className="text-gray-400 leading-relaxed">
                     Upload existing thumbnails or YouTube links to recreate similar designs with your personal touch.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 4 */}
+              <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF8D00]/10 flex items-center justify-center mb-4">
+                    <PenTool className="w-6 h-6 text-[#FF8D00]" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Sketch to Thumbnail</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Convert your hand-drawn sketches into professional thumbnails with AI-powered enhancement and styling.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 5 */}
+              <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF8D00]/10 flex items-center justify-center mb-4">
+                    <Type className="w-6 h-6 text-[#FF8D00]" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Title to Thumbnail</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Generate eye-catching thumbnails directly from your video titles. Perfect for quick content creation.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 6 */}
+              <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF8D00]/10 flex items-center justify-center mb-4">
+                    <Search className="w-6 h-6 text-[#FF8D00]" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Analyze Thumbnail</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Get AI-powered insights on your thumbnails. Understand what works and optimize for better engagement.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 7 */}
+              <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF8D00]/10 flex items-center justify-center mb-4">
+                    <Wrench className="w-6 h-6 text-[#FF8D00]" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Fix Thumbnail</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Improve and enhance existing thumbnails. Fix issues, adjust colors, and optimize for better performance.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 8 */}
+              <div className="group relative bg-gradient-to-b from-[#FF8D00]/5 to-transparent border border-[#FF8D00]/20 rounded-2xl p-8 hover:border-[#FF8D00]/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FF8D00]/0 to-[#FF8D00]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF8D00]/10 flex items-center justify-center mb-4">
+                    <Maximize className="w-6 h-6 text-[#FF8D00]" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Upscale Thumbnail</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Enhance image resolution and quality. Upscale your thumbnails without losing detail or clarity.
                   </p>
                 </div>
               </div>

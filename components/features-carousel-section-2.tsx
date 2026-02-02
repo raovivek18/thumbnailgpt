@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useRef, useEffect, useState } from "react"
-import { 
-  X, TrendingUp, Eye, Sparkles, Heart, Contrast, 
-  Target, ChevronRight, ChevronDown 
+import {
+  X, TrendingUp, Eye, Sparkles, Heart, Contrast,
+  Target, ChevronRight, ChevronDown
 } from 'lucide-react'
 
 // ==========================================
@@ -31,7 +31,7 @@ const getBarColor = (score) => {
 const ScoreRing = ({ score }) => {
   const normalizedScore = normalizeScore(score)
   const [mounted, setMounted] = useState(false)
-  const circumference = 75.39 
+  const circumference = 75.39
 
   useEffect(() => {
     setMounted(true)
@@ -125,29 +125,22 @@ const ThumbnailReport = ({
   fixPrompt,
   onClose,
   onFixThumbnail,
-  buttonRef, 
+  buttonRef,
 }) => {
   const [expandedId, setExpandedId] = useState(null)
-  const [isFixing, setIsFixing] = useState(false)
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id)
   }
 
-  const handleFixThumbnail = async () => {
-    if (!fixPrompt || !onFixThumbnail) return
-    setIsFixing(true)
-    try {
-      await onFixThumbnail(thumbnailUrl, fixPrompt)
-    } catch (error) {
-      console.error('Failed to fix thumbnail:', error)
-    } finally {
-      setIsFixing(false)
+  const handleFixThumbnail = () => {
+    if (onFixThumbnail) {
+      onFixThumbnail(thumbnailUrl, fixPrompt)
     }
   }
 
   return (
-    <div 
+    <div
       className="relative w-full max-w-[240px] h-[280px] flex flex-col overflow-hidden transition-all duration-300 z-20 shrink-0 group/card"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -171,8 +164,8 @@ const ThumbnailReport = ({
           --radii: 9999px;
           cursor: pointer;
           font-size: 0.75rem;
-          font-weight: 500;
-          transition: 0.8s;
+          font-weight: 600;
+          transition: 0.5s;
           background-size: 280% auto;
           background-image: linear-gradient(
             325deg,
@@ -188,6 +181,7 @@ const ThumbnailReport = ({
             0px 5px 5px -1px rgba(255, 140, 0, 0.2),
             inset 2px 2px 4px rgba(255, 200, 150, 0.3),
             inset -2px -2px 4px rgba(200, 100, 0, 0.2);
+          outline: none;
         }
         .btn-generate:hover {
           background-position: right top;
@@ -195,15 +189,12 @@ const ThumbnailReport = ({
         .btn-generate:is(:focus, :focus-visible, :active) {
           outline: none;
           box-shadow:
-            0 0 0 3px var(--btn-bg-color),
-            0 0 0 6px var(--btn-bg-2);
+            0px 0px 20px rgba(255, 165, 0, 0.4),
+            0px 5px 5px -1px rgba(255, 140, 0, 0.2);
         }
-        .btn-generate:disabled {
-          cursor: not-allowed;
-          opacity: 0.7;
-          background-image: linear-gradient(325deg, hsla(25 95% 53% / 0.3) 0%, hsla(25 95% 53% / 0.2) 55%, hsla(25 95% 53% / 0.3) 90%);
-          box-shadow: 0px 2px 4px rgba(255, 165, 0, 0.2);
-          color: hsla(25 95% 53% / 0.8);
+        .btn-generate:active {
+          transform: scale(0.96);
+          transition: 0.1s;
         }
         @media (prefers-reduced-motion: reduce) {
           .btn-generate {
@@ -212,7 +203,7 @@ const ThumbnailReport = ({
         }
       `}</style>
 
-      {/* Header */}
+      {/* Header - Secondary Label is Orange */}
       <div className="flex-shrink-0 px-3 pt-3 pb-1 bg-transparent z-20 flex items-center justify-between">
         <span className="text-[8px] uppercase tracking-widest text-[#FF8D00] font-bold">Analysis</span>
         <button onClick={onClose} className="text-white/20 hover:text-white/50 transition-colors"><X size={12} /></button>
@@ -237,13 +228,13 @@ const ThumbnailReport = ({
             const Icon = factorIcons[key]
             return (
               <div key={key} className="flex flex-col border-b last:border-0 border-white/5">
-                <div 
+                <div
                   className="flex items-center justify-between py-1.5 cursor-pointer hover:bg-white/5 px-1 rounded transition-colors"
                   onClick={() => toggleExpand(key)}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <Icon size={10} className={isExpanded ? 'text-[#FF8D00]' : 'text-white/40'} />
-                    <span className="text-[10px] font-medium text-white/80 truncate">{factorLabels[key]}</span>
+                    <Icon size={10} className={isExpanded ? 'text-[#FF8D00]' : 'text-[#FF8D00]/70'} />
+                    <span className="text-[10px] font-bold text-[#FF8D00] truncate">{factorLabels[key]}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <ScoreBars score={factor.score} />
@@ -251,7 +242,7 @@ const ThumbnailReport = ({
                   </div>
                 </div>
                 {isExpanded && (
-                  <div className="pl-4 pb-1.5 text-[8px] text-white/50 leading-tight">
+                  <div className="pl-4 pb-1.5 text-[9px] text-white font-medium leading-tight opacity-90">
                     {factor.reason}
                   </div>
                 )}
@@ -266,12 +257,13 @@ const ThumbnailReport = ({
         <button
           ref={buttonRef}
           onClick={handleFixThumbnail}
-          disabled={isFixing}
+          onMouseUp={(e) => e.currentTarget.blur()}
+          onMouseLeave={(e) => e.currentTarget.blur()}
           className="btn-generate rounded-full flex items-center justify-center gap-2 px-3 py-1.5 w-full"
           title="Generate thumbnail"
         >
-          <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
-          <span>Fix Thumbnail</span>
+          <Sparkles className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+          <span className="text-white">Fix Thumbnail</span>
         </button>
       </div>
     </div>
@@ -284,7 +276,7 @@ const ThumbnailReport = ({
 
 const ThumbnailPreviewOutput = ({ imageUrl, outputRef }) => (
   <div className="w-[280px] flex flex-col items-center shrink-0">
-    <div 
+    <div
       ref={outputRef}
       className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]"
     >
@@ -297,9 +289,6 @@ const ThumbnailPreviewOutput = ({ imageUrl, outputRef }) => (
   </div>
 )
 
-/**
- * Flexible Animated Beam Logic for both Desktop (Horizontal) and Mobile (Vertical) L-shapes
- */
 const AnimatedBeam = ({
   containerRef,
   fromRef,
@@ -308,7 +297,7 @@ const AnimatedBeam = ({
   const [pathData, setPathData] = useState({ d: "", viewBox: "" })
   const [opacity, setOpacity] = useState(0)
   const id = React.useId()
-  
+
   const pathRef = useRef(null)
   const particleRef = useRef(null)
   const rafRef = useRef(null)
@@ -321,17 +310,18 @@ const AnimatedBeam = ({
       const fRect = fromRef.current.getBoundingClientRect()
       const tRect = toRef.current.getBoundingClientRect()
 
+      // Detection for vertical/stacked layout
       const isVertical = tRect.top > fRect.bottom;
-      const r = 16; // smooth corner radius
+      const r = 16;
 
       let d = "";
       if (!isVertical) {
-        // Horizontal L-shape logic
+        // Desktop: Smoothed L-shape Horizontal logic
         const sx = fRect.right - cRect.left
         const sy = fRect.top - cRect.top + fRect.height / 2
         const ex = tRect.left - cRect.left
         const ey = tRect.top - cRect.top + tRect.height / 2
-        
+
         const midX = sx + (ex - sx) * 0.5;
         const vDir = ey > sy ? 1 : -1;
 
@@ -344,23 +334,13 @@ const AnimatedBeam = ({
           L ${ex},${ey}
         `.trim();
       } else {
-        // Vertical L-shape logic for mobile
+        // Mobile: Simple straight down vertical line logic
         const sx = fRect.left - cRect.left + fRect.width / 2
         const sy = fRect.bottom - cRect.top
         const ex = tRect.left - cRect.left + tRect.width / 2
         const ey = tRect.top - cRect.top
 
-        const midY = sy + (ey - sy) * 0.5;
-        const hDir = ex > sx ? 1 : -1;
-
-        d = `
-          M ${sx},${sy} 
-          L ${sx},${midY - r} 
-          Q ${sx},${midY} ${sx + r * hDir},${midY} 
-          L ${ex - r * hDir},${midY} 
-          Q ${ex},${midY} ${ex},${midY + r} 
-          L ${ex},${ey}
-        `.trim();
+        d = `M ${sx},${sy} L ${ex},${ey}`;
       }
 
       setPathData({
@@ -398,22 +378,22 @@ const AnimatedBeam = ({
       if (!startTime) startTime = time
       const elapsed = time - startTime
       const progress = (elapsed % duration) / duration
-      
+
       if (pathRef.current && particleRef.current) {
         const path = pathRef.current
         try {
           const totalLength = path.getTotalLength()
           const currentLen = progress * totalLength
           const point = path.getPointAtLength(currentLen)
-          
-          const prevLen = Math.max(0, currentLen - 2) 
+
+          const prevLen = Math.max(0, currentLen - 2)
           const prevPoint = path.getPointAtLength(prevLen)
           const angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x) * (180 / Math.PI)
-          
+
           particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
           const opacityVal = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
           particleRef.current.setAttribute("opacity", opacityVal)
-        } catch (e) {}
+        } catch (e) { }
       }
       rafRef.current = requestAnimationFrame(animate)
     }
@@ -449,13 +429,13 @@ const AnimatedBeam = ({
         className="opacity-40"
       />
       <g ref={particleRef}>
-        <path 
-          d="M -3 -3 L 3 0 L -3 3" 
-          fill="none" 
-          stroke={THEME_ORANGE} 
-          strokeWidth="1.5" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
+        <path
+          d="M -3 -3 L 3 0 L -3 3"
+          fill="none"
+          stroke={THEME_ORANGE}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="drop-shadow-[0_0_8px_#FF8D00]"
         />
       </g>
@@ -473,8 +453,8 @@ export default function App() {
   const outputCardRef = useRef(null)
 
   const mockData = {
-    thumbnailUrl: "https://placehold.co/1280x720/1a1a1a/ffffff?text=Video+Thumbnail",
-    overallScore: 55, 
+    thumbnailUrl: "/analyze-thumbnail/thumbnailgpt-analyzed-thumbnail.webp",
+    overallScore: 55,
     factors: {
       virality: { score: 4, reason: "Composition is standard; lacks a strong unique hook." },
       clarity: { score: 6, reason: "Text is readable but could benefit from more contrast." },
@@ -487,39 +467,42 @@ export default function App() {
 
   return (
     <div className="w-full relative flex items-center justify-center overflow-hidden font-sans p-4 sm:p-6 bg-black">
-      <div className="w-full max-w-[1200px] relative z-10 flex justify-center items-center py-12">
-        {/* Responsive Main Container with fixed constraints */}
-        <div 
+      <div className="w-full max-w-[1250px] relative z-10 flex flex-col items-center py-4 md:py-8">
+
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white text-center mb-12 sm:mb-20 tracking-tight max-w-4xl leading-[1.1]">
+          Enhance Thumbnails With <span className="text-[#FF8D00]">Sketch</span>, <span className="text-[#FF8D00]">Title</span>, and <span className="text-[#FF8D00]">Upscaling</span> Tools
+        </h2>
+
+        <div
           ref={containerRef}
-          className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 w-full max-w-[900px] min-h-[400px] rounded-[24px] overflow-hidden backdrop-blur-md flex flex-col md:flex-row items-center justify-center p-8 sm:p-10 md:p-8 gap-12 sm:gap-16 md:gap-20"
+          className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 w-[340px] sm:w-[410px] md:w-full md:max-w-[1250px] min-h-[400px] rounded-[24px] overflow-hidden backdrop-blur-md flex flex-col md:flex-row items-center justify-center p-8 sm:p-10 md:p-8 gap-12 sm:gap-16 md:gap-20 mx-auto"
         >
-          {/* Analysis Report - Fixed Size */}
-          <ThumbnailReport 
-            {...mockData} 
+          <ThumbnailReport
+            {...mockData}
             fixPrompt="Enhance facial contrast."
-            onClose={() => {}}
-            onFixThumbnail={async () => new Promise(r => setTimeout(r, 2000))}
+            onClose={() => { }}
+            onFixThumbnail={async () => {
+              console.log("Fix Thumbnail Action Clicked");
+            }}
             buttonRef={buttonRef}
           />
 
-          {/* Result Output - Fixed Size */}
           <div className="flex flex-col items-center z-10 shrink-0">
             <div className="w-[280px]">
-              <div className="flex items-center justify-between text-[8px] font-medium uppercase tracking-wider text-neutral-500 mb-2">
+              <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-wider text-[#FF8D00] mb-2">
                 <span>Optimized Result</span>
               </div>
-              <ThumbnailPreviewOutput 
-                imageUrl={mockData.thumbnailUrl} 
+              <ThumbnailPreviewOutput
+                imageUrl="/analyze-thumbnail/thumbnailgpt-fixed-thumbnail.webp"
                 outputRef={outputCardRef}
               />
             </div>
           </div>
 
-          {/* Adaptive Beam - automatically switches orientation */}
-          <AnimatedBeam 
-            containerRef={containerRef} 
-            fromRef={buttonRef} 
-            toRef={outputCardRef} 
+          <AnimatedBeam
+            containerRef={containerRef}
+            fromRef={buttonRef}
+            toRef={outputCardRef}
           />
         </div>
       </div>

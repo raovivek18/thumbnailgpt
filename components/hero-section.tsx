@@ -16,15 +16,15 @@ export default function HeroSection() {
     left: '0', // CSS value: '0', '50%', '100px', etc.
     right: '0', // CSS value: '0', '50%', '100px', etc. (use 'auto' to disable)
     bottom: '0', // CSS value: '0', '50%', '100px', etc. (use 'auto' to disable)
-    
+
     // Alignment (when using flexbox)
     alignItems: 'center' as const, // 'center' | 'flex-start' | 'flex-end' | 'stretch'
     justifyContent: 'center' as const, // 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around'
-    
+
     // Transform/Offset (for fine-tuning)
     translateX: '70px', // Move horizontally: '-100px', '50px', etc.
     // translateY will be set dynamically based on screen size
-    
+
     // Size - Responsive controls for LaserFlow dimensions
     // Adjust width and height for each screen type independently
     // Screen Types: Mobile (<640px), Large Mobile (640-767px), Tablet-Portrait (770-790px), Tablet (768-1023px), Laptop (1024-1279px), Desktop (≥1280px)
@@ -54,43 +54,54 @@ export default function HeroSection() {
         height: '1080px', // LaserFlow height for desktop screens (≥ 1280px)
       },
     },
-    
+
     // Z-index
     zIndex: 0,
-    
+
     // LaserFlow component props - Responsive beam offsets
     // Control placement using horizontalBeamOffset and verticalBeamOffset
     beamOffsets: {
       mobile: {
         horizontalBeamOffset: 0.1,
-        verticalBeamOffset: -0.035,
+        verticalBeamOffset: -0.0285,
+        decay: 0.6,
+        verticalSizing: 2.5,
       },
       largeMobile: {
         horizontalBeamOffset: 0.15,
-        verticalBeamOffset: -0.05,
+        verticalBeamOffset: -0.054,
+        decay: 0.55, // Responsive decay control for largeMobile
+        verticalSizing: 2.5,
       },
       tabletPortrait: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.08,
+        verticalBeamOffset: -0.15,
+        decay: 1.1,
+        verticalSizing: 2.25,
       },
       tablet: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.135,
+        verticalBeamOffset: -0.114,
+        decay: 1.1,
+        verticalSizing: 2.5,
       },
       laptop: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.106,
+        verticalBeamOffset: -0.11,
+        decay: 1.1,
+        verticalSizing: 2.256,
       },
       desktop: {
         horizontalBeamOffset: 0.2,
-        verticalBeamOffset: -0.105,
+        verticalBeamOffset: -0.11,
+        decay: 1.1,
+        verticalSizing: 2,
       },
     },
     laserFlowProps: {
-      color: "#ff8800",
+      color: "#ff8D00",
       wispDensity: 1,
       flowSpeed: 0.35,
-      verticalSizing: 2,
       horizontalSizing: 0.5,
       fogIntensity: 0.5,
       fogScale: 0.3,
@@ -105,7 +116,7 @@ export default function HeroSection() {
   // Responsive LaserFlow positioning
   const [screenSize, setScreenSize] = useState<'mobile' | 'largeMobile' | 'tabletPortrait' | 'tablet' | 'laptop' | 'desktop'>('desktop');
   const [isMounted, setIsMounted] = useState(false);
-  
+
   useEffect(() => {
     setIsMounted(true);
     const handleResize = () => {
@@ -130,7 +141,7 @@ export default function HeroSection() {
         setScreenSize('desktop');
       }
     };
-    
+
     handleResize(); // Set initial size
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -170,7 +181,7 @@ export default function HeroSection() {
     if (textareaRef.current) {
       // Reset height to auto to get the correct scrollHeight
       textareaRef.current.style.height = 'auto';
-      
+
       const scrollHeight = textareaRef.current.scrollHeight;
       const maxHeight = 120; // Matches the maxHeight in styles
 
@@ -293,11 +304,11 @@ export default function HeroSection() {
   `;
 
   return (
-    <div 
+    <div
       className="w-full h-full flex flex-col items-center justify-center text-white overflow-x-hidden selection:bg-[#FF8D00] selection:text-black relative min-h-screen bg-transparent"
     >
       <style>{customStyles}</style>
-      
+
       {/* LaserFlow Background */}
       {/* 
         POSITIONING CONTROLS: Edit laserFlowConfig object above to adjust position
@@ -309,105 +320,138 @@ export default function HeroSection() {
       */}
       {/* LaserFlow Background */}
       {isMounted && (
-      <div 
-        className={`flex pointer-events-none`}
-        style={{ 
-          position: laserFlowConfig.position,
-          top: laserFlowConfig.top,
-          left: laserFlowConfig.left,
-          right: laserFlowConfig.right === 'auto' ? undefined : laserFlowConfig.right,
-          bottom: laserFlowConfig.bottom === 'auto' ? undefined : laserFlowConfig.bottom,
-          alignItems: laserFlowConfig.alignItems,
-          justifyContent: laserFlowConfig.justifyContent,
-          zIndex: laserFlowConfig.zIndex,
-        }}
-      >
-        {isMounted && (
-          <div 
-            style={{ 
-              width: 
-                screenSize === 'mobile' 
-                  ? laserFlowConfig.size.mobile.width
-                  : screenSize === 'largeMobile'
-                  ? laserFlowConfig.size.largeMobile.width
-                  : screenSize === 'tabletPortrait'
-                  ? laserFlowConfig.size.tabletPortrait.width
-                  : screenSize === 'tablet'
-                  ? laserFlowConfig.size.tablet.width
-                  : screenSize === 'laptop'
-                  ? laserFlowConfig.size.laptop.width
-                  : laserFlowConfig.size.desktop.width,
-              height: 
-                screenSize === 'mobile' 
-                  ? laserFlowConfig.size.mobile.height
-                  : screenSize === 'largeMobile'
-                  ? laserFlowConfig.size.largeMobile.height
-                  : screenSize === 'tabletPortrait'
-                  ? laserFlowConfig.size.tabletPortrait.height
-                  : screenSize === 'tablet'
-                  ? laserFlowConfig.size.tablet.height
-                  : screenSize === 'laptop'
-                  ? laserFlowConfig.size.laptop.height
-                  : laserFlowConfig.size.desktop.height,
-              position: 'relative',
-              transform: `scale(${
-                screenSize === 'mobile' ? '1.9' : 
-                screenSize === 'largeMobile' ? '1.5' :
-                screenSize === 'tabletPortrait' ? '0.85' :
-                screenSize === 'tablet' ? '0.9' : 
-                screenSize === 'laptop' ? '1' :
-                '1'
-              })`,
-            }}
-          >
-            <LaserFlow 
-              {...laserFlowConfig.laserFlowProps}
-              decay={screenSize === 'mobile' ? 0.6 : 1.1}
-              horizontalBeamOffset={
-                screenSize === 'mobile' 
-                  ? laserFlowConfig.beamOffsets.mobile.horizontalBeamOffset
-                  : screenSize === 'largeMobile'
-                  ? laserFlowConfig.beamOffsets.largeMobile.horizontalBeamOffset
-                  : screenSize === 'tabletPortrait'
-                  ? laserFlowConfig.beamOffsets.tabletPortrait.horizontalBeamOffset
-                  : screenSize === 'tablet'
-                  ? laserFlowConfig.beamOffsets.tablet.horizontalBeamOffset
-                  : screenSize === 'laptop'
-                  ? laserFlowConfig.beamOffsets.laptop.horizontalBeamOffset
-                  : laserFlowConfig.beamOffsets.desktop.horizontalBeamOffset
-              }
-              verticalBeamOffset={
-                screenSize === 'mobile' 
-                  ? laserFlowConfig.beamOffsets.mobile.verticalBeamOffset
-                  : screenSize === 'largeMobile'
-                  ? laserFlowConfig.beamOffsets.largeMobile.verticalBeamOffset
-                  : screenSize === 'tabletPortrait'
-                  ? laserFlowConfig.beamOffsets.tabletPortrait.verticalBeamOffset
-                  : screenSize === 'tablet'
-                  ? laserFlowConfig.beamOffsets.tablet.verticalBeamOffset
-                  : screenSize === 'laptop'
-                  ? laserFlowConfig.beamOffsets.laptop.verticalBeamOffset
-                  : laserFlowConfig.beamOffsets.desktop.verticalBeamOffset
-              }
-            />
-          </div>
-        )}
-      </div>
+        <div
+          className={`flex pointer-events-none`}
+          style={{
+            position: laserFlowConfig.position,
+            top: laserFlowConfig.top,
+            left: laserFlowConfig.left,
+            right: laserFlowConfig.right === 'auto' ? undefined : laserFlowConfig.right,
+            bottom: laserFlowConfig.bottom === 'auto' ? undefined : laserFlowConfig.bottom,
+            alignItems: laserFlowConfig.alignItems,
+            justifyContent: laserFlowConfig.justifyContent,
+            zIndex: laserFlowConfig.zIndex,
+          }}
+        >
+          {isMounted && (
+            <div
+              style={{
+                width:
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.size.mobile.width
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.size.largeMobile.width
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.size.tabletPortrait.width
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.size.tablet.width
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.size.laptop.width
+                            : laserFlowConfig.size.desktop.width,
+                height:
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.size.mobile.height
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.size.largeMobile.height
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.size.tabletPortrait.height
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.size.tablet.height
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.size.laptop.height
+                            : laserFlowConfig.size.desktop.height,
+                position: 'relative',
+                transform: `scale(${screenSize === 'mobile' ? '1.9' :
+                    screenSize === 'largeMobile' ? '1.5' :
+                      screenSize === 'tabletPortrait' ? '0.85' :
+                        screenSize === 'tablet' ? '0.9' :
+                          screenSize === 'laptop' ? '1' :
+                            '1'
+                  })`,
+              }}
+            >
+              <LaserFlow
+                {...laserFlowConfig.laserFlowProps}
+                decay={
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.beamOffsets.mobile.decay
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.beamOffsets.largeMobile.decay
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.beamOffsets.tabletPortrait.decay
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.beamOffsets.tablet.decay
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.beamOffsets.laptop.decay
+                            : laserFlowConfig.beamOffsets.desktop.decay
+                }
+                verticalSizing={
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.beamOffsets.mobile.verticalSizing
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.beamOffsets.largeMobile.verticalSizing
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.beamOffsets.tabletPortrait.verticalSizing
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.beamOffsets.tablet.verticalSizing
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.beamOffsets.laptop.verticalSizing
+                            : laserFlowConfig.beamOffsets.desktop.verticalSizing
+                }
+                horizontalBeamOffset={
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.beamOffsets.mobile.horizontalBeamOffset
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.beamOffsets.largeMobile.horizontalBeamOffset
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.beamOffsets.tabletPortrait.horizontalBeamOffset
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.beamOffsets.tablet.horizontalBeamOffset
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.beamOffsets.laptop.horizontalBeamOffset
+                            : laserFlowConfig.beamOffsets.desktop.horizontalBeamOffset
+                }
+                verticalBeamOffset={
+                  screenSize === 'mobile'
+                    ? laserFlowConfig.beamOffsets.mobile.verticalBeamOffset
+                    : screenSize === 'largeMobile'
+                      ? laserFlowConfig.beamOffsets.largeMobile.verticalBeamOffset
+                      : screenSize === 'tabletPortrait'
+                        ? laserFlowConfig.beamOffsets.tabletPortrait.verticalBeamOffset
+                        : screenSize === 'tablet'
+                          ? laserFlowConfig.beamOffsets.tablet.verticalBeamOffset
+                          : screenSize === 'laptop'
+                            ? laserFlowConfig.beamOffsets.laptop.verticalBeamOffset
+                            : laserFlowConfig.beamOffsets.desktop.verticalBeamOffset
+                }
+              />
+            </div>
+          )}
+        </div>
       )}
-      
+
       {/* Main Content Wrapper - Increased padding for mobile */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-12 sm:pt-16 md:pt-20 pb-0 relative z-10">
-        
+
         {/* 1. Top Badge / Notification */}
         <div className="mb-4 sm:mb-6">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-[9px] sm:text-[10px] font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white cursor-pointer group">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8D00] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF8D00]"></span>
+          <a
+            href="#"
+            className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-[#FF8D00]/50 hover:bg-white/10 transition-all cursor-pointer group"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8D00] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF8D00]"></span>
+            </span>
+            <span className="text-sm text-white/90 font-medium flex items-center gap-2">
+              ThumbnailGPT
+              <span className="px-1.5 py-[1px] rounded bg-[#FF8D00] text-[10px] font-bold text-black uppercase tracking-wide leading-tight shadow-[0_0_10px_rgba(255,141,0,0.3)]">
+                V2
               </span>
-              <span>ThumbnailGPT V2 Live</span>
-              <ArrowRight className="w-3 h-3 text-gray-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
-            </div>
+              Live
+              <ArrowRight className="w-3.5 h-3.5 text-white/50 group-hover:text-[#FF8D00] group-hover:translate-x-0.5 transition-all ml-0.5" />
+            </span>
+          </a>
         </div>
 
         {/* 2. Headline - Responsive sizing */}
@@ -417,7 +461,7 @@ export default function HeroSection() {
             <span className="inline-flex items-center justify-center align-middle mx-1.5 sm:mx-2.5 md:mx-3 relative -top-0.5 sm:-top-1">
               {/* YouTube Icon - Scaled for responsive */}
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 sm:w-11 sm:h-11 md:w-[52px] md:h-[52px] lg:w-16 lg:h-16 text-[#FF0000] drop-shadow-[0_0_20px_rgba(255,0,0,0.4)]">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
             </span>
             Videos Deserve to <br className="hidden md:block" />
@@ -428,7 +472,7 @@ export default function HeroSection() {
         {/* 3. Subheading - Responsive sizing and width */}
         <div className="text-center mb-4 sm:mb-6 max-w-sm sm:max-w-lg md:max-w-xl mx-auto">
           <p className="text-gray-400 text-xs sm:text-sm md:text-base font-normal leading-relaxed">
-            Custom-designed thumbnails that make your <br className="hidden sm:block"/>
+            Custom-designed thumbnails that make your <br className="hidden sm:block" />
             content impossible to ignore.
           </p>
         </div>
@@ -436,7 +480,7 @@ export default function HeroSection() {
         {/* 4. Input Area - Responsive width and padding */}
         <div className="mt-0 sm:mt-2 w-full max-w-lg sm:max-w-xl md:max-w-4xl mx-auto relative z-[3]">
           {/* Glassmorphism border wrapper - stroke only */}
-          <div 
+          <div
             className="rounded-2xl p-[3px] transition-all duration-200"
             style={{
               background: isFocused
@@ -449,59 +493,59 @@ export default function HeroSection() {
                 : 'none',
             }}
           >
-            <div 
+            <div
               className="rounded-2xl p-3 sm:p-4 w-full bg-[#111] transition-all duration-200"
             >
               <div className="flex flex-col gap-3">
-              <div className="w-full min-h-[50px] relative flex items-start">
-                
-                {/* Animated Placeholder Overlay - Responsive Text Size */}
-                {!message && (
-                  <div 
-                    className="absolute top-0 left-0 w-full h-full pointer-events-none text-white/40 leading-relaxed text-sm sm:text-base transition-opacity duration-500 flex items-start"
-                    style={{ 
-                      padding: '2px 0px 2px 2px',
-                      opacity: fadeOpacity
-                    }}
-                  >
-                    {placeholders[currentPlaceholder]}
-                  </div>
-                )}
+                <div className="w-full min-h-[50px] relative flex items-start">
 
-                <textarea 
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  // placeholder removed to allow animated overlay
-                  className="w-full bg-transparent resize-none focus:outline-none leading-relaxed text-sm sm:text-base placeholder-transparent custom-scrollbar" 
-                  rows={1} 
-                  spellCheck={false}
-                  style={{ 
-                    minHeight: '24px', 
-                    maxHeight: '120px', 
-                    overflowY: 'hidden', 
-                    whiteSpace: 'pre-wrap', 
-                    color: '#eee', 
-                    caretColor: '#FF8D00', 
-                    padding: '2px 0px 2px 2px',
-                    height: 'auto'
-                  }}
-                />
-              </div>
-              <div className="flex items-center justify-end">
-                <button
-                  onClick={handleSubmit}
-                  disabled={!message.trim()}
-                  className="btn-generate rounded-full flex items-center justify-center gap-2 px-4 py-2 min-w-[100px] text-sm sm:text-base"
-                  title="Generate thumbnail"
-                >
-                  <Sparkles className="w-4 h-4" strokeWidth={2.5} />
-                  <span>Generate</span>
-                </button>
-              </div>
+                  {/* Animated Placeholder Overlay - Responsive Text Size */}
+                  {!message && (
+                    <div
+                      className="absolute top-0 left-0 w-full h-full pointer-events-none text-white/40 leading-relaxed text-sm sm:text-base transition-opacity duration-500 flex items-start"
+                      style={{
+                        padding: '2px 0px 2px 2px',
+                        opacity: fadeOpacity
+                      }}
+                    >
+                      {placeholders[currentPlaceholder]}
+                    </div>
+                  )}
+
+                  <textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    // placeholder removed to allow animated overlay
+                    className="w-full bg-transparent resize-none focus:outline-none leading-relaxed text-sm sm:text-base placeholder-transparent custom-scrollbar"
+                    rows={1}
+                    spellCheck={false}
+                    style={{
+                      minHeight: '24px',
+                      maxHeight: '120px',
+                      overflowY: 'hidden',
+                      whiteSpace: 'pre-wrap',
+                      color: '#eee',
+                      caretColor: '#FF8D00',
+                      padding: '2px 0px 2px 2px',
+                      height: 'auto'
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-end">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!message.trim()}
+                    className="btn-generate rounded-full flex items-center justify-center gap-2 px-4 py-2 min-w-[100px] text-sm sm:text-base"
+                    title="Generate thumbnail"
+                  >
+                    <Sparkles className="w-4 h-4" strokeWidth={2.5} />
+                    <span>Generate</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -357,17 +357,6 @@ export function CardStack<T extends CardStackItem>({
               );
             })}
           </div>
-          {activeItem.href ? (
-            <Link
-              href={activeItem.href}
-              target="_blank"
-              rel="noreferrer"
-              className="text-muted-foreground hover:text-foreground transition"
-              aria-label="Open link"
-            >
-              <SquareArrowOutUpRight className="h-4 w-4" />
-            </Link>
-          ) : null}
         </div>
       ) : null}
     </div>
@@ -394,20 +383,6 @@ function DefaultFanCard({ item }: { item: CardStackItem; active: boolean }) {
         )}
       </div>
 
-      {/* subtle gradient overlay at bottom for text readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-      {/* content */}
-      <div className="relative z-10 flex h-full flex-col justify-end p-5">
-        <div className="truncate text-lg font-semibold text-white">
-          {item.title}
-        </div>
-        {item.description ? (
-          <div className="mt-1 line-clamp-2 text-sm text-white/80">
-            {item.description}
-          </div>
-        ) : null}
-      </div>
     </div>
   );
 }

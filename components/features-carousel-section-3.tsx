@@ -19,14 +19,14 @@ const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
     const rect = containerRef.current.getBoundingClientRect()
     const x = e.clientX || (e.touches && e.touches[0].clientX)
     if (!x) return
-    
+
     let position = ((x - rect.left) / rect.width) * 100
     position = Math.max(0, Math.min(100, position))
     setSliderPos(position)
   }
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative aspect-video w-full overflow-hidden rounded-lg bg-black/80 cursor-col-resize select-none"
       onMouseMove={handleMove}
@@ -45,7 +45,7 @@ const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
       </div>
 
       {/* Before Image (Low Res) - Clipped Layer (Higher Z-index than Upscaled badge) */}
-      <div 
+      <div
         className="absolute inset-0 h-full overflow-hidden border-r border-orange-500/50 z-10"
         style={{ width: `${sliderPos}%` }}
       >
@@ -55,19 +55,18 @@ const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
           className="absolute inset-0 h-full w-full object-cover grayscale-[0.5]"
           style={{ width: `${100 / (sliderPos / 100)}%`, maxWidth: 'none' }}
         />
-        
+
         {/* Badge: Original */}
-        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest text-white/80 shadow-xl">
+        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest text-orange-500 shadow-xl">
           Original
         </div>
       </div>
 
       {/* Slider Handle - UI Matching Orange/Black Colors */}
-      <div 
+      <div
         className="absolute top-0 bottom-0 w-0.5 bg-orange-500 shadow-[0_0_15px_rgba(255,141,0,0.6)] z-20"
         style={{ left: `${sliderPos}%` }}
       >
-        {/* Handle circle changed from white to black with orange border */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-neutral-900 shadow-2xl flex items-center justify-center border-2 border-orange-500">
           <div className="w-0.5 h-2.5 bg-orange-500 rounded-full mx-0.5 opacity-80" />
           <div className="w-0.5 h-2.5 bg-orange-500 rounded-full mx-0.5 opacity-80" />
@@ -96,18 +95,17 @@ const ThumbnailPreview = forwardRef(({ imageUrl, className = "", label = "Proces
       <div ref={ref} className={`group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-sm transition-transform duration-500 ${!noHover && 'hover:scale-[1.02]'}`}>
         <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black/80">
           {!imageUrl && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-700 border-t-neutral-400" />
-              <span className="mt-3 text-xs font-medium tracking-wider uppercase opacity-60">{label}</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-orange-500/60">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-800 border-t-orange-500" />
+              <span className="mt-3 text-xs font-medium tracking-wider uppercase">{label}</span>
             </div>
           )}
           {imageUrl && (
             <img
               src={imageUrl}
               alt="Preview"
-              className={`h-full w-full object-cover transition-all duration-700 ease-out ${
-                isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
-              }`}
+              className={`h-full w-full object-cover transition-all duration-700 ease-out ${isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
+                }`}
               onError={(e) => {
                 e.target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Image+Load+Failed"
               }}
@@ -126,7 +124,7 @@ ThumbnailPreview.displayName = "ThumbnailPreview"
 const UniversalResult = ({ outputRef, imageUrl, noHover = false }) => {
   return (
     <div className="relative z-20 flex flex-col gap-2 shrink-0 mt-auto">
-      <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
         <span>Result</span>
       </div>
       <div className="w-full">
@@ -145,7 +143,7 @@ const AnimatedBeam = ({
   const [pathData, setPathData] = useState({ d: "", length: 0, viewBox: "" })
   const [opacity, setOpacity] = useState(0)
   const id = React.useId()
-  
+
   const pathRef = useRef(null)
   const particleRef = useRef(null)
   const rafRef = useRef(null)
@@ -159,7 +157,7 @@ const AnimatedBeam = ({
       const toRect = toRef.current.getBoundingClientRect()
 
       const startX = fromRect.left - containerRect.left + fromRect.width / 2
-      const startY = fromRect.bottom - containerRect.top 
+      const startY = fromRect.bottom - containerRect.top
       const endX = toRect.left - containerRect.left + toRect.width / 2
       const endY = toRect.top - containerRect.top
       const controlY = startY + (endY - startY) * curvature
@@ -174,7 +172,7 @@ const AnimatedBeam = ({
 
     const timer = setTimeout(updatePath, 100)
     const resizeObserver = new ResizeObserver(updatePath)
-    // FIX: resizeObserver.observe(containerRef.current) instead of containerRect.current
+
     if (containerRef.current) resizeObserver.observe(containerRef.current)
     window.addEventListener("resize", updatePath)
 
@@ -202,21 +200,21 @@ const AnimatedBeam = ({
       if (!startTime) startTime = time
       const elapsed = time - startTime
       const progress = (elapsed % duration) / duration
-      
+
       if (pathRef.current && particleRef.current) {
         const path = pathRef.current
         try {
           const totalLength = path.getTotalLength()
           const currentLen = progress * totalLength
           const point = path.getPointAtLength(currentLen)
-          const prevLen = Math.max(0, currentLen - 2) 
+          const prevLen = Math.max(0, currentLen - 2)
           const prevPoint = path.getPointAtLength(prevLen)
           const angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x) * (180 / Math.PI)
-          
+
           particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
           const opacityVal = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
           particleRef.current.setAttribute("opacity", opacityVal)
-        } catch (e) {}
+        } catch (e) { }
       }
       rafRef.current = requestAnimationFrame(animate)
     }
@@ -263,21 +261,21 @@ const AnimatedBeam = ({
 // ==========================================
 
 const SketchToThumbnailCard = () => {
-  const sketchUrl = "https://placehold.co/800x450/222/888?text=Hand-drawn+Sketch+Placeholder"
-  const outputUrl = "https://placehold.co/800x450/111/444?text=Cyberpunk+Samurai" 
+  const sketchUrl = "/sketch2thumbnail/thumbnailgpt-sketch-thumbnail.webp"
+  const outputUrl = "/sketch2thumbnail/thumbnailgpt-generated-thumbnail.webp"
 
   const containerRef = useRef(null)
   const inputRef = useRef(null)
   const outputRef = useRef(null)
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 h-[365px] w-[340px] sm:h-[440px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col"
     >
       <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2 justify-start">
         <div className="relative z-20 flex flex-col gap-2 shrink-0">
-          <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
             <span>sketch</span>
           </div>
           <div className="w-[45%] mx-auto">
@@ -298,25 +296,25 @@ const SketchToThumbnailCard = () => {
 
 const TitleToThumbnailCard = () => {
   const title = "“How I Scaled My SaaS to $10K/Month”"
-  const outputUrl = "https://placehold.co/800x450/222/555?text=SaaS+Growth+Thumbnail"
+  const outputUrl = "/title2thumbnail/thumbnailgpt-title2thumbnail.webp"
 
   const containerRef = useRef(null)
   const inputRef = useRef(null)
   const outputRef = useRef(null)
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 h-[365px] w-[340px] sm:h-[440px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col"
     >
       <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2 justify-start">
         <div className="relative z-20 flex flex-col gap-2 shrink-0">
-          <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
             <span>Title</span>
           </div>
-          
+
           <div ref={inputRef} className="group relative mx-auto w-fit rounded-lg bg-black/50 ring-1 ring-white/10 transition-all hover:ring-white/20 px-3 py-2 flex items-center justify-center mt-4">
-            <div className="text-[10px] sm:text-xs font-medium leading-tight text-neutral-200 text-center italic">
+            <div className="text-[10px] sm:text-xs font-medium leading-tight text-white text-center italic">
               {title}
             </div>
           </div>
@@ -324,7 +322,9 @@ const TitleToThumbnailCard = () => {
 
         <div className="relative flex items-center justify-center min-h-[4px]" />
 
-        <UniversalResult outputRef={outputRef} imageUrl={outputUrl} />
+        <div className="w-full mt-auto translate-y-2.5">
+          <UniversalResult outputRef={outputRef} imageUrl={outputUrl} />
+        </div>
 
         <AnimatedBeam containerRef={containerRef} fromRef={inputRef} toRef={outputRef} curvature={0.2} />
       </div>
@@ -337,20 +337,20 @@ const TitleToThumbnailCard = () => {
 // ==========================================
 
 const UpscaleThumbnailCard = () => {
-  const beforeUrl = "https://placehold.co/800x450/333/666?text=Low+Res+Original"
-  const afterUrl = "https://placehold.co/800x450/222/999?text=High+Res+Upscaled"
+  const beforeUrl = "/upscale-thumbnail/thumbnailgpt-blur-thumbnail.webp"
+  const afterUrl = "/upscale-thumbnail/thumbnailgpt-upscaled-thumbnail.webp"
 
   return (
     <div className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 h-[365px] w-[340px] sm:h-[440px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col items-center justify-center">
       <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2">
-        <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500 mb-2">
+        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">
           <span>upscale</span>
         </div>
 
         {/* Centered Single Result Card with Slider */}
         <div className="flex-grow flex items-center justify-center">
           <div className="w-full flex flex-col gap-2">
-            <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-neutral-500">
+            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
               <span>Result Preview</span>
             </div>
             {/* Custom frame for comparison slider - no scale-on-hover */}
@@ -406,7 +406,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-black relative flex items-center justify-center overflow-hidden">
+    <div className="w-full bg-black relative flex items-center justify-center overflow-hidden py-8 md:py-12">
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: scale(0.98); }
@@ -415,14 +415,21 @@ export default function App() {
       `}</style>
 
       <div className="w-full max-w-[1400px] relative z-10 p-4">
-        
+
+        {/* Updated Heading Section with Orange Highlights and crisp white text */}
+        <div className="flex justify-center w-full px-4">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white text-center mb-12 sm:mb-20 tracking-tight max-w-4xl leading-[1.1]">
+            <span className="text-orange-500">Analyze</span> Thumbnails and Automatically <span className="text-orange-500">Fix</span> Design Issues
+          </h2>
+        </div>
+
         {/* Desktop View */}
         <div className="hidden xl:flex flex-row justify-center items-end gap-6">
           {components}
         </div>
 
         {/* Mobile/Tablet View */}
-        <div 
+        <div
           className="xl:hidden flex flex-col items-center gap-8"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -440,7 +447,7 @@ export default function App() {
           <div className="flex items-center gap-6 z-20">
             <button
               onClick={prevSlide}
-              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5"
+              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5 transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
@@ -454,9 +461,8 @@ export default function App() {
                     className="touch-action-manipulation py-2 group focus:outline-none"
                   >
                     <div
-                      className={`transition-all duration-300 rounded-full h-1.5 ${
-                        currentSlide === index ? 'w-8 bg-white' : 'w-2 bg-white/20 group-hover:bg-white/40'
-                      }`}
+                      className={`transition-all duration-300 rounded-full h-1.5 ${currentSlide === index ? 'w-8 bg-white' : 'w-2 bg-white/20 group-hover:bg-white/40'
+                        }`}
                     />
                   </button>
                 ))}
@@ -465,7 +471,7 @@ export default function App() {
 
             <button
               onClick={nextSlide}
-              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5"
+              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5 transition-all"
             >
               <ArrowRight className="w-4 h-4" />
             </button>

@@ -12,12 +12,17 @@ export function Pricing() {
       name: "Basic",
       description: "Perfect for individuals and small projects getting started with AI thumbnail generator tools for YouTube.",
       price: { INR: 810, USD: 9 },
-      credits: 250,
-      thumbnails: 25,
+      credits: 200,
+      thumbnails: 20,
       features: [
         "Text to Thumbnail",
         "Image to Thumbnail",
         "Recreate Thumbnail",
+        "Title to Thumbnail",
+        "Analyze Thumbnail",
+        "Fix Thumbnail",
+        "Sketch to Thumbnail",
+        "Upscale Thumbnail",
       ],
       popular: false,
     },
@@ -31,6 +36,11 @@ export function Pricing() {
         "Text to Thumbnail",
         "Image to Thumbnail",
         "Recreate Thumbnail",
+        "Title to Thumbnail",
+        "Analyze Thumbnail",
+        "Fix Thumbnail",
+        "Sketch to Thumbnail",
+        "Upscale Thumbnail",
       ],
       popular: true,
     },
@@ -44,6 +54,11 @@ export function Pricing() {
         "Text to Thumbnail",
         "Image to Thumbnail",
         "Recreate Thumbnail",
+        "Title to Thumbnail",
+        "Analyze Thumbnail",
+        "Fix Thumbnail",
+        "Sketch to Thumbnail",
+        "Upscale Thumbnail",
       ],
       popular: false,
     },
@@ -125,7 +140,7 @@ export function Pricing() {
                     {currency === "INR" ? "₹" : "$"}
                     {plan.price[currency]}
                   </span>
-                  <span className="text-gray-500 text-sm">one-time</span>
+                  <span className="text-gray-500 text-sm">/ month</span>
                 </div>
               </div>
 
@@ -169,7 +184,7 @@ export function Pricing() {
                 <ul className="space-y-2">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full border-2 border-[#FF8D00] flex items-center justify-center flex-shrink-0">
+                      <div className="w-5 h-5 rounded-full border-2 border-[#FF8D00] flex items-center justify-center shrink-0">
                         <Check className="w-3 h-3 text-[#FF8D00]" />
                       </div>
                       <span className="text-gray-400 text-sm">{feature}</span>

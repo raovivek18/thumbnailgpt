@@ -23,126 +23,104 @@ export default function TermsPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-2 mt-8">
             Terms & <span className="text-[#FF8D00]">Conditions</span>
           </h1>
-          <p className="text-gray-400 mb-6">Last Updated: 14 Dec 2025</p>
+          <p className="text-gray-400 mb-6">Last Updated: 01 February 2026</p>
 
           <div className="space-y-4 text-gray-300 leading-relaxed">
             <p>
-              Welcome to ThumbnailGPT. By using our website and tools, you agree to the following Terms & Conditions.
-              Please read them carefully.
+              By using ThumbnailGPT, you agree to the following Terms of Service.
             </p>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">1. Overview</h2>
-              <p className="mb-2">ThumbnailGPT provides AI tools for generating thumbnails:</p>
-              <ol className="list-decimal list-inside ml-4 space-y-1">
-                <li>
-                  <span className="font-semibold text-white">Text to Thumbnail</span> - enter text and optionally upload
-                  1 reference image.
-                </li>
-                <li>
-                  <span className="font-semibold text-white">Image to Thumbnail</span> - upload up to 5 images and add
-                  text input.
-                </li>
-                <li>
-                  <span className="font-semibold text-white">Recreate Thumbnail</span> - upload an existing thumbnail or
-                  provide a YouTube video link, add prompt text, and optionally upload a persona image.
-                </li>
-              </ol>
-              <p className="mt-2 font-semibold text-white">
-                All user-uploaded images are deleted after processing. Only generated output images are stored.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-2">2. Login & Basic Information We Collect</h2>
-              <p className="mb-2">We use Google Login only. When you sign in, we receive:</p>
+              <h2 className="text-2xl font-bold text-white mb-3">1. Service Overview</h2>
+              <p className="mb-2">ThumbnailGPT is a paid AI-powered thumbnail generation platform.</p>
+              <p className="mb-2">Supported features include:</p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Your Name</li>
-                <li>Your Email</li>
-                <li>Your Profile Picture</li>
+                <li>Text to Thumbnail</li>
+                <li>Image to Thumbnail</li>
+                <li>Recreate Thumbnail</li>
               </ul>
-              <p className="mt-2">This is required to create your account, manage credits, and show your profile.</p>
+              <p className="mt-2 font-semibold text-white">Access to all tools requires an active paid subscription.</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">3. Uploaded Images</h2>
-              <p className="mb-2">For all three features:</p>
+              <h2 className="text-2xl font-bold text-white mb-3">2. Paid-Only Access</h2>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>
-                  Any image uploaded by you (reference image, persona image, YouTube thumbnail, or input images) is
-                  automatically deleted after AI processing.
-                </li>
-                <li>We do not permanently store your uploaded images.</li>
-              </ul>
-              <p className="mt-2">Only the final generated images are saved in our storage.</p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-2">4. What We Store</h2>
-              <p className="mb-2">After generation, we store:</p>
-              <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Prompt text</li>
-                <li>Feature used</li>
-                <li>Time of generation</li>
-                <li>Generated image URL</li>
-                <li>UUID</li>
-                <li>Credit usage data</li>
-              </ul>
-              <p className="mt-2">
-                Generated images are stored on: <span className="text-[#FF8D00]">storage.thumbnailgpt.com</span>
-              </p>
-              <p className="mt-1">This data is necessary for your history, analytics, and credit tracking.</p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-2">5. Credit Purchases</h2>
-              <p className="mb-2">You can buy credits through our payment provider: Dodo Payment Gateway (powered).</p>
-              <h3 className="text-xl font-semibold text-[#FF8D00] mb-1">Important Refund Rule</h3>
-              <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>If you buy credits and use even 1 credit, no refund will be given.</li>
-                <li>Unused credits may be reviewed for refund (optional and based on our evaluation).</li>
+                <li>ThumbnailGPT does not offer free usage or trials.</li>
+                <li>You must have an active subscription to use any generation feature.</li>
+                <li>If your subscription expires or is canceled, access is blocked.</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">6. Prohibited Content</h2>
-              <p className="mb-2">Uploading or trying to generate:</p>
+              <h2 className="text-2xl font-bold text-white mb-3">3. Subscriptions & Billing</h2>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Adult content</li>
-                <li>NSFW content</li>
-                <li>Sexual content</li>
+                <li>Subscriptions are billed monthly.</li>
+                <li>Billing is handled by Dodo Payments.</li>
+                <li>Plans automatically renew unless canceled before the billing date.</li>
               </ul>
-              <p className="mt-2 font-semibold text-white">is strictly prohibited.</p>
-              <p className="mt-1">
-                If we detect such content, the user account may be banned permanently, and no refund will be provided.
-              </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">7. Service Disclaimer</h2>
-              <p className="mb-2">AI results may vary. ThumbnailGPT does not guarantee:</p>
+              <h2 className="text-2xl font-bold text-white mb-3">4. Credits & Usage</h2>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Perfect accuracy</li>
-                <li>Exact style matching</li>
-                <li>Copyright safety of generated images</li>
+                <li>Each generation consumes credits.</li>
+                <li>Monthly credits are added automatically on renewal.</li>
+                <li>Credits roll over while subscription remains active.</li>
+                <li>Credits have no cash value and cannot be transferred.</li>
               </ul>
-              <p className="mt-2">
-                Users are responsible for ensuring the images comply with usage laws and platform rules.
-              </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">8. Changes to Terms</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">5. Cancellation</h2>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>You may cancel your subscription at any time.</li>
+                <li>Cancellation takes effect at the end of the current billing period.</li>
+                <li>No partial refunds are provided for unused time or credits.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">6. Prohibited Usage</h2>
+              <p className="mb-2">You may not use ThumbnailGPT to create:</p>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>NSFW or adult content</li>
+                <li>Sexual or explicit material</li>
+                <li>Illegal or copyrighted content</li>
+              </ul>
+              <p className="mt-2 mb-2">Violation may result in:</p>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>Immediate account suspension</li>
+                <li>Permanent ban without refund</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">7. AI Disclaimer</h2>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>AI results may vary.</li>
+                <li>We do not guarantee accuracy, originality, or copyright safety.</li>
+                <li>You are responsible for how generated images are used.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">8. Service Availability</h2>
               <p>
-                We may update or modify these Terms anytime. Continued use of ThumbnailGPT means you accept the updated
-                Terms.
+                We strive for uptime but do not guarantee uninterrupted service.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-2">9. Contact</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">9. Changes to Terms</h2>
               <p>
-                For support, refunds, or issues: <span className="text-[#FF8D00]">support@thumbnailgpt.com</span>
+                We may modify these Terms at any time. Continued use means acceptance.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">10. Contact</h2>
+              <p>
+                📧 <span className="text-[#FF8D00]">support@thumbnailgpt.com</span>
               </p>
             </section>
           </div>
