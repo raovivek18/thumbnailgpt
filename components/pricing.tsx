@@ -65,7 +65,7 @@ export function Pricing() {
   ]
 
   return (
-    <section className="relative py-20 px-4 bg-black">
+    <section className="relative py-20 px-4 bg-orange-flow">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-12">
@@ -83,24 +83,21 @@ export function Pricing() {
           <div className="inline-flex items-center gap-0 p-1 rounded-full bg-neutral-900/60 backdrop-blur-sm border border-[#FF8D00]/20 relative">
             {/* Sliding indicator background */}
             <div
-              className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-r from-[#FF8D00] to-[#FFA500] rounded-full transition-all duration-300 shadow-lg shadow-[#FF8D00]/40 ${
-                currency === "INR" ? "translate-x-[calc(100%+4px)]" : "translate-x-0"
-              }`}
+              className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-r from-[#FF8D00] to-[#FFA500] rounded-full transition-all duration-300 shadow-lg shadow-[#FF8D00]/40 ${currency === "INR" ? "translate-x-[calc(100%+4px)]" : "translate-x-0"
+                }`}
             />
 
             <button
               onClick={() => setCurrency("USD")}
-              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${
-                currency === "USD" ? "text-black" : "text-gray-400 hover:text-gray-200"
-              }`}
+              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${currency === "USD" ? "text-black" : "text-gray-400 hover:text-gray-200"
+                }`}
             >
               USD $
             </button>
             <button
               onClick={() => setCurrency("INR")}
-              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${
-                currency === "INR" ? "text-black" : "text-gray-400 hover:text-gray-200"
-              }`}
+              className={`relative z-10 px-8 py-2.5 rounded-full font-semibold transition-all duration-300 ${currency === "INR" ? "text-black" : "text-gray-400 hover:text-gray-200"
+                }`}
             >
               INR ₹
             </button>
@@ -112,22 +109,15 @@ export function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative rounded-2xl p-8 transition-all duration-300 hover:scale-105 ${
-                plan.popular
-                  ? "bg-gradient-to-br from-[#1a0f00] to-black border-2 border-[#FF8D00] shadow-2xl shadow-[#FF8D00]/20"
-                  : "bg-gradient-to-br from-neutral-900/60 to-black border border-[#FF8D00]/10 hover:border-[#FF8D00]/30 backdrop-blur-sm"
-              }`}
+              className={`relative rounded-2xl p-8 transition-all duration-300 hover:scale-105 ${plan.popular
+                ? "bg-gradient-to-br from-[#1a0f00] to-black border-2 border-[#FF8D00] shadow-2xl shadow-[#FF8D00]/20"
+                : "bg-gradient-to-br from-neutral-900/60 to-black border border-[#FF8D00]/10 hover:border-[#FF8D00]/30 backdrop-blur-sm"
+                }`}
             >
               {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#FF8D00] to-[#FFA500] text-black px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-[#FF8D00]/50">
                   Most Popular
-                </div>
-              )}
-              {/* Anchor Badge for Premium */}
-              {plan.name === "Premium" && (
-                <div className="absolute -top-4 right-4 bg-gradient-to-r from-[#FF8D00] to-[#FFA500] text-black px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-[#FF8D00]/50">
-                  Anchor
                 </div>
               )}
 

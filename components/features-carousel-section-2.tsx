@@ -12,23 +12,27 @@ import {
 
 const THEME_ORANGE = '#FF8D00'
 
-const normalizeScore = (score) => {
+const normalizeScore = (score: number) => {
   return score <= 10 ? Math.round(score * 10) : score
 }
 
-const getGradientId = (score) => {
+const getGradientId = (score: number) => {
   if (score < 60) return "gradient-red"
   if (score < 85) return "gradient-yellow"
   return "gradient-green"
 }
 
-const getBarColor = (score) => {
+const getBarColor = (score: number) => {
   if (score >= 85) return 'bg-emerald-400'
   if (score >= 60) return 'bg-amber-400'
   return 'bg-red-500'
 }
 
-const ScoreRing = ({ score }) => {
+interface ScoreRingProps {
+  score: number;
+}
+
+const ScoreRing = ({ score }: ScoreRingProps) => {
   const normalizedScore = normalizeScore(score)
   const [mounted, setMounted] = useState(false)
   const circumference = 75.39
@@ -75,7 +79,11 @@ const ScoreRing = ({ score }) => {
   )
 }
 
-const ScoreBars = ({ score }) => {
+interface ScoreBarsProps {
+  score: number;
+}
+
+const ScoreBars = ({ score }: ScoreBarsProps) => {
   const normalizedScore = normalizeScore(score)
   return (
     <div className="flex gap-[1px]">
@@ -105,7 +113,7 @@ const factorIcons = {
   focus: Target,
 }
 
-const factorLabels = {
+const factorLabels: Record<string, string> = {
   virality: 'Viral',
   clarity: 'Clear',
   curiosity: 'Hook',
@@ -118,6 +126,21 @@ const factorLabels = {
 // CORE REPORT COMPONENT
 // ==========================================
 
+interface Factor {
+  score: number;
+  reason: string;
+}
+
+interface ThumbnailReportProps {
+  thumbnailUrl: string;
+  overallScore: number;
+  factors: Record<string, Factor>;
+  fixPrompt: string;
+  onClose: () => void;
+  onFixThumbnail?: (url: string, prompt: string) => void;
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
+}
+
 const ThumbnailReport = ({
   thumbnailUrl,
   overallScore,
@@ -126,10 +149,10 @@ const ThumbnailReport = ({
   onClose,
   onFixThumbnail,
   buttonRef,
-}) => {
-  const [expandedId, setExpandedId] = useState(null)
+}: ThumbnailReportProps) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
-  const toggleExpand = (id) => {
+  const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id)
   }
 
@@ -206,7 +229,6 @@ const ThumbnailReport = ({
       {/* Header - Secondary Label is Orange */}
       <div className="flex-shrink-0 px-3 pt-3 pb-1 bg-transparent z-20 flex items-center justify-between">
         <span className="text-[8px] uppercase tracking-widest text-[#FF8D00] font-bold">Analysis</span>
-        <button onClick={onClose} className="text-white/20 hover:text-white/50 transition-colors"><X size={12} /></button>
       </div>
 
       {/* Mini Thumbnail Area */}
@@ -225,6 +247,7 @@ const ThumbnailReport = ({
         <div className="space-y-0.5">
           {Object.entries(factors).map(([key, factor]) => {
             const isExpanded = expandedId === key
+            // @ts-ignore
             const Icon = factorIcons[key]
             return (
               <div key={key} className="flex flex-col border-b last:border-0 border-white/5">
@@ -274,7 +297,12 @@ const ThumbnailReport = ({
 // RESULT & BEAM COMPONENTS
 // ==========================================
 
-const ThumbnailPreviewOutput = ({ imageUrl, outputRef }) => (
+interface ThumbnailPreviewOutputProps {
+  imageUrl: string;
+  outputRef: React.RefObject<HTMLDivElement | null>;
+}
+
+const ThumbnailPreviewOutput = ({ imageUrl, outputRef }: ThumbnailPreviewOutputProps) => (
   <div className="w-[280px] flex flex-col items-center shrink-0">
     <div
       ref={outputRef}
@@ -289,18 +317,24 @@ const ThumbnailPreviewOutput = ({ imageUrl, outputRef }) => (
   </div>
 )
 
+interface AnimatedBeamProps {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  fromRef: React.RefObject<HTMLElement | null>;
+  toRef: React.RefObject<HTMLElement | null>;
+}
+
 const AnimatedBeam = ({
   containerRef,
   fromRef,
   toRef,
-}) => {
+}: AnimatedBeamProps) => {
   const [pathData, setPathData] = useState({ d: "", viewBox: "" })
   const [opacity, setOpacity] = useState(0)
   const id = React.useId()
 
-  const pathRef = useRef(null)
-  const particleRef = useRef(null)
-  const rafRef = useRef(null)
+  const pathRef = useRef<SVGPathElement>(null)
+  const particleRef = useRef<SVGGElement>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
     const updatePath = () => {
@@ -371,10 +405,10 @@ const AnimatedBeam = ({
   useEffect(() => {
     if (!pathData.d) return
 
-    let startTime
+    let startTime: number | undefined
     const duration = 2400
 
-    const animate = (time) => {
+    const animate = (time: number) => {
       if (!startTime) startTime = time
       const elapsed = time - startTime
       const progress = (elapsed % duration) / duration
@@ -392,14 +426,16 @@ const AnimatedBeam = ({
 
           particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
           const opacityVal = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
-          particleRef.current.setAttribute("opacity", opacityVal)
+          particleRef.current.setAttribute("opacity", String(opacityVal))
         } catch (e) { }
       }
       rafRef.current = requestAnimationFrame(animate)
     }
 
     rafRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(rafRef.current)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [pathData.d])
 
   if (!pathData.d) return null
@@ -448,9 +484,9 @@ const AnimatedBeam = ({
 // ==========================================
 
 export default function App() {
-  const containerRef = useRef(null)
-  const buttonRef = useRef(null)
-  const outputCardRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const outputCardRef = useRef<HTMLDivElement>(null)
 
   const mockData = {
     thumbnailUrl: "/analyze-thumbnail/thumbnailgpt-analyzed-thumbnail.webp",
@@ -466,7 +502,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-full relative flex items-center justify-center overflow-hidden font-sans p-4 sm:p-6 bg-black">
+    <div className="w-full relative flex items-center justify-center overflow-hidden font-sans p-4 sm:p-6 bg-orange-flow">
       <div className="w-full max-w-[1250px] relative z-10 flex flex-col items-center py-4 md:py-8">
 
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white text-center mb-12 sm:mb-20 tracking-tight max-w-4xl leading-[1.1]">

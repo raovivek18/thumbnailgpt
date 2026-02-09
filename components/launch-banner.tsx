@@ -5,9 +5,9 @@ import { useBanner } from "./banner-context"
 
 // EXACT SAME UI AS PROVIDED HTML (Orange launch version)
 export default function LaunchBanner({
-  targetDate = "2026-01-02T23:59:59",
-  promoText = "YEAR END SALE - 25% OFF ALL PLANS",
-  promoCode = "SALE25",
+  targetDate = "2026-03-01T23:59:59",
+  promoText = "25% off for first 25 users — Limited launch offer",
+  promoCode = "LAUNCHV2",
   ctaHref = "https://app.thumbnailgpt.com",
   enabled = true,
 }: {
@@ -27,7 +27,7 @@ export default function LaunchBanner({
       setIsVisible(false)
       return
     }
-    
+
     // Only proceed if enabled is true
 
     const target = new Date(targetDate)

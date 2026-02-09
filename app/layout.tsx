@@ -37,66 +37,29 @@ const ogImageUrl = `${baseUrl}/og/thumbnailgpt.-og-image.png`
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
+    default: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
     template: "%s | ThumbnailGPT"
   },
   description:
-    "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
+    "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
   keywords: [
-    "ai thumbnail maker",
-    "ai thumbnail generator tool",
-    "ai thumbnail creator",
-    "thumbnailgpt ai thumbnail maker",
-    "viral thumbnail generator",
-    "social media thumbnail generator",
-    "high ctr thumbnail maker",
-    "create thumbnails online with ai",
-    "best ai thumbnail maker 2025",
-    "thumbnail gpt",
+    "ai thumbnail generator",
     "ai youtube thumbnail generator",
-    "ai youtube thumbnail maker",
-    "youtube thumbnail ai",
-    "automatic thumbnail generator",
-    "best ai thumbnail generator",
-    "ai tool to make youtube thumbnails",
-    "create youtube thumbnail with ai",
-    "generate youtube thumbnail ai",
-    "thumbnail generator online",
-    "free ai thumbnail generator",
-    "ai youtube thumbnail generator free",
-    "youtube video thumbnail generator ai",
-    "ai design thumbnails for youtube",
-    "auto thumbnail creator for youtubers",
-    "ctr optimized thumbnail generator",
-    "ai viral thumbnail generator",
-    "thumbnail maker for youtube automation",
-    "thumbnail maker for faceless channels",
-    "ai thumbnail presets",
-    "1 click youtube thumbnail generator",
-    "upload and auto thumbnail ai",
-    "ai thumbnail text generator",
-    "thumbnail generator for youtube growth",
-    "best paid thumbnail generator",
-    "youtube thumbnail generator for creators",
-    "ai thumbnail maker saas",
-    "ai for youtube automation tools",
-    "ai for viral thumbnails",
-    "youtube ctr thumbnail tool",
-    "clickable thumbnails ai",
-    "high ctr thumbnail generator",
-    "shorts thumbnail generator ai",
-    "mrbeast style thumbnail generator",
-    "youtube thumbnail trends 2025",
-    "ai thumbnail generator no watermark",
-    "ai thumbnail generator with template",
-    "thumbnail maker using gpt",
-    "youtube seo thumbnail tool",
-    "ai tool for youtube click through rate",
-    "faceless youtube thumbnail generator",
-    "ai for youtube growth",
-    "thumbnailgpt waitlist",
-    "thumbnailgpt launch",
-    "youtube thumbnail generator 2025",
+    "youtube thumbnail generator",
+    "thumbnail generator ai",
+    "ai thumbnail creator",
+    "thumbnail maker ai",
+    "ai thumbnails for youtube",
+    "youtube thumbnails with ai",
+    "text to thumbnail",
+    "image to thumbnail",
+    "recreate thumbnail",
+    "title to thumbnail",
+    "sketch to thumbnail",
+    "thumbnail upscaling",
+    "thumbnail enhancement",
+    "thumbnail background change",
+    "thumbnail design optimization",
   ],
   authors: [{ name: "ThumbnailGPT" }],
   creator: "ThumbnailGPT",
@@ -117,24 +80,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: baseUrl,
     siteName: "ThumbnailGPT",
-    title: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
+    title: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
     description:
-      "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
+      "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
     images: [
       {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
+        alt: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ThumbnailGPT | AI Thumbnail Generator & YouTube Thumbnail Maker",
+    title: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
     description:
-      "Create YouTube thumbnails with AI using ThumbnailGPT. Generate eye-catching designs, change thumbnail backgrounds, and boost CTR with creator-focused tools.",
+      "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
     images: [ogImageUrl],
     creator: "@thumbnailgpt",
     site: "@thumbnailgpt",
@@ -164,8 +127,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-black">
-      <body 
-        className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`} 
+      <body
+        className={`${inter.variable} font-sans antialiased overflow-x-hidden bg-black`}
         style={{ backgroundColor: "#000000" }}
         suppressHydrationWarning
       >
@@ -179,7 +142,7 @@ export default function RootLayout({
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        
+
         <GoogleAnalytics />
         <BannerProvider initialVisible={BANNER_ENABLED}>
           <LaunchBanner enabled={BANNER_ENABLED} />

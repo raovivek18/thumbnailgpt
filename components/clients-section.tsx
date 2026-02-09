@@ -7,14 +7,6 @@ import { logos } from "@/lib/logos"
 export function ClientsSection() {
   return (
     <div className="w-full max-w-full overflow-x-hidden py-12 md:py-16 lg:py-20">
-      <div
-        aria-hidden="true"
-        className={cn(
-          "-z-10 -top-1/2 -translate-x-1/2 pointer-events-none absolute left-1/2 h-[120vmin] w-[120vmin] rounded-b-full",
-          "bg-[radial-gradient(ellipse_at_center,rgb(255_141_0/.1),transparent_50%)]",
-          "blur-[30px]",
-        )}
-      />
 
       <section className="relative mx-auto max-w-3xl px-4">
         <h2 className="mb-5 text-center font-medium text-white text-xl tracking-tight md:text-3xl">

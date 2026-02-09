@@ -10,7 +10,12 @@ import { ArrowLeft, ArrowRight, Play } from "lucide-react"
 /**
  * Renders the generated image with a sleek reveal animation and glass frame.
  */
-const ThumbnailPreview = ({ imageUrl, className = "" }) => {
+interface ThumbnailPreviewProps {
+  imageUrl?: string
+  className?: string
+}
+
+const ThumbnailPreview = ({ imageUrl, className = "" }: ThumbnailPreviewProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -45,7 +50,8 @@ const ThumbnailPreview = ({ imageUrl, className = "" }) => {
               className={`h-full w-full object-cover transition-all duration-700 ease-out ${isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
                 }`}
               onError={(e) => {
-                e.target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Generation+Failed"
+                const target = e.target as HTMLImageElement;
+                target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Generation+Failed"
               }}
             />
           )}
@@ -64,7 +70,12 @@ const ThumbnailPreview = ({ imageUrl, className = "" }) => {
 /**
  * Standardized Result Card Component for Universal alignment
  */
-const UniversalResult = ({ outputRef, imageUrl }) => {
+interface UniversalResultProps {
+  outputRef?: React.RefObject<HTMLDivElement | null>
+  imageUrl: string
+}
+
+const UniversalResult = ({ outputRef, imageUrl }: UniversalResultProps) => {
   return (
     // Added mt-auto to strictly force this section to the bottom
     <div className="relative z-20 flex flex-col gap-2 shrink-0 mt-auto">
@@ -81,20 +92,27 @@ const UniversalResult = ({ outputRef, imageUrl }) => {
 /**
  * Draws the connecting line between elements with a directional arrow.
  */
+interface AnimatedBeamProps {
+  containerRef: React.RefObject<HTMLDivElement | null>
+  fromRef: React.RefObject<HTMLDivElement | null>
+  toRef: React.RefObject<HTMLDivElement | null>
+  curvature?: number
+}
+
 const AnimatedBeam = ({
   containerRef,
   fromRef,
   toRef,
   curvature = 0.4,
-}) => {
+}: AnimatedBeamProps) => {
   const [pathData, setPathData] = useState({ d: "", length: 0, viewBox: "" })
   const [opacity, setOpacity] = useState(0) // State for smooth fade-in
   const id = React.useId()
 
   // Refs for animation loop
-  const pathRef = useRef(null)
-  const particleRef = useRef(null)
-  const rafRef = useRef(null)
+  const pathRef = useRef<SVGPathElement>(null)
+  const particleRef = useRef<SVGGElement>(null)
+  const rafRef = useRef<number | null>(null)
 
   // Calculate SVG Path
   useEffect(() => {
@@ -152,10 +170,10 @@ const AnimatedBeam = ({
   useEffect(() => {
     if (!pathData.d) return
 
-    let startTime
+    let startTime: number | undefined
     const duration = 2000 // ms
 
-    const animate = (time) => {
+    const animate = (time: number) => {
       if (!startTime) startTime = time
       const elapsed = time - startTime
       const progress = (elapsed % duration) / duration
@@ -177,7 +195,7 @@ const AnimatedBeam = ({
 
           // Fade in/out at ends
           const opacityVal = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
-          particleRef.current.setAttribute("opacity", opacityVal)
+          particleRef.current.setAttribute("opacity", String(opacityVal))
         } catch (e) {
           // Safe exit for box resize/unmount
         }
@@ -187,7 +205,9 @@ const AnimatedBeam = ({
     }
 
     rafRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(rafRef.current)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [pathData.d])
 
   if (!pathData.d) return null
@@ -233,9 +253,9 @@ const TextToThumbnailCard = () => {
   )
   const imageUrl = "/text2thumbnail/thumbnailgpt-text2thumbnail.webp"
 
-  const containerRef = useRef(null)
-  const inputRef = useRef(null)
-  const outputRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const outputRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -273,7 +293,11 @@ const TextToThumbnailCard = () => {
 // CARD 2 SPECIFIC: IMAGE TO IMAGE
 // ==========================================
 
-const ImageReveal = ({ containerRef }) => {
+interface ImageRevealProps {
+  containerRef: React.RefObject<HTMLDivElement | null>
+}
+
+const ImageReveal = ({ containerRef }: ImageRevealProps) => {
   const imageSize = "w-14 h-14 sm:w-16 sm:h-16"
   const cards = [
     { src: "/image2thumbnail/mrbeast.webp", rotate: -10, x: -60, y: 4, z: 50, origin: "origin-bottom-right" },
@@ -302,9 +326,9 @@ const ImageReveal = ({ containerRef }) => {
 
 const ImageToThumbnailCard = () => {
   const imageUrl = "/image2thumbnail/thumbnailgpt-image2thumbnail.webp"
-  const containerRef = useRef(null)
-  const inputRef = useRef(null)
-  const outputRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const outputRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -361,9 +385,9 @@ const YouTubeCardPreview = () => {
 
 const RecreateThumbnailCard = () => {
   const imageUrl = "/recreate-thumbnail/thumbnailgpt-recreatethumbnail.webp"
-  const containerRef = useRef(null)
-  const inputRef = useRef(null)
-  const outputRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const outputRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -412,7 +436,7 @@ export default function App() {
     const mediaQuery = window.matchMedia('(max-width: 1279px)')
     setIsMobile(mediaQuery.matches)
 
-    const handler = (e) => setIsMobile(e.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mediaQuery.addEventListener('change', handler)
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
@@ -436,7 +460,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-full bg-black relative flex items-center justify-center overflow-hidden py-8 md:py-12">
+    <div className="w-full bg-orange-flow relative flex items-center justify-center overflow-hidden py-8 md:py-12">
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: scale(0.98); }

@@ -4,51 +4,59 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    question: "What is ThumbnailGPT and how does it work?",
+    question: "What is ThumbnailGPT?",
     answer:
-      "ThumbnailGPT is an AI thumbnail generator and YouTube thumbnail generator powered by advanced AI. You enter a prompt and optionally upload images. The system processes your input and creates a custom thumbnail using thumbnail AI technology that you can use for YouTube, social media, blogs, or other projects. No design skills are required.",
+      "ThumbnailGPT is an AI-powered YouTube thumbnail generator built for creators who want higher click-through rates. It generates, analyzes, and optimizes thumbnails using proven viral design patterns.",
   },
   {
-    question: "Do I need to install any software to use it?",
+    question: "Is ThumbnailGPT free to use?",
     answer:
-      "No installation is needed. ThumbnailGPT works directly in your browser. Just sign in with Google, choose a tool, enter your input, and generate your thumbnail instantly.",
+      "ThumbnailGPT is a premium AI thumbnail generator. Each plan includes credits that unlock high-quality, watermark-free thumbnails and advanced optimization tools.",
   },
   {
-    question: "How do credits work?",
+    question: "How is ThumbnailGPT different from free AI thumbnail makers?",
     answer:
-      "Credits act as usage tokens. Every time you generate a thumbnail, a certain number of credits is deducted from your account. You can buy credit packs whenever you need more.",
+      "Most free tools only generate images. ThumbnailGPT goes further by analyzing thumbnails, detecting design issues, and automatically fixing them to improve CTR and engagement.",
   },
   {
-    question: "Are my uploaded images saved?",
-    answer:
-      "No, uploaded images are not stored permanently. Any image you upload for reference, processing, or recreation is deleted automatically after the thumbnail is generated. Only the final output image is stored safely in your account.",
+    question: "Can I create YouTube thumbnails from text or images?",
+    answer: (
+      <div>
+        Yes. You can generate thumbnails using:
+        <ul className="list-disc pl-5 mt-2 space-y-1">
+          <li>Text prompts</li>
+          <li>Uploaded images</li>
+          <li>Existing YouTube thumbnails</li>
+          <li>Video titles or sketches</li>
+        </ul>
+      </div>
+    ),
   },
   {
-    question: "Can I get a refund if I do not like the result?",
+    question: "Does ThumbnailGPT help increase YouTube CTR?",
     answer:
-      "Refunds are only possible if all purchased credits are unused. If even one credit is used, refunds are not allowed. This rule ensures fair usage for all users.",
+      "Yes. ThumbnailGPT includes thumbnail analysis, viral scoring, and optimization tools designed to improve click-through rate, clarity, and visual hook.",
   },
   {
-    question: "Is there any content that is not allowed?",
+    question: "Are AI-generated thumbnails allowed on YouTube?",
     answer:
-      "Yes. ThumbnailGPT does not allow adult, NSFW, harmful, or illegal content. If such content is detected, the account may be banned without refund.",
+      "Yes. YouTube allows AI-generated thumbnails as long as they follow platform policies and do not mislead viewers. All thumbnails created with ThumbnailGPT are safe for commercial use.",
   },
   {
-    question: "Can I use the generated thumbnails commercially?",
+    question: "Can I use thumbnails commercially?",
     answer:
-      "Yes. You are free to use the generated thumbnails for videos, social accounts, advertisements, or any other commercial purpose.",
+      "Yes. All thumbnails generated with ThumbnailGPT can be used commercially on YouTube and other platforms without watermark restrictions.",
+  },
+  {
+    question: "Do I need design skills to use ThumbnailGPT?",
+    answer:
+      "No. ThumbnailGPT is built for creators with zero design experience. The AI handles layout, text hierarchy, contrast, and focus automatically.",
   },
 ]
 
 export function FaqSection() {
   return (
-    <section id="faq" className="relative py-20 px-4 overflow-hidden scroll-mt-24">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black" />
-
-      {/* Orange glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#FF8D00]/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#FF8D00]/5 rounded-full blur-[120px]" />
+    <section id="faq" className="relative py-20 px-4 overflow-hidden scroll-mt-24 bg-orange-flow">
 
       <div className="relative max-w-4xl mx-auto">
         {/* Heading */}

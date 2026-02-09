@@ -5,7 +5,7 @@ import { AnimatedButton } from "@/components/ui/animated-button"
 
 export function CtaSection() {
   return (
-    <section className="relative py-20 md:py-32 px-4">
+    <section className="relative py-20 md:py-32 px-4 bg-orange-flow">
       <div className="max-w-3xl mx-auto text-center space-y-6">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
           Start Creating <span className="text-[#FF8D00]">Better Thumbnails</span>

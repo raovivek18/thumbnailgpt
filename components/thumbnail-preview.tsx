@@ -8,37 +8,37 @@ const items: CardStackItem[] = [
     id: 1,
     title: "",
     description: "",
-    imageSrc: "https://i.pinimg.com/736x/e7/cf/cb/e7cfcbd7a8af10b8839c8d9a3d8eb4ce.jpg",
+    imageSrc: "/preview-thumbnail/thumbnailgpt-preview1.webp",
   },
   {
     id: 2,
     title: "",
     description: "",
-    imageSrc: "https://i.pinimg.com/736x/f4/b0/00/f4b000a6880f7e8d0c677812d789e001.jpg",
+    imageSrc: "/preview-thumbnail/thumbnailgpt-preview2.webp",
   },
   {
     id: 3,
     title: "",
     description: "",
-    imageSrc: "https://i.pinimg.com/1200x/ae/cf/d7/aecfd72b2439914647ec06d19cb182b5.jpg",
+    imageSrc: "/preview-thumbnail/thumbnailgpt-preview3.webp",
   },
   {
     id: 4,
     title: "",
     description: "",
-    imageSrc: "https://i.pinimg.com/736x/5d/f7/69/5df7696c4f24b7961c8c72748a355ff8.jpg",
+    imageSrc: "/preview-thumbnail/thumbnailgpt-preview4.webp",
   },
   {
     id: 5,
     title: "",
     description: "",
-    imageSrc: "https://i.pinimg.com/736x/9c/f2/8b/9cf28b4df4e06e0ca34fbe87f25734b6.jpg",
+    imageSrc: "/preview-thumbnail/thumbnailgpt-preview5.webp",
   },
 ];
 
 export default function ThumbnailPreview() {
   const [cardWidth, setCardWidth] = useState(380);
-  const [cardHeight, setCardHeight] = useState(240);
+  const [cardHeight, setCardHeight] = useState(214);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -48,15 +48,15 @@ export default function ThumbnailPreview() {
       if (width < 640) {
         // Mobile
         setCardWidth(280);
-        setCardHeight(180);
+        setCardHeight(158);
       } else if (width < 1024) {
         // Tablet
         setCardWidth(400);
-        setCardHeight(250);
+        setCardHeight(225);
       } else {
         // Desktop
         setCardWidth(380);
-        setCardHeight(240);
+        setCardHeight(214);
       }
     };
 
@@ -66,7 +66,7 @@ export default function ThumbnailPreview() {
   }, []);
 
   return (
-    <div className="w-full bg-black">
+    <div className="w-full bg-orange-flow">
       <div className="mx-auto w-full max-w-2xl px-4 sm:px-6 md:px-6">
         {isMounted ? (
           <CardStack

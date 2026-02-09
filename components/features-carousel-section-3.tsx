@@ -10,17 +10,32 @@ import { ArrowLeft, ArrowRight, Play } from "lucide-react"
 /**
  * Image Comparison Slider for Upscaling
  */
-const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
-  const [sliderPos, setSliderPos] = useState(50)
-  const containerRef = useRef(null)
+interface ComparisonSliderProps {
+  beforeUrl: string
+  afterUrl: string
+  beforeLabel?: string
+  afterLabel?: string
+}
 
-  const handleMove = (e) => {
+const ComparisonSlider = ({ beforeUrl, afterUrl, beforeLabel = "Original", afterLabel = "Upscaled 4K" }: ComparisonSliderProps) => {
+  const [sliderPos, setSliderPos] = useState(50)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
-    const x = e.clientX || (e.touches && e.touches[0].clientX)
-    if (!x) return
 
-    let position = ((x - rect.left) / rect.width) * 100
+    let clientX: number | undefined
+
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX
+    } else {
+      clientX = e.clientX
+    }
+
+    if (!clientX) return
+
+    let position = ((clientX - rect.left) / rect.width) * 100
     position = Math.max(0, Math.min(100, position))
     setSliderPos(position)
   }
@@ -41,24 +56,23 @@ const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
 
       {/* Badge: Upscaled 4K - Placed behind the sliding div so it gets covered */}
       <div className="absolute top-3 right-3 bg-orange-500 backdrop-blur-md border border-white/20 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest text-white shadow-[0_0_20px_rgba(249,115,22,0.4)] z-0">
-        Upscaled 4K
+        {afterLabel}
       </div>
 
       {/* Before Image (Low Res) - Clipped Layer (Higher Z-index than Upscaled badge) */}
       <div
-        className="absolute inset-0 h-full overflow-hidden border-r border-orange-500/50 z-10"
-        style={{ width: `${sliderPos}%` }}
+        className="absolute inset-0 h-full z-10"
+        style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
       >
         <img
           src={beforeUrl}
           alt="Before"
           className="absolute inset-0 h-full w-full object-cover grayscale-[0.5]"
-          style={{ width: `${100 / (sliderPos / 100)}%`, maxWidth: 'none' }}
         />
 
         {/* Badge: Original */}
         <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest text-orange-500 shadow-xl">
-          Original
+          {beforeLabel}
         </div>
       </div>
 
@@ -79,7 +93,14 @@ const ComparisonSlider = ({ beforeUrl, afterUrl }) => {
 /**
  * Renders an image with a sleek reveal animation and glass frame.
  */
-const ThumbnailPreview = forwardRef(({ imageUrl, className = "", label = "Processing", noHover = false }, ref) => {
+interface ThumbnailPreviewProps {
+  imageUrl?: string
+  className?: string
+  label?: string
+  noHover?: boolean
+}
+
+const ThumbnailPreview = forwardRef<HTMLDivElement, ThumbnailPreviewProps>(({ imageUrl, className = "", label = "Processing", noHover = false }, ref) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -107,7 +128,8 @@ const ThumbnailPreview = forwardRef(({ imageUrl, className = "", label = "Proces
               className={`h-full w-full object-cover transition-all duration-700 ease-out ${isLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-0 blur-lg"
                 }`}
               onError={(e) => {
-                e.target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Image+Load+Failed"
+                const target = e.target as HTMLImageElement;
+                target.src = "https://placehold.co/800x450/1a1a1a/666666?text=Image+Load+Failed"
               }}
             />
           )}
@@ -121,7 +143,13 @@ const ThumbnailPreview = forwardRef(({ imageUrl, className = "", label = "Proces
 
 ThumbnailPreview.displayName = "ThumbnailPreview"
 
-const UniversalResult = ({ outputRef, imageUrl, noHover = false }) => {
+interface UniversalResultProps {
+  outputRef?: React.Ref<HTMLDivElement>
+  imageUrl: string
+  noHover?: boolean
+}
+
+const UniversalResult = ({ outputRef, imageUrl, noHover = false }: UniversalResultProps) => {
   return (
     <div className="relative z-20 flex flex-col gap-2 shrink-0 mt-auto">
       <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
@@ -134,19 +162,26 @@ const UniversalResult = ({ outputRef, imageUrl, noHover = false }) => {
   )
 }
 
+interface AnimatedBeamProps {
+  containerRef: React.RefObject<HTMLDivElement | null>
+  fromRef: React.RefObject<HTMLDivElement | null>
+  toRef: React.RefObject<HTMLDivElement | null>
+  curvature?: number
+}
+
 const AnimatedBeam = ({
   containerRef,
   fromRef,
   toRef,
   curvature = 0.4,
-}) => {
+}: AnimatedBeamProps) => {
   const [pathData, setPathData] = useState({ d: "", length: 0, viewBox: "" })
   const [opacity, setOpacity] = useState(0)
   const id = React.useId()
 
-  const pathRef = useRef(null)
-  const particleRef = useRef(null)
-  const rafRef = useRef(null)
+  const pathRef = useRef<SVGPathElement>(null)
+  const particleRef = useRef<SVGGElement>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
     const updatePath = () => {
@@ -193,10 +228,10 @@ const AnimatedBeam = ({
   useEffect(() => {
     if (!pathData.d) return
 
-    let startTime
+    let startTime: number | undefined
     const duration = 2000
 
-    const animate = (time) => {
+    const animate = (time: number) => {
       if (!startTime) startTime = time
       const elapsed = time - startTime
       const progress = (elapsed % duration) / duration
@@ -213,14 +248,16 @@ const AnimatedBeam = ({
 
           particleRef.current.setAttribute("transform", `translate(${point.x}, ${point.y}) rotate(${angle})`)
           const opacityVal = progress < 0.1 ? progress * 10 : progress > 0.9 ? (1 - progress) * 10 : 1
-          particleRef.current.setAttribute("opacity", opacityVal)
+          particleRef.current.setAttribute("opacity", String(opacityVal))
         } catch (e) { }
       }
       rafRef.current = requestAnimationFrame(animate)
     }
 
     rafRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(rafRef.current)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [pathData.d])
 
   if (!pathData.d) return null
@@ -264,27 +301,30 @@ const SketchToThumbnailCard = () => {
   const sketchUrl = "/sketch2thumbnail/thumbnailgpt-sketch-thumbnail.webp"
   const outputUrl = "/sketch2thumbnail/thumbnailgpt-generated-thumbnail.webp"
 
-  const containerRef = useRef(null)
-  const inputRef = useRef(null)
-  const outputRef = useRef(null)
-
   return (
-    <div
-      ref={containerRef}
-      className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 h-[365px] w-[340px] sm:h-[440px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col"
-    >
-      <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2 justify-start">
-        <div className="relative z-20 flex flex-col gap-2 shrink-0">
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
-            <span>sketch</span>
-          </div>
-          <div className="w-[45%] mx-auto">
-            <ThumbnailPreview ref={inputRef} imageUrl={sketchUrl} className="opacity-80" />
+    <div className="relative bg-neutral-900/80 shadow-2xl outline outline-[6px] outline-white/5 h-[365px] w-[340px] sm:h-[440px] sm:w-[410px] rounded-3xl overflow-hidden mx-2.5 xl:mx-0 backdrop-blur-md flex flex-col items-center justify-center">
+      <div className="relative p-5 sm:p-6 z-10 flex flex-col h-full w-full gap-2">
+        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">
+          <span>sketch to thumbnail</span>
+        </div>
+
+        {/* Centered Result Card with Slider */}
+        <div className="flex-grow flex items-center justify-center">
+          <div className="w-full flex flex-col gap-2">
+            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-orange-500">
+              <span>Result Preview</span>
+            </div>
+            <div className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-sm">
+              <ComparisonSlider
+                beforeUrl={sketchUrl}
+                afterUrl={outputUrl}
+                beforeLabel="Sketch"
+                afterLabel="Generated"
+              />
+            </div>
+            <div className="mt-2 mx-auto h-1 w-[80%] rounded-full bg-orange-500/20 blur-xl" />
           </div>
         </div>
-        <div className="relative flex items-center justify-center min-h-[4px]" />
-        <UniversalResult outputRef={outputRef} imageUrl={outputUrl} />
-        <AnimatedBeam containerRef={containerRef} fromRef={inputRef} toRef={outputRef} curvature={0.2} />
       </div>
     </div>
   )
@@ -298,9 +338,9 @@ const TitleToThumbnailCard = () => {
   const title = "“How I Scaled My SaaS to $10K/Month”"
   const outputUrl = "/title2thumbnail/thumbnailgpt-title2thumbnail.webp"
 
-  const containerRef = useRef(null)
-  const inputRef = useRef(null)
-  const outputRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const outputRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -384,7 +424,7 @@ export default function App() {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 1279px)')
     setIsMobile(mediaQuery.matches)
-    const handler = (e) => setIsMobile(e.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mediaQuery.addEventListener('change', handler)
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
@@ -406,7 +446,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-full bg-black relative flex items-center justify-center overflow-hidden py-8 md:py-12">
+    <div className="w-full bg-orange-flow relative flex items-center justify-center overflow-hidden py-8 md:py-12">
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: scale(0.98); }

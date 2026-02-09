@@ -28,7 +28,8 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --brand-orange: #ff8d00; /* Added custom orange accent color for the brand */
+  --brand-orange: #ff8d00;
+  /* Added custom orange accent color for the brand */
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -121,12 +122,11 @@
 
   @keyframes orbit {
     0% {
-      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px))
-        rotate(calc(var(--angle) * -1deg));
+      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
     }
+
     100% {
-      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px))
-        rotate(calc((var(--angle) * -1deg) - 360deg));
+      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
     }
   }
 
@@ -135,6 +135,7 @@
     from {
       transform: translateX(0);
     }
+
     to {
       transform: translateX(calc(-100% - var(--gap)));
     }
@@ -147,6 +148,7 @@
     from {
       transform: translateX(0);
     }
+
     to {
       transform: translateX(-100%);
     }
@@ -156,6 +158,7 @@
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
@@ -168,9 +171,10 @@
     /* Added box-sizing to ensure padding doesn't cause overflow */
     box-sizing: border-box;
   }
+
   /* Enhanced smooth scrolling with Lenis-compatible styles */
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   html.lenis,
@@ -201,11 +205,12 @@
     /* Prevent white flash on page load */
     background-color: #000000;
   }
-  
+
   html {
     /* Prevent white flash on page load */
     background-color: #000000;
   }
+
   /* Enhanced overflow prevention with min-width constraint */
   html,
   body {
@@ -217,7 +222,7 @@
   }
 
   /* Ensure all direct children respect viewport width */
-  body > *,
+  body>*,
   #__next,
   main {
     max-width: 100vw;
@@ -256,5 +261,9 @@
 
   .animate-fade-in {
     animation: fade-in 0.5s ease-out;
+  }
+
+  .bg-orange-flow {
+    background-image: radial-gradient(ellipse at center, rgba(255, 141, 0, 0.15), transparent 60%);
   }
 }

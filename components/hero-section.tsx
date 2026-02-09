@@ -305,7 +305,7 @@ export default function HeroSection() {
 
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center text-white overflow-x-hidden selection:bg-[#FF8D00] selection:text-black relative min-h-screen bg-transparent"
+      className="w-full flex flex-col items-center justify-center text-white selection:bg-[#FF8D00] selection:text-black relative min-h-[100dvh] bg-transparent"
     >
       <style>{customStyles}</style>
 
@@ -362,11 +362,11 @@ export default function HeroSection() {
                             : laserFlowConfig.size.desktop.height,
                 position: 'relative',
                 transform: `scale(${screenSize === 'mobile' ? '1.9' :
-                    screenSize === 'largeMobile' ? '1.5' :
-                      screenSize === 'tabletPortrait' ? '0.85' :
-                        screenSize === 'tablet' ? '0.9' :
-                          screenSize === 'laptop' ? '1' :
-                            '1'
+                  screenSize === 'largeMobile' ? '1.5' :
+                    screenSize === 'tabletPortrait' ? '0.85' :
+                      screenSize === 'tablet' ? '0.9' :
+                        screenSize === 'laptop' ? '1' :
+                          '1'
                   })`,
               }}
             >
@@ -431,7 +431,7 @@ export default function HeroSection() {
       )}
 
       {/* Main Content Wrapper - Increased padding for mobile */}
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-12 sm:pt-16 md:pt-20 pb-0 relative z-10">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center pt-12 sm:pt-16 md:pt-20 pb-0 relative z-10">
 
         {/* 1. Top Badge / Notification */}
         <div className="mb-4 sm:mb-6">
@@ -523,6 +523,7 @@ export default function HeroSection() {
                     className="w-full bg-transparent resize-none focus:outline-none leading-relaxed text-sm sm:text-base placeholder-transparent custom-scrollbar"
                     rows={1}
                     spellCheck={false}
+                    data-lenis-prevent
                     style={{
                       minHeight: '24px',
                       maxHeight: '120px',
@@ -551,7 +552,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-      </main>
+      </section>
     </div>
   );
 }
