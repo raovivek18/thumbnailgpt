@@ -118,7 +118,22 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">10. Contact</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">10. User Consent & Communications</h2>
+              <p className="mb-2">
+                By creating an account or using our services, you provide your explicit consent to receive communications from ThumbnailGPT. This includes, but is not limited to:
+              </p>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>Service updates and feature announcements</li>
+                <li>Marketing and promotional newsletters</li>
+                <li>Account-related notifications (e.g., billing, credit balance)</li>
+              </ul>
+              <p className="mt-2">
+                You may opt-out of marketing communications at any time by using the "Unsubscribe" link provided in our emails. However, essential service-related emails required for account management and security cannot be disabled while you maintain an active account.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">11. Contact</h2>
               <p>
                 📧 <span className="text-[#FF8D00]">support@thumbnailgpt.com</span>
               </p>

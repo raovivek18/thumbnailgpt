@@ -37,11 +37,11 @@ const ogImageUrl = `${baseUrl}/og/thumbnailgpt.-og-image.png`
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
+    default: "ThumbnailGPT – Best AI Thumbnail Generator for YouTube (2026)",
     template: "%s | ThumbnailGPT"
   },
   description:
-    "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
+    "ThumbnailGPT is the best AI thumbnail generator for YouTube in 2026. Create high-CTR thumbnails online using AI image generation, thumbnail analysis, and smart fixes designed to increase clicks and views.",
   keywords: [
     "ai thumbnail generator",
     "ai youtube thumbnail generator",
@@ -80,24 +80,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: baseUrl,
     siteName: "ThumbnailGPT",
-    title: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
+    title: "ThumbnailGPT – Best AI Thumbnail Generator for YouTube (2026)",
     description:
-      "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
+      "ThumbnailGPT is the best AI thumbnail generator for YouTube in 2026. Create high-CTR thumbnails using AI image generation, thumbnail analysis, and smart fixes. Compare ThumbnailGPT vs Canva AI Thumbnail Maker and vidIQ Thumbnail Maker with better control, speed, and performance.",
     images: [
       {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
+        alt: "ThumbnailGPT – Best AI Thumbnail Generator for YouTube (2026)",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ThumbnailGPT – AI YouTube Thumbnail Generator for High CTR",
+    title: "ThumbnailGPT – Best AI Thumbnail Generator for YouTube (2026)",
     description:
-      "Create high-CTR YouTube thumbnails with AI. ThumbnailGPT helps creators generate, analyze, and fix thumbnails designed to get more clicks and views.",
+      "ThumbnailGPT is the best AI thumbnail generator for YouTube in 2026. Create high-CTR thumbnails using AI image generation, thumbnail analysis, and smart fixes. Compare ThumbnailGPT vs Canva AI Thumbnail Maker and vidIQ Thumbnail Maker with better control, speed, and performance.",
     images: [ogImageUrl],
     creator: "@thumbnailgpt",
     site: "@thumbnailgpt",

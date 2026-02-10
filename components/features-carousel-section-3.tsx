@@ -487,9 +487,10 @@ export default function App() {
           <div className="flex items-center gap-6 z-20">
             <button
               onClick={prevSlide}
-              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5 transition-all"
+              aria-label="Scroll left"
+              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full transition-all duration-200 bg-white/10 hover:bg-orange-500 active:bg-orange-600 text-white backdrop-blur-md border border-white/5"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             </button>
 
             <div className="flex justify-center items-center h-8 px-1 border rounded-full bg-white/10 border-white/5 backdrop-blur-md">
@@ -498,10 +499,13 @@ export default function App() {
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
+                    aria-label={`Go to slide ${index + 1}`}
                     className="touch-action-manipulation py-2 group focus:outline-none"
                   >
                     <div
-                      className={`transition-all duration-300 rounded-full h-1.5 ${currentSlide === index ? 'w-8 bg-white' : 'w-2 bg-white/20 group-hover:bg-white/40'
+                      className={`transition-all duration-300 rounded-full h-1.5 ${currentSlide === index
+                        ? 'w-8 bg-orange-500'
+                        : 'w-2 bg-white/20 group-hover:bg-white/40'
                         }`}
                     />
                   </button>
@@ -511,9 +515,10 @@ export default function App() {
 
             <button
               onClick={nextSlide}
-              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/15 text-white backdrop-blur-md border border-white/5 transition-all"
+              aria-label="Scroll right"
+              className="touch-action-manipulation h-8 w-8 flex items-center justify-center rounded-full transition-all duration-200 bg-white/10 hover:bg-orange-500 active:bg-orange-600 text-white backdrop-blur-md border border-white/5"
             >
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>
