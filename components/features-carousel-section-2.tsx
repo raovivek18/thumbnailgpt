@@ -35,16 +35,16 @@ interface ScoreRingProps {
 const ScoreRing = ({ score }: ScoreRingProps) => {
   const normalizedScore = normalizeScore(score)
   const [mounted, setMounted] = useState(false)
-  const circumference = 75.39
+  const circumference = 75.39 // 2 * PI * r (r=12)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   return (
-    <div className="absolute bottom-0 left-[50%] transform -translate-x-1/2 translate-y-1/2 flex flex-col items-center justify-center z-30">
-      <div className="relative w-8 h-8 rounded-full bg-black/90 border border-white/10 flex items-center justify-center shadow-lg backdrop-blur-md">
-        <svg className="w-full h-full transform -rotate-90 p-0.5">
+    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex items-center justify-center z-30">
+      <div className="relative w-9 h-9 rounded-full bg-black/90 border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-md">
+        <svg className="w-full h-full -rotate-90" viewBox="0 1 32 32">
           <defs>
             <linearGradient id="gradient-red" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ef4444" />
@@ -59,10 +59,10 @@ const ScoreRing = ({ score }: ScoreRingProps) => {
               <stop offset="100%" stopColor="#34d399" />
             </linearGradient>
           </defs>
-          <circle cx="14" cy="14" r="12" stroke="rgba(255,255,255,0.05)" strokeWidth="2.5" fill="transparent" />
+          <circle cx="16" cy="16" r="12" stroke="rgba(255,255,255,0.05)" strokeWidth="2.5" fill="transparent" />
           <circle
-            cx="14"
-            cy="14"
+            cx="16"
+            cy="16"
             r="12"
             stroke={`url(#${getGradientId(normalizedScore)})`}
             strokeWidth="2.5"
@@ -73,7 +73,7 @@ const ScoreRing = ({ score }: ScoreRingProps) => {
             className="transition-all duration-1000 ease-out"
           />
         </svg>
-        <span className="absolute text-[10px] font-bold text-white tracking-tighter">{normalizedScore}</span>
+        <span className="absolute text-[10px] font-bold text-white tracking-widest">{normalizedScore}</span>
       </div>
     </div>
   )
@@ -234,9 +234,8 @@ const ThumbnailReport = ({
       {/* Mini Thumbnail Area */}
       <div className="flex-shrink-0 px-3 pt-2 pb-5 z-10">
         <div className="relative w-full aspect-video">
-          <div className="absolute inset-0 rounded-md overflow-hidden border border-white/10 bg-black/40">
-            <img src={thumbnailUrl} className="w-full h-full object-cover opacity-50 group-hover/card:opacity-60 transition-opacity" alt="Analysis preview" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 rounded-md overflow-hidden border border-white/10">
+            <img src={thumbnailUrl} className="w-full h-full object-cover transition-opacity" alt="Analysis preview" />
           </div>
           <ScoreRing score={overallScore} />
         </div>
