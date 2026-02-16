@@ -46,7 +46,17 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">2. Refund Eligibility</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">2. Free Trial Refunds</h2>
+              <p className="mb-2">Free trials are provided for evaluation only.</p>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>Because no payment is collected during the trial period, no refund applies to trial use.</li>
+                <li>To avoid charges, you must cancel before the trial period ends.</li>
+                <li>Once a trial converts to a paid subscription and a payment is successfully processed, the general refund eligibility criteria apply.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-3">3. Refund Eligibility</h2>
               <p className="mb-2">Refunds are not guaranteed and are reviewed on a case-by-case basis.</p>
               <p className="mb-2">A refund may be considered only if all of the following conditions are met:</p>
               <ul className="list-disc list-inside ml-4 space-y-1">
@@ -59,13 +69,15 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">3. Non-Refundable Situations</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">4. Non-Refundable Situations</h2>
               <p className="mb-2">Refunds will not be issued in the following cases:</p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>Any credits have been consumed (even partially)</li>
-                <li>Dissatisfaction with AI-generated results or creative output</li>
+                <li>Any credits that have been consumed, even partially</li>
+                <li>Time remaining in a billing period after cancellation</li>
+                <li>Trial periods that convert to paid plans</li>
+                <li>User dissatisfaction with outputs or results</li>
+                <li>Failure to cancel before the renewal date</li>
                 <li>Expectation of a specific design style or guaranteed accuracy</li>
-                <li>Failure to cancel the subscription before renewal</li>
                 <li>Account suspension due to policy or terms violations</li>
                 <li>Misuse, abuse, or prohibited content generation</li>
                 <li>Change of mind after using the service</li>
@@ -74,17 +86,18 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">4. Subscription Cancellation</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">5. Subscription Cancellation Process</h2>
+              <p className="mb-2">To cancel your subscription and avoid future billing:</p>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>You may cancel your subscription at any time from your Manage Subscription page.</li>
-                <li>Canceling stops future billing only.</li>
-                <li>You will continue to have access and credits until the end of the current billing period.</li>
-                <li>Canceling a subscription does not automatically trigger a refund.</li>
+                <li>Visit the <strong>Manage Subscription</strong> page in your account</li>
+                <li>Follow the cancellation steps provided</li>
+                <li>Cancellation must be completed before the next billing date</li>
               </ul>
+              <p className="mt-3">Canceling a subscription does not automatically issue a refund.</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">5. Refund Processing Timeline</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">6. Refund Processing Timeline</h2>
               <p className="mb-2">If a refund is approved:</p>
               <ul className="list-disc list-inside ml-4 space-y-1">
                 <li>It will be processed within 5-7 business days</li>
@@ -94,7 +107,7 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">6. How to Request a Refund</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">7. How to Request a Refund</h2>
               <p className="mb-2">To request a refund, contact us at:</p>
               <p className="mb-2">
                 Email: <span className="text-[#FF8D00]">support@thumbnailgpt.com</span>
@@ -113,7 +126,7 @@ export default function RefundPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-white mb-3">7. Contact & Support</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">8. Contact & Support</h2>
               <p className="mb-2">For billing, subscription, or refund-related questions, reach out to us anytime:</p>
               <p>
                 📧 <span className="text-[#FF8D00]">support@thumbnailgpt.com</span>

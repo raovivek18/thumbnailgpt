@@ -39,15 +39,15 @@ export default function TermsPage() {
                 <li>Image to Thumbnail</li>
                 <li>Recreate Thumbnail</li>
               </ul>
-              <p className="mt-2 font-semibold text-white">Access to all tools requires an active paid subscription.</p>
+              <p className="mt-2 font-semibold text-white">Access to all tools requires an active paid subscription or free trial.</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold text-white mb-3">2. Paid-Only Access</h2>
               <ul className="list-disc list-inside ml-4 space-y-1">
-                <li>ThumbnailGPT does not offer free usage or trials.</li>
-                <li>You must have an active subscription to use any generation feature.</li>
-                <li>If your subscription expires or is canceled, access is blocked.</li>
+                <li>ThumbnailGPT offers a 1-day free trial for new users.</li>
+                <li>You must have an active subscription or trial to use any generation feature.</li>
+                <li>If your subscription or trial expires, access is blocked.</li>
               </ul>
             </section>
 
@@ -57,6 +57,27 @@ export default function TermsPage() {
                 <li>Subscriptions are billed monthly.</li>
                 <li>Billing is handled by Dodo Payments.</li>
                 <li>Plans automatically renew unless canceled before the billing date.</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-[#FF8D00] mt-4 mb-2">Free Trial Offer</h3>
+              <p className="mb-2">We may offer a one-day free trial for first-time users of a paid plan. By starting the free trial, you acknowledge and agree:</p>
+              <ul className="list-disc list-inside ml-4 space-y-1 mb-4">
+                <li>A valid payment method is required at trial signup.</li>
+                <li>A ₹0 verification authorization may be performed on your payment method.</li>
+                <li>The trial automatically converts to a paid subscription after 24 hours unless cancelled before the trial ends.</li>
+                <li>Once the trial converts, your payment method will be charged the applicable subscription fee.</li>
+                <li>Trial credits and promotional access are granted only once per user.</li>
+                <li>Trial time and entitlements may be modified or withdrawn at any time.</li>
+                <li>If you cancel during the trial, your access ends immediately and no charges will be applied.</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-[#FF8D00] mb-2">Automatic Renewal and Payment Authorization</h3>
+              <p className="mb-2">By entering a paid subscription (including after a free trial):</p>
+              <ul className="list-disc list-inside ml-4 space-y-1">
+                <li>You authorize automatic renewal and recurring charges to your selected payment method (monthly or as otherwise specified).</li>
+                <li>You are responsible for payments until cancellation is completed through the Billing Portal or before the next renewal date.</li>
+                <li>If a payment attempt fails, your subscription may become past due. You will retain credit access while your credit balance is positive.</li>
+                <li>Any free trial that automatically converts to a paid subscription must be cancelled before the trial period ends to avoid charges.</li>
               </ul>
             </section>
 

@@ -47,16 +47,16 @@ export default function PrivacyPage() {
                 <li>Provide customer support</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-[#FF8D00] mb-2">1.2 Payment Information</h3>
-              <p className="mb-2">All payments are handled securely by Dodo Payments.</p>
-              <p className="mb-2">We do not store your card or payment details.</p>
-              <p className="mb-2">We may store:</p>
-              <ul className="list-disc list-inside ml-4 space-y-1 mb-4">
-                <li>Subscription ID</li>
-                <li>Plan name</li>
-                <li>Billing status</li>
-                <li>Invoice URL</li>
+              <h3 className="text-xl font-semibold text-[#FF8D00] mb-2">1.2 Billing and Transaction Data</h3>
+              <p className="mb-2">We collect and process certain billing information to manage your subscription and credits, including:</p>
+              <ul className="list-disc list-inside ml-4 space-y-1 mb-2">
+                <li>Subscription status and history</li>
+                <li>Billing cycle and renewal dates</li>
+                <li>Transaction metadata and invoice URLs</li>
+                <li>Trial start and conversion dates</li>
               </ul>
+              <p className="mb-2">We do not store full card details. All payment data is handled securely through our payment processor (Dodo Payments).</p>
+              <p className="mb-4">This information is used for billing, credit allocation, fraud prevention, customer support, and compliance.</p>
 
               <h3 className="text-xl font-semibold text-[#FF8D00] mb-2">1.3 Uploaded Content</h3>
               <p className="mb-2">When using our AI tools, you may upload images or text.</p>
