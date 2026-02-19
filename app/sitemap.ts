@@ -100,8 +100,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ]
 
-  // Cast to any because Next.js sitemap image types can be restrictive
-  // depending on the version, but the output XML handles object images correctly.
-  return routes as any
+  // No images for now to avoid Google Search Console "Invalid URL" errors
+  // where it sees [object Object] in the location tag.
+  return routes.map(route => {
+    const { images, ...rest } = route as any
+    return rest
+  })
 }
 
