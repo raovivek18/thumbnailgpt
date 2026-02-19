@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-                  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://thumbnailgpt.com')
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://thumbnailgpt.com')
 
   const routes = [
     {
@@ -83,8 +83,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       ],
     },
+    ...[
+      '/image-to-thumbnail',
+      '/text-to-thumbnail',
+      '/recreate-thumbnail',
+      '/analyze-thumbnail',
+      '/fix-thumbnail',
+      '/title-to-thumbnail',
+      '/upscale-thumbnail',
+      '/sketch-to-thumbnail'
+    ].map((route) => ({
+      url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    })),
   ]
 
-  return routes
+  // Cast to any because Next.js sitemap image types can be restrictive
+  // depending on the version, but the output XML handles object images correctly.
+  return routes as any
 }
 
